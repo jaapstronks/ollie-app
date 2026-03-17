@@ -10,7 +10,7 @@ import MapKit
 
 /// Full-screen view for managing favorite walk spots
 struct FavoriteSpotsView: View {
-    @ObservedObject var spotStore: SpotStore
+    var spotStore: SpotStore
     @State private var showingMap = false
 
     var body: some View {

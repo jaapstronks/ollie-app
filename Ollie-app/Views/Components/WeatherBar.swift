@@ -20,10 +20,11 @@ struct WeatherBar: View {
 /// Single hour cell in the weather bar
 struct WeatherHourCell: View {
     let forecast: HourForecast
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     var body: some View {
@@ -112,23 +113,17 @@ struct WeatherSection: View {
     let forecasts: [HourForecast]
     let alert: WeatherAlert?
     let isLoading: Bool
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     var body: some View {
         if isLoading && forecasts.isEmpty {
-            // Loading state
-            HStack(spacing: 6) {
-                ProgressView()
-                    .scaleEffect(0.7)
-                Text(Strings.Weather.loading)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.vertical, 4)
+            // Loading state - skeleton
+            WeatherSectionSkeleton()
         } else if let current = forecasts.first {
             // Compact single-line weather display
             HStack(spacing: 12) {
@@ -182,7 +177,7 @@ struct WeatherSection: View {
 /// Isolated container that owns weather observation
 /// Prevents parent view from re-rendering when weather updates
 struct WeatherSectionContainer: View {
-    @ObservedObject var weatherService: WeatherService
+    var weatherService: WeatherService
     let isToday: Bool
     let predictedPottyTime: Date?
 

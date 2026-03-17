@@ -8,29 +8,28 @@ import OtisShared
 import UIKit
 
 /// Single event row in the timeline
+/// Note: Attribution is shown at the group level in RecentActivityPreview and PartnerActivitySummaryCard,
+/// not per-event. This keeps the timeline clean when a partner logs multiple events in a row.
 struct EventRow: View {
     let event: PuppyEvent
-    var householdMembers: HouseholdMembers?
 
-    /// Look up the member who logged this event
-    private var loggedByMember: HouseholdMember? {
-        guard let loggedBy = event.loggedBy,
-              let members = householdMembers else { return nil }
-        return members.member(byId: loggedBy)
+    @Environment(ContactStore.self) var contactStore
+
+    // Linked trainer contact for training events
+    private var linkedTrainer: DogContact? {
+        guard event.type == .training,
+              let contactID = event.linkedContactID else {
+            return nil
+        }
+        return contactStore.contact(withId: contactID)
     }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            // Attribution avatar (only shown when loggedBy is set)
-            if loggedByMember != nil {
-                HouseholdMemberAvatar(member: loggedByMember, size: 18)
-                    .padding(.top, 2)
-            }
-
             // Time
             Text(event.time.timeString)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
             // Event icon
@@ -46,39 +45,46 @@ struct EventRow: View {
                     if let location = event.location {
                         Text("(\(location.label.lowercased()))")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
                 if let note = event.note, !note.isEmpty {
                     Text(note)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
 
                 if let who = event.who, !who.isEmpty {
                     Label(who, systemImage: "person")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 if let exercise = event.exercise {
                     Label(exercise, systemImage: "figure.walk")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 if let result = event.result {
                     Label(result, systemImage: "checkmark.circle")
                         .font(.caption)
-                        .foregroundColor(.green)
+                        .foregroundStyle(.green)
+                }
+
+                // Linked trainer for training events
+                if let trainer = linkedTrainer {
+                    Label(trainer.name, systemImage: "person.badge.key")
+                        .font(.caption)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 if let duration = event.durationMin {
                     Label("\(duration) min", systemImage: "timer")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 // Walk location
@@ -87,6 +93,9 @@ struct EventRow: View {
                         .font(.caption)
                         .foregroundStyle(Color.otisAccent)
                 }
+
+                // Like indicator (if event has likes)
+                LikeIndicator(event: event)
             }
 
             Spacer()
@@ -100,16 +109,16 @@ struct EventRow: View {
 
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             } else if event.photo != nil || event.video != nil {
                 HStack(spacing: 8) {
                     Image(systemName: event.video != nil ? "video" : "photo")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -205,4 +214,5 @@ struct ThumbnailView: View {
             who: "Neighbor's dog Sasha"
         ))
     }
+    .environment(ContactStore())
 }

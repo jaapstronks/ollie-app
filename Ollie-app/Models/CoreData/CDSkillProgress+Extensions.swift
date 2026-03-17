@@ -5,7 +5,7 @@
 //  Extensions for converting between SkillProgress and CDSkillProgress
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDSkillProgress {
@@ -40,18 +40,29 @@ extension CDSkillProgress {
         self.maintenanceTier = Int16(progress.maintenanceTier)
         self.nextReviewDate = progress.nextReviewDate
         self.lastPracticedAt = progress.lastPracticedAt
+        self.isInMaintenanceMode = progress.isInMaintenanceMode
         self.createdAt = progress.createdAt
         self.modifiedAt = progress.modifiedAt
 
         // Encode complex types as JSON data
         self.recentSessionsData = try? Self.encoder.encode(progress.recentSessions)
         self.practicedContextsData = try? Self.encoder.encode(progress.practicedContexts)
+        self.phaseLocationMatrixData = try? Self.encoder.encode(progress.phaseLocationMatrix)
     }
 
     /// Create a new CDSkillProgress from a SkillProgress struct
     static func create(from progress: SkillProgress, in context: NSManagedObjectContext) -> CDSkillProgress {
         let cdProgress = CDSkillProgress(context: context)
         cdProgress.update(from: progress)
+        return cdProgress
+    }
+
+    /// Create a new CDSkillProgress linked to a profile (required for CloudKit sync)
+    @discardableResult
+    static func create(from progress: SkillProgress, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> CDSkillProgress {
+        let cdProgress = CDSkillProgress(context: context)
+        cdProgress.update(from: progress)
+        cdProgress.profile = profile
         return cdProgress
     }
 
@@ -79,6 +90,11 @@ extension CDSkillProgress {
             practicedContexts = (try? Self.decoder.decode([TrainingContext].self, from: data)) ?? []
         }
 
+        var phaseLocationMatrix: [PhaseLocationCell] = []
+        if let data = self.phaseLocationMatrixData {
+            phaseLocationMatrix = (try? Self.decoder.decode([PhaseLocationCell].self, from: data)) ?? []
+        }
+
         return SkillProgress(
             id: id,
             skillId: skillId,
@@ -95,7 +111,9 @@ extension CDSkillProgress {
             maintenanceTier: Int(self.maintenanceTier),
             nextReviewDate: self.nextReviewDate,
             lastPracticedAt: self.lastPracticedAt,
+            isInMaintenanceMode: self.isInMaintenanceMode,
             practicedContexts: practicedContexts,
+            phaseLocationMatrix: phaseLocationMatrix,
             createdAt: createdAt,
             modifiedAt: modifiedAt
         )
@@ -112,7 +130,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch skill progress by ID
@@ -120,7 +142,11 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        nonisolated(unsafe) var result: CDSkillProgress?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch skill progress by skillId
@@ -128,7 +154,11 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        nonisolated(unsafe) var result: CDSkillProgress?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch skills due for maintenance review
@@ -142,7 +172,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.nextReviewDate, ascending: true)
         ]
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch skills in regression state (needs work)
@@ -152,7 +186,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch skills in active learning phases
@@ -168,7 +206,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Check if progress exists for a skill
@@ -176,6 +218,39 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        return ((try? context.count(for: request)) ?? 0) > 0
+        nonisolated(unsafe) var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count > 0
+    }
+
+    /// Fetch all skill progress records for a specific profile
+    static func fetchAll(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDSkillProgress] {
+        let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
+        ]
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
+    }
+
+    /// Fetch all orphaned skill progress records (not linked to a profile)
+    /// Used for migration to link existing records to the profile
+    static func fetchOrphaned(in context: NSManagedObjectContext) -> [CDSkillProgress] {
+        let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
+        request.predicate = NSPredicate(format: "profile == nil")
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
+        ]
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

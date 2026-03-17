@@ -22,6 +22,8 @@ struct WidgetData: Codable {
     let isCurrentlySleeping: Bool
     let sleepStartTime: Date?  // When current sleep started (if sleeping)
     let lastWakeTime: Date?    // When puppy last woke up (for awake timer)
+    let expectedWakeTime: Date?  // Predicted wake time based on average nap duration
+    let averageNapDurationMin: Int?  // Average nap duration for predictions
 
     // MARK: - Meal Data
     let lastMealTime: Date?
@@ -32,6 +34,14 @@ struct WidgetData: Codable {
     // MARK: - Walk Data
     let lastWalkTime: Date?
     let nextScheduledWalkTime: Date?  // Next walk target time today
+
+    // MARK: - Latest Event Data
+    let lastEventType: String?  // EventType.rawValue
+    let lastEventTime: Date?
+    let lastEventNote: String?
+    let lastEventLocation: String?  // For potty events
+    let lastEventHasMedia: Bool
+    let lastEventThumbnailName: String?  // Filename of thumbnail in shared container
 
     // MARK: - Meta
     let puppyName: String
@@ -50,12 +60,20 @@ struct WidgetData: Codable {
         isCurrentlySleeping = try container.decode(Bool.self, forKey: .isCurrentlySleeping)
         sleepStartTime = try container.decodeIfPresent(Date.self, forKey: .sleepStartTime)
         lastWakeTime = try container.decodeIfPresent(Date.self, forKey: .lastWakeTime)
+        expectedWakeTime = try container.decodeIfPresent(Date.self, forKey: .expectedWakeTime)
+        averageNapDurationMin = try container.decodeIfPresent(Int.self, forKey: .averageNapDurationMin)
         lastMealTime = try container.decodeIfPresent(Date.self, forKey: .lastMealTime)
         nextScheduledMealTime = try container.decodeIfPresent(Date.self, forKey: .nextScheduledMealTime)
         mealsLoggedToday = try container.decode(Int.self, forKey: .mealsLoggedToday)
         mealsExpectedToday = try container.decode(Int.self, forKey: .mealsExpectedToday)
         lastWalkTime = try container.decodeIfPresent(Date.self, forKey: .lastWalkTime)
         nextScheduledWalkTime = try container.decodeIfPresent(Date.self, forKey: .nextScheduledWalkTime)
+        lastEventType = try container.decodeIfPresent(String.self, forKey: .lastEventType)
+        lastEventTime = try container.decodeIfPresent(Date.self, forKey: .lastEventTime)
+        lastEventNote = try container.decodeIfPresent(String.self, forKey: .lastEventNote)
+        lastEventLocation = try container.decodeIfPresent(String.self, forKey: .lastEventLocation)
+        lastEventHasMedia = try container.decodeIfPresent(Bool.self, forKey: .lastEventHasMedia) ?? false
+        lastEventThumbnailName = try container.decodeIfPresent(String.self, forKey: .lastEventThumbnailName)
         puppyName = try container.decode(String.self, forKey: .puppyName)
         lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
     }
@@ -71,12 +89,20 @@ struct WidgetData: Codable {
         isCurrentlySleeping: Bool,
         sleepStartTime: Date?,
         lastWakeTime: Date?,
+        expectedWakeTime: Date? = nil,
+        averageNapDurationMin: Int? = nil,
         lastMealTime: Date?,
         nextScheduledMealTime: Date?,
         mealsLoggedToday: Int,
         mealsExpectedToday: Int,
         lastWalkTime: Date?,
         nextScheduledWalkTime: Date?,
+        lastEventType: String? = nil,
+        lastEventTime: Date? = nil,
+        lastEventNote: String? = nil,
+        lastEventLocation: String? = nil,
+        lastEventHasMedia: Bool = false,
+        lastEventThumbnailName: String? = nil,
         puppyName: String,
         lastUpdated: Date
     ) {
@@ -89,12 +115,20 @@ struct WidgetData: Codable {
         self.isCurrentlySleeping = isCurrentlySleeping
         self.sleepStartTime = sleepStartTime
         self.lastWakeTime = lastWakeTime
+        self.expectedWakeTime = expectedWakeTime
+        self.averageNapDurationMin = averageNapDurationMin
         self.lastMealTime = lastMealTime
         self.nextScheduledMealTime = nextScheduledMealTime
         self.mealsLoggedToday = mealsLoggedToday
         self.mealsExpectedToday = mealsExpectedToday
         self.lastWalkTime = lastWalkTime
         self.nextScheduledWalkTime = nextScheduledWalkTime
+        self.lastEventType = lastEventType
+        self.lastEventTime = lastEventTime
+        self.lastEventNote = lastEventNote
+        self.lastEventLocation = lastEventLocation
+        self.lastEventHasMedia = lastEventHasMedia
+        self.lastEventThumbnailName = lastEventThumbnailName
         self.puppyName = puppyName
         self.lastUpdated = lastUpdated
     }
@@ -110,12 +144,20 @@ struct WidgetData: Codable {
             isCurrentlySleeping: false,
             sleepStartTime: nil,
             lastWakeTime: Date().addingTimeInterval(-90 * 60),
+            expectedWakeTime: nil,
+            averageNapDurationMin: 45,
             lastMealTime: Date().addingTimeInterval(-3 * 60 * 60),
             nextScheduledMealTime: Date().addingTimeInterval(1 * 60 * 60),
             mealsLoggedToday: 2,
             mealsExpectedToday: 3,
             lastWalkTime: Date().addingTimeInterval(-2 * 60 * 60),
             nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
+            lastEventType: "plassen",
+            lastEventTime: Date().addingTimeInterval(-45 * 60),
+            lastEventNote: nil,
+            lastEventLocation: "buiten",
+            lastEventHasMedia: false,
+            lastEventThumbnailName: nil,
             puppyName: "--",
             lastUpdated: Date()
         )
@@ -165,6 +207,26 @@ final class WidgetDataProvider: @unchecked Sendable {
             lastWakeTime = since
         }
 
+        // Calculate average nap duration and expected wake time
+        let averageNapDuration = SleepCalculations.averageNapDuration(events: allEvents)
+        var expectedWakeTime: Date? = nil
+        if isCurrentlySleeping, let sleepStart = sleepStartTime {
+            let napDuration = averageNapDuration ?? 45  // Default 45 min if no data
+            expectedWakeTime = sleepStart.addingTimeInterval(Double(napDuration) * 60)
+        }
+
+        // MARK: Latest Moment Data (most recent event WITH media)
+        // Find the most recent event that has a photo/video to display as the "moment"
+        let lastMomentEvent = allEvents.reverseChronological().first { $0.media.hasMedia }
+        let lastEventType = lastMomentEvent?.type.rawValue
+        let lastEventTime = lastMomentEvent?.time
+        let lastEventNote = lastMomentEvent?.note
+        let lastEventLocation = lastMomentEvent?.location?.rawValue
+        let lastEventHasMedia = lastMomentEvent?.media.hasMedia ?? false
+
+        // Copy thumbnail to shared container for widget access
+        let lastEventThumbnailName = copyThumbnailToSharedContainer(from: lastMomentEvent)
+
         // MARK: Meal Data
         let mealEvents = todayEvents.filter { $0.type == .eten }
         let lastMeal = allEvents.filter { $0.type == .eten }.reverseChronological().first
@@ -191,12 +253,20 @@ final class WidgetDataProvider: @unchecked Sendable {
             isCurrentlySleeping: isCurrentlySleeping,
             sleepStartTime: sleepStartTime,
             lastWakeTime: lastWakeTime,
+            expectedWakeTime: expectedWakeTime,
+            averageNapDurationMin: averageNapDuration,
             lastMealTime: lastMeal?.time,
             nextScheduledMealTime: nextMealTime,
             mealsLoggedToday: mealEvents.count,
             mealsExpectedToday: mealsExpected,
             lastWalkTime: lastWalk?.time,
             nextScheduledWalkTime: nextWalkTime,
+            lastEventType: lastEventType,
+            lastEventTime: lastEventTime,
+            lastEventNote: lastEventNote,
+            lastEventLocation: lastEventLocation,
+            lastEventHasMedia: lastEventHasMedia,
+            lastEventThumbnailName: lastEventThumbnailName,
             puppyName: profile?.name ?? "--",
             lastUpdated: now
         )
@@ -261,12 +331,20 @@ final class WidgetDataProvider: @unchecked Sendable {
                 isCurrentlySleeping: existing.isCurrentlySleeping,
                 sleepStartTime: existing.sleepStartTime,
                 lastWakeTime: existing.lastWakeTime,
+                expectedWakeTime: existing.expectedWakeTime,
+                averageNapDurationMin: existing.averageNapDurationMin,
                 lastMealTime: existing.lastMealTime,
                 nextScheduledMealTime: existing.nextScheduledMealTime,
                 mealsLoggedToday: existing.mealsLoggedToday,
                 mealsExpectedToday: existing.mealsExpectedToday,
                 lastWalkTime: existing.lastWalkTime,
                 nextScheduledWalkTime: existing.nextScheduledWalkTime,
+                lastEventType: existing.lastEventType,
+                lastEventTime: existing.lastEventTime,
+                lastEventNote: existing.lastEventNote,
+                lastEventLocation: existing.lastEventLocation,
+                lastEventHasMedia: existing.lastEventHasMedia,
+                lastEventThumbnailName: existing.lastEventThumbnailName,
                 puppyName: name,
                 lastUpdated: Date()
             )
@@ -284,12 +362,20 @@ final class WidgetDataProvider: @unchecked Sendable {
                 isCurrentlySleeping: false,
                 sleepStartTime: nil,
                 lastWakeTime: nil,
+                expectedWakeTime: nil,
+                averageNapDurationMin: nil,
                 lastMealTime: nil,
                 nextScheduledMealTime: nil,
                 mealsLoggedToday: 0,
                 mealsExpectedToday: 3,
                 lastWalkTime: nil,
                 nextScheduledWalkTime: nil,
+                lastEventType: nil,
+                lastEventTime: nil,
+                lastEventNote: nil,
+                lastEventLocation: nil,
+                lastEventHasMedia: false,
+                lastEventThumbnailName: nil,
                 puppyName: name,
                 lastUpdated: Date()
             )
@@ -306,6 +392,55 @@ final class WidgetDataProvider: @unchecked Sendable {
             return
         }
         sharedDefaults.set(data, forKey: Self.dataKey)
+    }
+
+    /// Copy thumbnail to shared App Group container for widget access
+    /// Returns the filename if successful, nil otherwise
+    private func copyThumbnailToSharedContainer(from event: PuppyEvent?) -> String? {
+        guard let event = event,
+              let thumbnailPath = event.thumbnailPath,
+              !thumbnailPath.isEmpty else {
+            return nil
+        }
+
+        let fileManager = FileManager.default
+
+        // Get source URL (app documents directory)
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        let sourceURL = documentsURL.appendingPathComponent(thumbnailPath)
+
+        // Check if source file exists
+        guard fileManager.fileExists(atPath: sourceURL.path) else {
+            return nil
+        }
+
+        // Get shared container URL
+        guard let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier) else {
+            return nil
+        }
+
+        // Create widget thumbnails directory if needed
+        let widgetThumbnailsDir = containerURL.appendingPathComponent("WidgetThumbnails", isDirectory: true)
+        if !fileManager.fileExists(atPath: widgetThumbnailsDir.path) {
+            try? fileManager.createDirectory(at: widgetThumbnailsDir, withIntermediateDirectories: true)
+        }
+
+        // Use event ID as filename to ensure uniqueness
+        let thumbnailFilename = "\(event.id.uuidString).jpg"
+        let destinationURL = widgetThumbnailsDir.appendingPathComponent(thumbnailFilename)
+
+        // Copy file (replace if exists)
+        do {
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try fileManager.removeItem(at: destinationURL)
+            }
+            try fileManager.copyItem(at: sourceURL, to: destinationURL)
+            return thumbnailFilename
+        } catch {
+            return nil
+        }
     }
 }
 

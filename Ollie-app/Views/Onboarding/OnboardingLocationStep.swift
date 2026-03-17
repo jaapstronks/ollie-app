@@ -10,7 +10,7 @@ import CoreLocation
 
 /// Pre-permission screen explaining location benefits before requesting
 struct OnboardingLocationStep: View {
-    @EnvironmentObject var locationManager: LocationManager
+    @Environment(LocationManager.self) var locationManager
     let onComplete: () -> Void
 
     @State private var showingCheckmark = false
@@ -149,7 +149,8 @@ struct OnboardingLocationStep: View {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 showingCheckmark = true
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.5))
                 permissionHandled = true
             }
         } else {
@@ -179,5 +180,5 @@ private struct LocationBenefitRow: View {
 
 #Preview {
     OnboardingLocationStep(onComplete: {})
-        .environmentObject(LocationManager())
+        .environment(LocationManager())
 }

@@ -135,14 +135,8 @@ public struct WalkSuggestionCalculations {
             // Next suggestion = last walk time + configured interval
             suggestedTime = lastWalk.time.addingTimeInterval(TimeInterval(walkSchedule.intervalMinutes * 60))
 
-            // Use label from next scheduled walk slot if available
-            if walksCompletedToday < walkSchedule.walks.count {
-                label = walkSchedule.walks[walksCompletedToday].label
-            } else if let closestSlot = walkSchedule.closestSlot(to: suggestedTime) {
-                label = closestSlot.label
-            } else {
-                label = Strings.Walks.nextWalk
-            }
+            // Generate label dynamically based on actual suggested time
+            label = WalkSchedule.labelForTime(suggestedTime.timeString)
         } else {
             // No walks today yet
             minutesSinceLastWalk = nil
@@ -165,7 +159,8 @@ public struct WalkSuggestionCalculations {
                 suggestedTime = max(dayStart, now)
             }
 
-            label = walkSchedule.walks.first?.label ?? Strings.Walks.morningWalk
+            // Generate label dynamically based on actual suggested time
+            label = WalkSchedule.labelForTime(suggestedTime.timeString)
         }
 
         // Cap at day end
@@ -278,9 +273,12 @@ public struct WalkSuggestionCalculations {
         let isOverdue = scheduledTime < now
         let minutesUntilSuggested = Int(scheduledTime.timeIntervalSince(now) / 60)
 
+        // Generate label dynamically based on scheduled time
+        let label = WalkSchedule.labelForTime(nextScheduledWalk.targetTime)
+
         return WalkSuggestion(
             suggestedTime: scheduledTime,
-            label: nextScheduledWalk.label,
+            label: label,
             isOverdue: isOverdue,
             minutesSinceLastWalk: minutesSinceLastWalk,
             minutesUntilSuggested: minutesUntilSuggested,
@@ -327,9 +325,12 @@ public struct WalkSuggestionCalculations {
             let isOverdue = scheduledTime < now
             let minutesUntilSuggested = Int(scheduledTime.timeIntervalSince(now) / 60)
 
+            // Generate label dynamically based on scheduled time
+            let label = WalkSchedule.labelForTime(scheduledWalk.targetTime)
+
             suggestions.append(WalkSuggestion(
                 suggestedTime: scheduledTime,
-                label: scheduledWalk.label,
+                label: label,
                 isOverdue: isOverdue,
                 minutesSinceLastWalk: minutesSinceLastWalk,
                 minutesUntilSuggested: minutesUntilSuggested,

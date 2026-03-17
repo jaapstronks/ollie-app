@@ -14,16 +14,23 @@ struct PostWakePottyCard: View {
     let wokeAt: Date
     let minutesSinceWake: Int
     let pottyWasOverdueBy: Int?
+    /// Gender of the dog for localized pronoun strings
+    let gender: PuppyProfile.Gender
     let onLogPotty: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
+
+    /// Title text using proper pronouns
+    private var titleText: String {
+        Strings.CombinedStatus.awakeTimePotty(isMale: gender == .male, isFemale: gender == .female)
+    }
 
     var body: some View {
         StatusCardHeader(
             iconName: "sun.max.fill",
             iconColor: .otisWarning,
             tintColor: .otisWarning,
-            title: Strings.CombinedStatus.awakeTimePotty,
+            title: titleText,
             titleColor: .primary,
             subtitle: subtitleText
         ) {
@@ -38,7 +45,7 @@ struct PostWakePottyCard: View {
         .shadow(color: shadowColor, radius: 10, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.CombinedStatus.postWakeCardAccessibility)
-        .accessibilityValue("\(Strings.CombinedStatus.awakeTimePotty). \(subtitleText)")
+        .accessibilityValue("\(titleText). \(subtitleText)")
     }
 
     // MARK: - Computed Properties
@@ -83,6 +90,7 @@ struct PostWakePottyCard: View {
             wokeAt: Date().addingTimeInterval(-2 * 60),
             minutesSinceWake: 2,
             pottyWasOverdueBy: 8,
+            gender: .female,
             onLogPotty: { print("Log potty tapped") }
         )
         Spacer()
@@ -96,6 +104,7 @@ struct PostWakePottyCard: View {
             wokeAt: Date().addingTimeInterval(-3 * 60),
             minutesSinceWake: 3,
             pottyWasOverdueBy: nil,
+            gender: .unspecified,
             onLogPotty: { print("Log potty tapped") }
         )
         Spacer()

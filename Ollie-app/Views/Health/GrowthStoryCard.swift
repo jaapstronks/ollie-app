@@ -20,16 +20,23 @@ struct GrowthStoryCard: View {
     let onShowChart: () -> Void
     @Binding var showWeightSheet: Bool
 
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @Environment(UnitPreferences.self) var unitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
+    @State private var showGrowthCardCreator = false
+
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     /// Whether we have enough data to show a chart
     private var hasChartData: Bool {
         latestWeight != nil
+    }
+
+    /// Whether we have enough data to create shareable cards
+    private var canShareGrowth: Bool {
+        hasChartData && growthStory != nil
     }
 
     var body: some View {
@@ -45,14 +52,28 @@ struct GrowthStoryCard: View {
                 Spacer()
 
                 if hasChartData {
-                    Button(action: onShowChart) {
-                        HStack(spacing: 4) {
-                            Text(Strings.Growth.growthChart)
-                                .font(.subheadline)
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
+                    HStack(spacing: 12) {
+                        // Share button
+                        if canShareGrowth {
+                            Button {
+                                showGrowthCardCreator = true
+                            } label: {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.otisAccent)
+                            }
                         }
-                        .foregroundStyle(Color.otisAccent)
+
+                        // Chart button
+                        Button(action: onShowChart) {
+                            HStack(spacing: 4) {
+                                Text(Strings.Growth.growthChart)
+                                    .font(.subheadline)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                            }
+                            .foregroundStyle(Color.otisAccent)
+                        }
                     }
                 }
             }
@@ -83,6 +104,9 @@ struct GrowthStoryCard: View {
             .padding()
             .glassCard(tint: .accent)
         }
+        .sheet(isPresented: $showGrowthCardCreator) {
+            GrowthCardCreatorSheet()
+        }
     }
 
     // MARK: - Current Weight Hero
@@ -97,24 +121,16 @@ struct GrowthStoryCard: View {
 
             // Weight change badge (if available)
             if let delta = weightDelta {
-                HStack(spacing: 4) {
-                    Image(systemName: delta.delta >= 0 ? "arrow.up.right" : "arrow.down.right")
-                        .font(.caption)
-                    Text(Strings.Growth.weightChange(weightUnit.formatDelta(delta.delta)))
-                        .font(.caption)
-                }
-                .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(
-                    (delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
-                        .opacity(colorScheme == .dark ? 0.2 : 0.1)
+                CapsuleBadge(
+                    Strings.Growth.weightChange(weightUnit.formatDelta(delta.delta)),
+                    icon: delta.delta >= 0 ? "arrow.up.right" : "arrow.down.right",
+                    color: delta.delta >= 0 ? .otisSuccess : .otisWarning,
+                    style: .tinted
                 )
-                .clipShape(Capsule())
             }
 
             // Date of last measurement
-            Text(formattedDate(date))
+            Text(date.formattedMedium())
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -169,13 +185,6 @@ struct GrowthStoryCard: View {
         .padding(12)
         .background(tintColor.opacity(colorScheme == .dark ? 0.15 : 0.08))
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
     }
 
     // MARK: - Full Growth Story View
@@ -289,17 +298,12 @@ struct GrowthStoryCard: View {
 
     @ViewBuilder
     private func percentToAdultBadge(percent: Int) -> some View {
-        HStack(spacing: 4) {
-            Image(systemName: "arrow.up.forward")
-                .font(.caption2)
-            Text(Strings.Growth.percentOfAdult(percent))
-                .font(.caption)
-        }
-        .foregroundStyle(Color.otisAccent)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 4)
-        .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
-        .clipShape(Capsule())
+        CapsuleBadge(
+            Strings.Growth.percentOfAdult(percent),
+            icon: "arrow.up.forward",
+            color: .otisAccent,
+            style: .tinted
+        )
     }
 
     // MARK: - Helper Methods

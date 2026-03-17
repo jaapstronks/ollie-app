@@ -176,7 +176,7 @@ struct EditWalkSheet: View {
         var updatedWalk = walk
         updatedWalk.time = selectedTime
         updatedWalk.durationMin = Int(durationMinutes)
-        updatedWalk.note = note.isEmpty ? nil : note
+        updatedWalk.note = note.nilIfBlank
         updatedWalk.spotId = selectedSpot?.id
         updatedWalk.spotName = selectedSpot?.name
         updatedWalk.latitude = selectedSpot?.latitude

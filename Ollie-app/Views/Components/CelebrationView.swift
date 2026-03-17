@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 /// Celebration style presets
 enum CelebrationPreset {
@@ -28,11 +27,11 @@ enum CelebrationPreset {
 
     var headline: String {
         switch self {
-        case .milestone: return String(localized: "Amazing!")
-        case .pottySuccess: return String(localized: "Great job!")
-        case .streak: return String(localized: "On a roll!")
-        case .training: return String(localized: "Great work!")
-        case .quickLog: return String(localized: "Nice!")
+        case .milestone: return Strings.Celebrations.amazing
+        case .pottySuccess: return Strings.Celebrations.greatJob
+        case .streak: return Strings.Celebrations.onARoll
+        case .training: return Strings.Celebrations.greatWork
+        case .quickLog: return Strings.Celebrations.nice
         }
     }
 }
@@ -40,10 +39,19 @@ enum CelebrationPreset {
 /// Simple, high-visibility celebration overlay.
 struct CelebrationView: View {
     let style: CelebrationPreset
+    var streakCount: Int? = nil
     @Binding var isActive: Bool
 
     @State private var progress: CGFloat = 1
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Custom headline that shows streak count for potty success
+    private var headline: String {
+        if let count = streakCount, style == .pottySuccess, count > 1 {
+            return Strings.Celebration.streakInARow(count)
+        }
+        return style.headline
+    }
 
     var body: some View {
         ZStack {
@@ -84,7 +92,7 @@ struct CelebrationView: View {
                         .scaleEffect(1.15 - progress * 0.5)
                 }
 
-                Text(style.headline)
+                Text(headline)
                     .foregroundStyle(.white)
                     .shadow(color: .black.opacity(0.35), radius: 8, x: 0, y: 2)
                     .scaleEffect(CGFloat(2.0) * (CGFloat(0.86) + progress * CGFloat(0.22)))
@@ -103,12 +111,13 @@ struct CelebrationView: View {
         progress = 0
         HapticFeedback.success()
 
-        let duration = reduceMotion ? 0.35 : 1.1
+        let duration = reduceMotion ? 0.5 : 2.5
         withAnimation(.easeOut(duration: duration)) {
             progress = 1
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration + 0.15) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(duration + 0.15))
             isActive = false
         }
     }
@@ -116,28 +125,32 @@ struct CelebrationView: View {
 
 struct CelebrationModifier: ViewModifier {
     let style: CelebrationPreset
+    var streakCount: Int? = nil
     @Binding var trigger: Bool
 
     func body(content: Content) -> some View {
         content.overlay {
-            CelebrationView(style: style, isActive: $trigger)
+            CelebrationView(style: style, streakCount: streakCount, isActive: $trigger)
         }
     }
 }
 
 extension View {
-    func celebration(style: CelebrationPreset = .milestone, trigger: Binding<Bool>) -> some View {
-        modifier(CelebrationModifier(style: style, trigger: trigger))
+    func celebration(style: CelebrationPreset = .milestone, streakCount: Int? = nil, trigger: Binding<Bool>) -> some View {
+        modifier(CelebrationModifier(style: style, streakCount: streakCount, trigger: trigger))
     }
 }
 
+@Observable
 @MainActor
-final class CelebrationTrigger: ObservableObject {
-    @Published var isActive = false
-    @Published var style: CelebrationPreset = .milestone
+final class CelebrationTrigger {
+    var isActive = false
+    var style: CelebrationPreset = .milestone
+    var streakCount: Int?
 
-    func trigger(_ style: CelebrationPreset = .milestone) {
+    func trigger(_ style: CelebrationPreset = .milestone, streakCount: Int? = nil) {
         self.style = style
+        self.streakCount = streakCount
         isActive = true
     }
 }

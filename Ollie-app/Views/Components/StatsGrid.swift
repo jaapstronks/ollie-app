@@ -12,11 +12,12 @@ import SwiftUI
 
 /// Data model for a single stat item
 struct StatItemData: Identifiable {
-    let id = UUID()
     let value: String
     let label: String
     let iconName: String
     let iconColor: Color
+
+    var id: String { "\(label)-\(iconName)-\(value)" }
 
     init(value: String, label: String, iconName: String, iconColor: Color) {
         self.value = value

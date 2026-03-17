@@ -5,7 +5,6 @@
 
 import SwiftUI
 import OtisShared
-import Combine
 
 /// App error types with user-friendly messages
 enum GeneralError: LocalizedError {
@@ -72,10 +71,11 @@ extension View {
 }
 
 /// Observable error state for view models
+@Observable
 @MainActor
-class ErrorState: ObservableObject {
-    @Published var currentError: Error?
-    @Published var showError: Bool = false
+class ErrorState {
+    var currentError: Error?
+    var showError: Bool = false
 
     func handle(_ error: Error) {
         currentError = error

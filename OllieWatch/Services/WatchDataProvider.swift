@@ -15,23 +15,27 @@ import os
 
 /// Provides data received from iPhone via WatchConnectivity
 /// Also reads local events logged directly on Watch
+@Observable
 @MainActor
-final class WatchDataProvider: NSObject, ObservableObject {
+final class WatchDataProvider: NSObject {
     static let shared = WatchDataProvider()
 
-    @Published var lastPeeTime: Date?
-    @Published var lastPoopTime: Date?
-    @Published var currentStreak: Int = 0
-    @Published var isSleeping: Bool = false
-    @Published var sleepStartTime: Date?
-    @Published var puppyName: String = "Puppy"
-    @Published var canLogEvents: Bool = true
-    @Published var isConnected: Bool = false
-    @Published var lastSyncTime: Date?
-    @Published var connectionState: ConnectionState = .unknown
+    var lastPeeTime: Date?
+    var lastPoopTime: Date?
+    var currentStreak: Int = 0
+    var isSleeping: Bool = false
+    var sleepStartTime: Date?
+    var puppyName: String = "Puppy"
+    var canLogEvents: Bool = true
+    var isConnected: Bool = false
+    var lastSyncTime: Date?
+    var connectionState: ConnectionState = .unknown
 
+    @ObservationIgnored
     private var session: WCSession?
+    @ObservationIgnored
     private let logger = Logger.otisWatch(category: "WatchDataProvider")
+    @ObservationIgnored
     private let localDataStore = WatchIntentDataStore.shared
 
     // Sync state persistence keys

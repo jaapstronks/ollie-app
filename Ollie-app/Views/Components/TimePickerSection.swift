@@ -31,14 +31,14 @@ struct TimePickerSection: View {
             } label: {
                 HStack {
                     Image(systemName: "clock")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .accessibilityHidden(true)
                     Text(selectedTime.timeString)
                         .font(.title3)
                         .fontWeight(.medium)
                     Image(systemName: "chevron.down")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .accessibilityHidden(true)
                 }
                 .padding(.horizontal, 16)

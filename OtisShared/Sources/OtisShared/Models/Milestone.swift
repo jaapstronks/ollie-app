@@ -2,59 +2,14 @@
 //  Milestone.swift
 //  OtisShared
 //
-//  Comprehensive milestone model for health, developmental, administrative, and custom milestones
+//  Comprehensive milestone model for health, developmental, administrative, and custom milestones.
+//  Supporting types are in separate files:
+//  - MilestoneEnums.swift - MilestoneCategory, MilestoneStatus
+//  - DefaultMilestones.swift - Factory for creating default milestones
+//  - MilestoneLabelResolver.swift - Localized string resolution
+//
 
 import Foundation
-
-// MARK: - Milestone Category
-
-/// Categories for organizing milestones
-public enum MilestoneCategory: String, Codable, CaseIterable, Sendable {
-    case health          // Vaccinations, deworming, vet visits
-    case developmental   // Socialization window, training milestones
-    case administrative  // Registration, insurance, microchip
-    case custom          // User-created milestones (Otis+)
-
-    /// SF Symbol icon for the category
-    public var icon: String {
-        switch self {
-        case .health: return "heart.fill"
-        case .developmental: return "brain.head.profile"
-        case .administrative: return "doc.text.fill"
-        case .custom: return "star.fill"
-        }
-    }
-
-    /// Localized display name
-    public var displayName: String {
-        switch self {
-        case .health: return String(localized: "Health")
-        case .developmental: return String(localized: "Development")
-        case .administrative: return String(localized: "Administrative")
-        case .custom: return String(localized: "Custom")
-        }
-    }
-}
-
-// MARK: - Milestone Status
-
-/// Status of a milestone relative to current date
-public enum MilestoneStatus: String, Codable, Sendable {
-    case upcoming   // Future milestone
-    case nextUp     // Coming up within the current or next week
-    case overdue    // Past due date, not completed
-    case completed  // Marked as done
-
-    /// SF Symbol icon for the status
-    public var icon: String {
-        switch self {
-        case .upcoming: return "circle"
-        case .nextUp: return "arrow.right.circle.fill"
-        case .overdue: return "exclamationmark.triangle.fill"
-        case .completed: return "checkmark.circle.fill"
-        }
-    }
-}
 
 // MARK: - Milestone
 
@@ -84,7 +39,8 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
     public var completionPhotoID: UUID?      // Otis+ feature
 
     // Premium features
-    public var vetClinicName: String?        // Otis+ feature
+    public var vetClinicName: String?        // Otis+ feature (deprecated, use linkedContactID)
+    public var linkedContactID: UUID?        // Otis+ feature: linked vet contact
     public var calendarEventID: String?      // Otis+ feature
     public var reminderDaysBefore: Int
 
@@ -117,6 +73,7 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         completionNotes: String? = nil,
         completionPhotoID: UUID? = nil,
         vetClinicName: String? = nil,
+        linkedContactID: UUID? = nil,
         calendarEventID: String? = nil,
         reminderDaysBefore: Int = 3,
         icon: String = "heart.fill",
@@ -142,6 +99,7 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         self.completionNotes = completionNotes
         self.completionPhotoID = completionPhotoID
         self.vetClinicName = vetClinicName
+        self.linkedContactID = linkedContactID
         self.calendarEventID = calendarEventID
         self.reminderDaysBefore = reminderDaysBefore
         self.icon = icon
@@ -212,15 +170,16 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
 
     /// Period label (e.g., "Week 8" or "6 months")
     public func periodLabel(birthDate: Date) -> String? {
+        let table = "Milestones"
         if let weeks = targetAgeWeeks {
-            return String(localized: "Week \(weeks)")
+            return String(localized: "Week \(weeks)", table: table, bundle: Strings.bundle)
         }
         if let months = targetAgeMonths {
-            return String(localized: "\(months) months")
+            return String(localized: "\(months) months", table: table, bundle: Strings.bundle)
         }
         if let days = targetAgeDays {
             let weeks = days / 7
-            return String(localized: "Week \(weeks)")
+            return String(localized: "Week \(weeks)", table: table, bundle: Strings.bundle)
         }
         return nil
     }
@@ -229,6 +188,7 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
     /// Example: "Age week 12 · ~March 15"
     public func periodLabelWithDate(birthDate: Date) -> String? {
         guard let targetDate = targetDate(birthDate: birthDate) else { return nil }
+        let table = "Milestones"
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d"
@@ -236,14 +196,14 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         let approximateDate = "~\(dateFormatter.string(from: targetDate))"
 
         if let weeks = targetAgeWeeks {
-            return String(localized: "Age week \(weeks) · \(approximateDate)")
+            return String(localized: "Age week \(weeks) · \(approximateDate)", table: table, bundle: Strings.bundle)
         }
         if let months = targetAgeMonths {
-            return String(localized: "\(months) months · \(approximateDate)")
+            return String(localized: "\(months) months · \(approximateDate)", table: table, bundle: Strings.bundle)
         }
         if let days = targetAgeDays {
             let weeks = days / 7
-            return String(localized: "Age week \(weeks) · \(approximateDate)")
+            return String(localized: "Age week \(weeks) · \(approximateDate)", table: table, bundle: Strings.bundle)
         }
 
         // For fixed date milestones, just show the date
@@ -264,187 +224,6 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         guard let target = targetDate(birthDate: birthDate) else { return nil }
         let calendar = Calendar.current
         return calendar.dateComponents([.day], from: calendar.startOfDay(for: from), to: calendar.startOfDay(for: target)).day
-    }
-}
-
-// MARK: - Default Milestones
-
-/// Factory for creating default milestones based on puppy's birth date
-public enum DefaultMilestones {
-
-    /// Create default milestones for a new puppy
-    public static func create() -> [Milestone] {
-        var milestones: [Milestone] = []
-        var sortOrder = 0
-
-        // Health milestones - Dutch vaccination schedule
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.firstDewormingBreeder",
-            targetAgeWeeks: 6,
-            isCompleted: true,  // Usually done by breeder
-            icon: "pills.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.firstVaccination",
-            detailKey: "milestone.firstVaccination.detail",
-            targetAgeWeeks: 8,
-            icon: "syringe.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.firstVetVisit",
-            targetAgeWeeks: 9,
-            icon: "cross.case.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.firstDewormingHome",
-            targetAgeWeeks: 9,
-            icon: "pills.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.secondVaccination",
-            detailKey: "milestone.secondVaccination.detail",
-            targetAgeWeeks: 12,
-            icon: "syringe.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.thirdVaccination",
-            detailKey: "milestone.thirdVaccination.detail",
-            targetAgeWeeks: 16,
-            icon: "syringe.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.neuteredDiscussion",
-            targetAgeMonths: 6,
-            icon: "stethoscope",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .health,
-            labelKey: "milestone.yearlyVaccination",
-            targetAgeMonths: 12,
-            isRecurring: true,
-            recurrenceMonths: 12,
-            icon: "syringe.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        // Developmental milestones
-        milestones.append(Milestone(
-            category: .developmental,
-            labelKey: "milestone.socializationStart",
-            detailKey: "milestone.socializationStart.detail",
-            targetAgeWeeks: 8,
-            icon: "person.3.fill",
-            isActionable: false,
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .developmental,
-            labelKey: "milestone.socializationPeak",
-            detailKey: "milestone.socializationPeak.detail",
-            targetAgeWeeks: 12,
-            icon: "sparkles",
-            isActionable: false,
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .developmental,
-            labelKey: "milestone.socializationEnd",
-            detailKey: "milestone.socializationEnd.detail",
-            targetAgeWeeks: 16,
-            icon: "clock.badge.checkmark.fill",
-            isActionable: false,
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .developmental,
-            labelKey: "milestone.fearPeriod1",
-            detailKey: "milestone.fearPeriod1.detail",
-            targetAgeWeeks: 8,
-            icon: "exclamationmark.triangle.fill",
-            isActionable: false,
-            isUserDismissable: true,
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .developmental,
-            labelKey: "milestone.fearPeriod2",
-            detailKey: "milestone.fearPeriod2.detail",
-            targetAgeMonths: 6,
-            icon: "exclamationmark.triangle.fill",
-            isActionable: false,
-            isUserDismissable: true,
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        // Administrative milestones
-        milestones.append(Milestone(
-            category: .administrative,
-            labelKey: "milestone.microchipRegistration",
-            targetAgeWeeks: 8,
-            icon: "wave.3.right.circle.fill",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .administrative,
-            labelKey: "milestone.insuranceSetup",
-            detailKey: "milestone.insuranceSetup.detail",
-            targetAgeWeeks: 8,
-            icon: "shield.checkered",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        milestones.append(Milestone(
-            category: .administrative,
-            labelKey: "milestone.dogLicense",
-            detailKey: "milestone.dogLicense.detail",
-            targetAgeWeeks: 12,
-            icon: "doc.badge.plus",
-            sortOrder: sortOrder
-        ))
-        sortOrder += 1
-
-        return milestones
     }
 }
 
@@ -476,73 +255,143 @@ extension Milestone {
     }
 }
 
-/// Resolves milestone label keys to localized strings
-public enum MilestoneLabelResolver {
+// MARK: - Health Milestones Generator
 
-    /// Resolve a label key to its localized string
-    public static func resolve(_ key: String) -> String {
-        switch key {
-        // Health milestones
-        case "milestone.firstDewormingBreeder":
-            return String(localized: "First deworming (breeder)")
-        case "milestone.firstVaccination":
-            return String(localized: "First vaccination (DHP + Lepto)")
-        case "milestone.firstVaccination.detail":
-            return String(localized: "Core vaccination at 8 weeks")
-        case "milestone.firstVetVisit":
-            return String(localized: "First vet visit")
-        case "milestone.firstDewormingHome":
-            return String(localized: "First deworming (home)")
-        case "milestone.secondVaccination":
-            return String(localized: "Second vaccination (DHP + Lepto + Rabies)")
-        case "milestone.secondVaccination.detail":
-            return String(localized: "Booster vaccination at 12 weeks")
-        case "milestone.thirdVaccination":
-            return String(localized: "Third vaccination (cocktail)")
-        case "milestone.thirdVaccination.detail":
-            return String(localized: "Final puppy vaccination at 16 weeks")
-        case "milestone.neuteredDiscussion":
-            return String(localized: "Spay/neuter discussion with vet")
-        case "milestone.yearlyVaccination":
-            return String(localized: "Yearly vaccination")
+extension Milestone {
 
-        // Developmental milestones
-        case "milestone.socializationStart":
-            return String(localized: "Socialization window begins")
-        case "milestone.socializationStart.detail":
-            return String(localized: "Critical period for positive experiences starts now")
-        case "milestone.socializationPeak":
-            return String(localized: "Peak socialization period")
-        case "milestone.socializationPeak.detail":
-            return String(localized: "Most receptive time for new experiences")
-        case "milestone.socializationEnd":
-            return String(localized: "Socialization window closing")
-        case "milestone.socializationEnd.detail":
-            return String(localized: "Window is narrowing - focus on remaining exposures")
-        case "milestone.fearPeriod1":
-            return String(localized: "First fear period")
-        case "milestone.fearPeriod1.detail":
-            return String(localized: "Be extra gentle with new experiences")
-        case "milestone.fearPeriod2":
-            return String(localized: "Second fear period")
-        case "milestone.fearPeriod2.detail":
-            return String(localized: "Temporary increase in fearfulness - stay patient")
+    /// Generate health milestones for a profile, skipping milestones the dog has already passed
+    public static func healthMilestones(for profile: PuppyProfile) -> [Milestone] {
+        var milestones: [Milestone] = []
+        var sortOrder = 100  // Start after default milestones
 
-        // Administrative milestones
-        case "milestone.microchipRegistration":
-            return String(localized: "Microchip registration")
-        case "milestone.insuranceSetup":
-            return String(localized: "Pet insurance setup")
-        case "milestone.insuranceSetup.detail":
-            return String(localized: "Consider health insurance coverage")
-        case "milestone.dogLicense":
-            return String(localized: "Dog license")
-        case "milestone.dogLicense.detail":
-            return String(localized: "Register with your municipality if required")
+        let currentAgeMonths = profile.ageInMonths
 
+        // Dental baseline at 24 months (2 years)
+        if currentAgeMonths < 24 {
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: "milestone.dentalBaseline",
+                detailKey: "milestone.dentalBaseline.detail",
+                targetAgeMonths: 24,
+                icon: "mouth.fill",
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Annual wellness exams (from year 2 onwards)
+        for year in 2...15 {
+            let months = year * 12
+            if currentAgeMonths < months {
+                milestones.append(Milestone(
+                    category: .health,
+                    labelKey: "milestone.annualWellness",
+                    detailKey: "milestone.annualWellness.detail",
+                    targetAgeMonths: months,
+                    icon: "heart.text.square.fill",
+                    sortOrder: sortOrder
+                ))
+                sortOrder += 1
+                break  // Only add the next upcoming one
+            }
+        }
+
+        // Senior wellness screening (age varies by size)
+        let seniorStartMonths = profile.seniorAgeMonths
+        if currentAgeMonths < seniorStartMonths {
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: "milestone.seniorScreening",
+                detailKey: "milestone.seniorScreening.detail",
+                targetAgeMonths: seniorStartMonths,
+                icon: "stethoscope",
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Semi-annual checkups for seniors (every 6 months after senior threshold)
+        if currentAgeMonths >= seniorStartMonths {
+            let nextCheckupMonths = ((currentAgeMonths - seniorStartMonths) / 6 + 1) * 6 + seniorStartMonths
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: "milestone.semiAnnualSenior",
+                detailKey: "milestone.semiAnnualSenior.detail",
+                targetAgeMonths: nextCheckupMonths,
+                isRecurring: true,
+                recurrenceMonths: 6,
+                icon: "heart.fill",
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Breed-specific screenings
+        milestones.append(contentsOf: breedScreeningMilestones(for: profile, startingSortOrder: sortOrder))
+
+        return milestones
+    }
+
+    /// Generate breed-specific screening milestones
+    private static func breedScreeningMilestones(for profile: PuppyProfile, startingSortOrder: Int) -> [Milestone] {
+        var milestones: [Milestone] = []
+        var sortOrder = startingSortOrder
+
+        let currentAgeMonths = profile.ageInMonths
+        let dueScreenings = profile.dueScreenings
+
+        // Add milestones for each due screening
+        for screening in dueScreenings {
+            guard let screeningAge = screening.screeningRecommendedAgeMonths,
+                  currentAgeMonths < screeningAge else {
+                continue
+            }
+
+            let (labelKey, detailKey, icon) = screeningMilestoneInfo(for: screening.conditionType)
+
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: labelKey,
+                detailKey: detailKey,
+                targetAgeMonths: screeningAge,
+                icon: icon,
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Add size-based screenings for large/extra-large dogs
+        if profile.sizeCategory == .large || profile.sizeCategory == .extraLarge {
+            // Hip screening at 24 months for large breeds
+            if currentAgeMonths < 24 && !dueScreenings.contains(where: { $0.conditionType == .hipDysplasia }) {
+                milestones.append(Milestone(
+                    category: .health,
+                    labelKey: "milestone.hipScreening",
+                    detailKey: "milestone.hipScreening.detail",
+                    targetAgeMonths: 24,
+                    icon: "figure.walk",
+                    sortOrder: sortOrder
+                ))
+                sortOrder += 1
+            }
+        }
+
+        return milestones
+    }
+
+    /// Map condition type to milestone label, detail, and icon
+    private static func screeningMilestoneInfo(for conditionType: HealthConditionType) -> (labelKey: String, detailKey: String, icon: String) {
+        switch conditionType {
+        case .hipDysplasia:
+            return ("milestone.hipScreening", "milestone.hipScreening.detail", "figure.walk")
+        case .elbowDysplasia:
+            return ("milestone.elbowScreening", "milestone.elbowScreening.detail", "figure.walk")
+        case .heartMurmur, .dilatedCardiomyopathy, .mitralValveDisease:
+            return ("milestone.heartScreening", "milestone.heartScreening.detail", "heart.fill")
+        case .cataracts, .glaucoma, .progressiveRetinalAtrophy:
+            return ("milestone.eyeScreening", "milestone.eyeScreening.detail", "eye.fill")
         default:
-            // For custom milestones, the key is the user-entered title
-            return key
+            return (conditionType.label, "", conditionType.icon)
         }
     }
 }

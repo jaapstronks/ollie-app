@@ -11,10 +11,21 @@ import OtisShared
 
 /// Personalized crate training guide sheet
 struct CrateTrainingGuideSheet: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+
+    // Training mastery state
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
+
+    @State private var showMasteryConfirmation = false
+
+    // Convenience accessors
+    private var isMastered: Bool { trainingMasteryStore.crateTrainingMastered }
+    private var masteredTimestamp: Double {
+        trainingMasteryStore.crateMasteredDate?.timeIntervalSince1970 ?? 0
+    }
 
     /// Calculate percentage of recent naps taken in crate
     private var crateNapStats: (percentage: Int, total: Int) {
@@ -35,26 +46,44 @@ struct CrateTrainingGuideSheet: View {
         crateNapStats.total > 0
     }
 
+    /// Formatted mastered date
+    private var masteredDateFormatted: String {
+        guard masteredTimestamp > 0 else { return "" }
+        let date = Date(timeIntervalSince1970: masteredTimestamp)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Stats section
-                    statsSection
+                    if isMastered {
+                        // Mastered state
+                        masteredSection
+                    } else {
+                        // Stats section
+                        statsSection
 
-                    // Benefits section
-                    benefitsSection
+                        // Benefits section
+                        benefitsSection
 
-                    // Tips section
-                    tipsSection
+                        // Tips section
+                        tipsSection
 
-                    // Encouragement
-                    Text(Strings.Training.CrateTraining.encouragement)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .italic()
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                        // Encouragement
+                        Text(Strings.Training.CrateTraining.encouragement)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .italic()
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+
+                        // Mark as mastered button
+                        markAsMasteredButton
+                    }
                 }
                 .padding()
                 .padding(.bottom, 20)
@@ -68,7 +97,127 @@ struct CrateTrainingGuideSheet: View {
                     }
                 }
             }
+            .confirmationDialog(
+                Strings.Training.CrateTraining.markMastered,
+                isPresented: $showMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Training.CrateTraining.markMastered) {
+                    markAsMastered()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Training.CrateTraining.markMasteredDescription)
+            }
         }
+    }
+
+    // MARK: - Mastered Section
+
+    @ViewBuilder
+    private var masteredSection: some View {
+        VStack(spacing: 24) {
+            // Celebration header
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.green.opacity(0.15))
+                        .frame(width: 80, height: 80)
+
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.green)
+                }
+
+                Text(Strings.Training.CrateTraining.masteredCelebration)
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text(Strings.Training.CrateTraining.masteredDescription)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+
+                if !masteredDateFormatted.isEmpty {
+                    Text(Strings.Training.CrateTraining.masteredOn(date: masteredDateFormatted))
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .padding(.top, 20)
+
+            Divider()
+
+            // Benefits reminder (collapsed)
+            benefitsSection
+
+            Divider()
+
+            // Reactivate button
+            Button {
+                reactivateTracking()
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.subheadline)
+                    Text(Strings.Training.CrateTraining.reactivateTracking)
+                        .font(.subheadline)
+                }
+                .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 8)
+        }
+    }
+
+    // MARK: - Mark as Mastered Button
+
+    @ViewBuilder
+    private var markAsMasteredButton: some View {
+        VStack(spacing: 8) {
+            Divider()
+                .padding(.top, 8)
+
+            Button {
+                showMasteryConfirmation = true
+            } label: {
+                HStack {
+                    Image(systemName: "checkmark.seal.fill")
+                    Text(Strings.Training.CrateTraining.markMastered)
+                }
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.green)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.green.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                )
+            }
+            .buttonStyle(.plain)
+
+            Text(Strings.Training.CrateTraining.markMasteredDescription)
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+        }
+    }
+
+    // MARK: - Actions
+
+    private func markAsMastered() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            trainingMasteryStore.markCrateMastered()
+        }
+        HapticFeedback.success()
+    }
+
+    private func reactivateTracking() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            trainingMasteryStore.reactivateCrateTraining()
+        }
+        HapticFeedback.light()
     }
 
     // MARK: - Stats Section
@@ -144,32 +293,15 @@ struct CrateTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 10) {
-                benefitRow(text: Strings.Training.CrateTraining.benefitPotty, icon: "drop.fill")
-                benefitRow(text: Strings.Training.CrateTraining.benefitSelfSoothe, icon: "moon.zzz.fill")
-                benefitRow(text: Strings.Training.CrateTraining.benefitSeparation, icon: "heart.fill")
-                benefitRow(text: Strings.Training.CrateTraining.benefitSafeSpace, icon: "shield.fill")
-                benefitRow(text: Strings.Training.CrateTraining.benefitLongerNaps, icon: "clock.fill")
+                InfoListRow.benefit(Strings.Training.CrateTraining.benefitPotty, icon: "drop.fill")
+                InfoListRow.benefit(Strings.Training.CrateTraining.benefitSelfSoothe, icon: "moon.zzz.fill")
+                InfoListRow.benefit(Strings.Training.CrateTraining.benefitSeparation, icon: "heart.fill")
+                InfoListRow.benefit(Strings.Training.CrateTraining.benefitSafeSpace, icon: "shield.fill")
+                InfoListRow.benefit(Strings.Training.CrateTraining.benefitLongerNaps, icon: "clock.fill")
             }
         }
         .padding()
         .glassStatusCard(tintColor: nil)
-    }
-
-    @ViewBuilder
-    private func benefitRow(text: String, icon: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(.indigo)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 
     // MARK: - Tips Section
@@ -182,34 +314,16 @@ struct CrateTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 10) {
-                tipRow(text: Strings.Training.CrateTraining.tipCozy)
-                tipRow(text: Strings.Training.CrateTraining.tipMeals)
-                tipRow(text: Strings.Training.CrateTraining.tipTired)
-                tipRow(text: Strings.Training.CrateTraining.tipStayClose)
-                tipRow(text: Strings.Training.CrateTraining.tipNoCrying)
-                tipRow(text: Strings.Training.CrateTraining.tipShortFirst)
+                InfoListRow.bullet(Strings.Training.CrateTraining.tipCozy, color: .indigo)
+                InfoListRow.bullet(Strings.Training.CrateTraining.tipMeals, color: .indigo)
+                InfoListRow.bullet(Strings.Training.CrateTraining.tipTired, color: .indigo)
+                InfoListRow.bullet(Strings.Training.CrateTraining.tipStayClose, color: .indigo)
+                InfoListRow.bullet(Strings.Training.CrateTraining.tipNoCrying, color: .indigo)
+                InfoListRow.bullet(Strings.Training.CrateTraining.tipShortFirst, color: .indigo)
             }
         }
         .padding()
         .glassStatusCard(tintColor: .indigo.opacity(0.1))
-    }
-
-    @ViewBuilder
-    private func tipRow(text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "circle.fill")
-                .font(.system(size: 5))
-                .foregroundStyle(.indigo.opacity(0.6))
-                .frame(width: 16)
-                .padding(.top, 6)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 }
 

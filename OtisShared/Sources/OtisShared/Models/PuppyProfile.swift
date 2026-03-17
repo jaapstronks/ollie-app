@@ -13,6 +13,33 @@ public enum ProfileOwnership: String, Codable, Sendable {
     case shared
 }
 
+/// Lifecycle phase of a dog - determines UI terminology and feature emphasis
+/// - puppy: 0-12 months - intensive care, potty training, socialization
+/// - teenage: 8-18 months - training consolidation, behavior challenges
+/// - adult: 18 months to senior threshold - maintenance mode
+/// - senior: 7+ years (varies by size) - health monitoring focus
+public enum LifecyclePhase: String, Codable, Sendable {
+    case puppy
+    case teenage
+    case adult
+    case senior
+
+    /// User-facing label for the phase
+    public var label: String {
+        switch self {
+        case .puppy: return Strings.Lifecycle.puppy
+        case .teenage: return Strings.Lifecycle.teenage
+        case .adult: return Strings.Lifecycle.adult
+        case .senior: return Strings.Lifecycle.senior
+        }
+    }
+
+    /// Whether this phase should use "puppy" terminology
+    public var usesPuppyTerminology: Bool {
+        self == .puppy
+    }
+}
+
 /// Profile for a puppy, configurable by the user
 public struct PuppyProfile: Codable, Identifiable, Sendable {
     public let id: UUID
@@ -22,6 +49,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var birthDate: Date
     public var homeDate: Date
     public var sizeCategory: SizeCategory
+    public var gender: Gender
     public var mealSchedule: MealSchedule
     public var exerciseConfig: ExerciseConfig
     public var predictionConfig: PredictionConfig
@@ -29,8 +57,17 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var notificationSettings: NotificationSettings
     public var medicationSchedule: MedicationSchedule
     public var webhookConfig: WebhookConfig
-    public var householdMembers: HouseholdMembers
+    // Note: householdMembers removed - replaced by CloudKit-based UserIdentity (see UserIdentityStore)
+    public var behaviorInterventions: [BehaviorIntervention]
+    public var healthConditions: [HealthCondition]
+    public var allergies: [Allergy]
+    public var coatType: CoatType?
+    public var preferredLocale: String?
     public var modifiedAt: Date
+
+    /// Last lifecycle phase the user acknowledged via transition sheet
+    /// Used to show celebration sheet when dog enters new phase
+    public var lastAcknowledgedPhase: LifecyclePhase?
 
     /// Profile photo filename (stored in ProfilePhotos directory)
     public var profilePhotoFilename: String?
@@ -74,6 +111,145 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         }
     }
 
+    /// Gender of the dog - used for pronouns throughout the app
+    /// When unspecified:
+    /// - English: they/them (singular they works well)
+    /// - Swedish: hen (accepted gender-neutral pronoun)
+    /// - Other languages: defaults to female (avoids awkward plural constructions)
+    public enum Gender: String, Codable, CaseIterable, Identifiable, Sendable {
+        case male
+        case female
+        case unspecified
+
+        public var id: String { rawValue }
+
+        public var label: String {
+            switch self {
+            case .male: return Strings.Gender.male
+            case .female: return Strings.Gender.female
+            case .unspecified: return Strings.Gender.preferNotToSay
+            }
+        }
+
+        // MARK: - Locale-Aware Neutral Pronoun Strategy
+
+        /// Languages that support true gender-neutral singular pronouns
+        /// - en: they/them works naturally as singular
+        /// - sv: hen is an accepted gender-neutral pronoun
+        private static let languagesWithNeutralPronouns: Set<String> = ["en", "sv"]
+
+        /// Current language code (first two characters of locale identifier)
+        private var currentLanguage: String {
+            String(Locale.current.language.languageCode?.identifier.prefix(2) ?? "en")
+        }
+
+        /// Whether current locale supports true gender-neutral pronouns
+        private var localeSupportsNeutralPronouns: Bool {
+            Self.languagesWithNeutralPronouns.contains(currentLanguage)
+        }
+
+        /// Whether current locale is Swedish (uses hen)
+        private var isSwedish: Bool {
+            currentLanguage == "sv"
+        }
+
+        // MARK: - Pronoun Accessors
+
+        /// Subject pronoun: he/she/they (or hen in Swedish, she in other languages when unspecified)
+        public var subjectPronoun: String {
+            switch self {
+            case .male: return Strings.Pronouns.he
+            case .female: return Strings.Pronouns.she
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.hen
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.they
+                } else {
+                    // Default to female for languages without good neutral option
+                    return Strings.Pronouns.she
+                }
+            }
+        }
+
+        /// Object pronoun: him/her/them (or hen in Swedish, her in other languages when unspecified)
+        public var objectPronoun: String {
+            switch self {
+            case .male: return Strings.Pronouns.him
+            case .female: return Strings.Pronouns.her
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.hen  // Swedish uses hen for both subject and object
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.them
+                } else {
+                    return Strings.Pronouns.her
+                }
+            }
+        }
+
+        /// Possessive pronoun: his/her/their (or hens in Swedish, her in other languages when unspecified)
+        public var possessivePronoun: String {
+            switch self {
+            case .male: return Strings.Pronouns.his
+            case .female: return Strings.Pronouns.hers
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.hens
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.their
+                } else {
+                    return Strings.Pronouns.hers
+                }
+            }
+        }
+
+        /// Reflexive pronoun: himself/herself/themselves (or sig själv in Swedish, herself in other languages when unspecified)
+        public var reflexivePronoun: String {
+            switch self {
+            case .male: return Strings.Pronouns.himself
+            case .female: return Strings.Pronouns.herself
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.sigSjalv
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.themselves
+                } else {
+                    return Strings.Pronouns.herself
+                }
+            }
+        }
+
+        /// Whether this gender's pronouns require plural verb forms
+        /// Only English "they" takes plural verb conjugation ("they wake" vs "she wakes")
+        /// Swedish "hen" and female fallback both use singular verb forms
+        public var usesPluralVerbForm: Bool {
+            guard self == .unspecified else { return false }
+            // Only English "they" uses plural verb forms
+            return currentLanguage == "en"
+        }
+    }
+
+    // MARK: - Pronoun Convenience Accessors
+
+    /// Subject pronoun for this dog: he/she/they
+    public var subjectPronoun: String { gender.subjectPronoun }
+
+    /// Object pronoun for this dog: him/her/them
+    public var objectPronoun: String { gender.objectPronoun }
+
+    /// Possessive pronoun for this dog: his/her/their
+    public var possessivePronoun: String { gender.possessivePronoun }
+
+    /// Reflexive pronoun for this dog: himself/herself/themselves
+    public var reflexivePronoun: String { gender.reflexivePronoun }
+
+    /// Whether this dog's pronouns require plural verb forms
+    /// "they wake" vs "he/she wakes"
+    public var usesPluralVerbForm: Bool { gender.usesPluralVerbForm }
+
+    // MARK: - Age & Duration Computed Properties
+
     /// Age in weeks from birth date
     public var ageInWeeks: Int {
         let calendar = Calendar.current
@@ -100,9 +276,55 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         ageInMonths * exerciseConfig.minutesPerMonthOfAge
     }
 
+    // MARK: - Lifecycle Phase
+
+    /// Age threshold (in months) when dog becomes senior, varies by size
+    /// Large breeds age faster and become seniors earlier
+    public var seniorAgeMonths: Int {
+        switch sizeCategory {
+        case .small: return 120      // 10 years
+        case .medium: return 96      // 8 years
+        case .large: return 84       // 7 years
+        case .extraLarge: return 72  // 6 years
+        }
+    }
+
+    /// Current lifecycle phase based on age and size
+    public var lifecyclePhase: LifecyclePhase {
+        let months = ageInMonths
+
+        // Deceased dogs are always shown in their last phase (typically senior)
+        // but we still calculate based on age for historical accuracy
+        if months >= seniorAgeMonths {
+            return .senior
+        } else if months >= 18 {
+            return .adult
+        } else if months >= 8 {
+            return .teenage
+        } else {
+            return .puppy
+        }
+    }
+
+    /// Whether the dog has passed away
+    public var isDeceased: Bool {
+        passedDate != nil
+    }
+
+    /// Returns "puppy" or "dog" based on lifecycle phase
+    /// Use this for generic references like "your puppy" vs "your dog"
+    public var petTerm: String {
+        lifecyclePhase.usesPuppyTerminology ? Strings.Lifecycle.Terms.puppy : Strings.Lifecycle.Terms.dog
+    }
+
+    /// Returns possessive form: "puppy's" or "dog's" based on lifecycle phase
+    public var petTermPossessive: String {
+        lifecyclePhase.usesPuppyTerminology ? Strings.Lifecycle.Terms.puppyPossessive : Strings.Lifecycle.Terms.dogPossessive
+    }
+
 
     /// Creates a default profile for onboarding
-    public static func defaultProfile(name: String, birthDate: Date, homeDate: Date, size: SizeCategory) -> PuppyProfile {
+    public static func defaultProfile(name: String, birthDate: Date, homeDate: Date, size: SizeCategory, gender: Gender = .unspecified) -> PuppyProfile {
         let ageWeeks = Calendar.current.dateComponents([.weekOfYear], from: birthDate, to: Date()).weekOfYear ?? 8
 
         return PuppyProfile(
@@ -113,6 +335,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             birthDate: birthDate,
             homeDate: homeDate,
             sizeCategory: size,
+            gender: gender,
             mealSchedule: MealSchedule.defaultSchedule(ageWeeks: ageWeeks, size: size),
             exerciseConfig: ExerciseConfig.defaultConfig(),
             predictionConfig: PredictionConfig.defaultConfig(),
@@ -120,7 +343,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             notificationSettings: NotificationSettings.defaultSettings(),
             medicationSchedule: MedicationSchedule.empty(),
             webhookConfig: WebhookConfig.defaultConfig(),
-            householdMembers: HouseholdMembers.empty(),
+            healthConditions: [],
+            allergies: [],
+            preferredLocale: Locale.current.identifier,  // Set from device locale at creation
             modifiedAt: Date(),
             legacyPremiumUnlocked: false
         )
@@ -136,6 +361,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         birthDate: Date,
         homeDate: Date,
         sizeCategory: SizeCategory,
+        gender: Gender = .unspecified,
         mealSchedule: MealSchedule,
         exerciseConfig: ExerciseConfig,
         predictionConfig: PredictionConfig,
@@ -143,8 +369,13 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings: NotificationSettings,
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
         webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
-        householdMembers: HouseholdMembers = HouseholdMembers.empty(),
+        behaviorInterventions: [BehaviorIntervention] = [],
+        healthConditions: [HealthCondition] = [],
+        allergies: [Allergy] = [],
+        coatType: CoatType? = nil,
+        preferredLocale: String? = nil,
         modifiedAt: Date? = nil,
+        lastAcknowledgedPhase: LifecyclePhase? = nil,
         profilePhotoFilename: String? = nil,
         passedDate: Date? = nil,
         ownership: ProfileOwnership = .owned,
@@ -157,6 +388,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.birthDate = birthDate
         self.homeDate = homeDate
         self.sizeCategory = sizeCategory
+        self.gender = gender
         self.mealSchedule = mealSchedule
         self.exerciseConfig = exerciseConfig
         self.predictionConfig = predictionConfig
@@ -164,8 +396,13 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.notificationSettings = notificationSettings
         self.medicationSchedule = medicationSchedule
         self.webhookConfig = webhookConfig
-        self.householdMembers = householdMembers
+        self.behaviorInterventions = behaviorInterventions
+        self.healthConditions = healthConditions
+        self.allergies = allergies
+        self.coatType = coatType
+        self.preferredLocale = preferredLocale
         self.modifiedAt = modifiedAt ?? Date()
+        self.lastAcknowledgedPhase = lastAcknowledgedPhase
         self.profilePhotoFilename = profilePhotoFilename
         self.passedDate = passedDate
         self.ownership = ownership
@@ -176,15 +413,17 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case name, breed, breedId, birthDate, homeDate, sizeCategory
+        case name, breed, breedId, birthDate, homeDate, sizeCategory, gender
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
-        case householdMembers
+        case behaviorInterventions, healthConditions, allergies, coatType, preferredLocale
         case modifiedAt
+        case lastAcknowledgedPhase
         case profilePhotoFilename
         case passedDate
         // Legacy fields for migration (read old values)
         case freeStartDate, isPremiumUnlocked
+        case householdMembers // Legacy - kept for reading old data but no longer used
         // New field
         case legacyPremiumUnlocked
     }
@@ -198,6 +437,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         birthDate = try container.decode(Date.self, forKey: .birthDate)
         homeDate = try container.decode(Date.self, forKey: .homeDate)
         sizeCategory = try container.decode(SizeCategory.self, forKey: .sizeCategory)
+        gender = try container.decodeIfPresent(Gender.self, forKey: .gender) ?? .unspecified
         mealSchedule = try container.decode(MealSchedule.self, forKey: .mealSchedule)
         exerciseConfig = try container.decode(ExerciseConfig.self, forKey: .exerciseConfig)
         predictionConfig = try container.decode(PredictionConfig.self, forKey: .predictionConfig)
@@ -205,8 +445,16 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
         webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
-        householdMembers = try container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers) ?? HouseholdMembers.empty()
+        // Note: householdMembers is no longer used - UserIdentity is now stored per-device
+        // We still decode it for backwards compatibility but ignore the value
+        _ = try? container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers)
+        behaviorInterventions = try container.decodeIfPresent([BehaviorIntervention].self, forKey: .behaviorInterventions) ?? []
+        healthConditions = try container.decodeIfPresent([HealthCondition].self, forKey: .healthConditions) ?? []
+        allergies = try container.decodeIfPresent([Allergy].self, forKey: .allergies) ?? []
+        coatType = try container.decodeIfPresent(CoatType.self, forKey: .coatType)
+        preferredLocale = try container.decodeIfPresent(String.self, forKey: .preferredLocale)
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
+        lastAcknowledgedPhase = try container.decodeIfPresent(LifecyclePhase.self, forKey: .lastAcknowledgedPhase)
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
         passedDate = try container.decodeIfPresent(Date.self, forKey: .passedDate)
 
@@ -230,6 +478,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(birthDate, forKey: .birthDate)
         try container.encode(homeDate, forKey: .homeDate)
         try container.encode(sizeCategory, forKey: .sizeCategory)
+        try container.encode(gender, forKey: .gender)
         try container.encode(mealSchedule, forKey: .mealSchedule)
         try container.encode(exerciseConfig, forKey: .exerciseConfig)
         try container.encode(predictionConfig, forKey: .predictionConfig)
@@ -237,8 +486,14 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(notificationSettings, forKey: .notificationSettings)
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
         try container.encode(webhookConfig, forKey: .webhookConfig)
-        try container.encode(householdMembers, forKey: .householdMembers)
+        // Note: householdMembers no longer encoded - replaced by CloudKit-based UserIdentity
+        try container.encode(behaviorInterventions, forKey: .behaviorInterventions)
+        try container.encode(healthConditions, forKey: .healthConditions)
+        try container.encode(allergies, forKey: .allergies)
+        try container.encodeIfPresent(coatType, forKey: .coatType)
+        try container.encodeIfPresent(preferredLocale, forKey: .preferredLocale)
         try container.encode(modifiedAt, forKey: .modifiedAt)
+        try container.encodeIfPresent(lastAcknowledgedPhase, forKey: .lastAcknowledgedPhase)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
         try container.encodeIfPresent(passedDate, forKey: .passedDate)
         try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)
@@ -252,5 +507,78 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         var copy = self
         copy.modifiedAt = Date()
         return copy
+    }
+
+    // MARK: - Health Summary Computed Properties
+
+    /// Active health conditions (not resolved)
+    public var activeHealthConditions: [HealthCondition] {
+        healthConditions.filter { $0.status == .active || $0.status == .monitoring }
+    }
+
+    /// Health conditions that need review based on monitoring frequency
+    public var conditionsNeedingReview: [HealthCondition] {
+        activeHealthConditions.filter { $0.needsReview }
+    }
+
+    /// Whether this dog has any known health conditions
+    public var hasHealthConditions: Bool {
+        !healthConditions.isEmpty
+    }
+
+    /// Whether this dog has any known allergies
+    public var hasAllergies: Bool {
+        !allergies.isEmpty
+    }
+
+    /// Life-threatening or severe allergies that need prominent display
+    public var criticalAllergies: [Allergy] {
+        allergies.filter { $0.severity == .lifeThreatening || $0.severity == .severe }
+    }
+
+    /// Get breed health risks for this dog
+    public var breedHealthRisks: BreedHealthRisk? {
+        BreedHealthRisk.risks(for: breed)
+    }
+
+    /// Get size-based health risks for this dog
+    public var sizeHealthRisks: [ConditionRisk] {
+        BreedHealthRisk.sizeBasedRisks(for: sizeCategory)
+    }
+
+    /// Conditions we haven't yet diagnosed but the breed is at risk for
+    public var undiagnosedRisks: [ConditionRisk] {
+        let diagnosedTypes = Set(healthConditions.map { $0.type })
+        var risks: [ConditionRisk] = []
+
+        if let breedRisks = breedHealthRisks {
+            risks.append(contentsOf: breedRisks.risks.filter { !diagnosedTypes.contains($0.conditionType) })
+        }
+
+        // Add size-based risks not already in breed risks
+        let breedRiskTypes = Set(risks.map { $0.conditionType })
+        let sizeRisks = sizeHealthRisks.filter {
+            !diagnosedTypes.contains($0.conditionType) && !breedRiskTypes.contains($0.conditionType)
+        }
+        risks.append(contentsOf: sizeRisks)
+
+        return risks
+    }
+
+    /// Screenings that are due based on age
+    public var dueScreenings: [ConditionRisk] {
+        BreedHealthRisk.screeningsDue(for: breed, sizeCategory: sizeCategory, ageMonths: ageInMonths)
+    }
+
+    // MARK: - Coat Type
+
+    /// Suggested coat type based on breed name
+    public var suggestedCoatType: CoatType? {
+        CoatType.suggested(for: breed)
+    }
+
+    /// Effective coat type (explicit or suggested from breed)
+    public var effectiveCoatType: CoatType? {
+        coatType ?? suggestedCoatType
     }
 }

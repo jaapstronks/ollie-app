@@ -20,7 +20,7 @@ struct LogSheetNoteField: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             TextField(placeholder, text: $note)
                 .textFieldStyle(.roundedBorder)
@@ -49,7 +49,7 @@ struct LogSheetActionButtons: View {
             Button(Strings.Common.cancel) {
                 onCancel()
             }
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
             .accessibilityIdentifier(cancelAccessibilityIdentifier)
 
             Button {
@@ -62,7 +62,7 @@ struct LogSheetActionButtons: View {
                     Text(saveLabel)
                 }
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .background(canSave ? Color.accentColor : Color.gray)

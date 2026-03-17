@@ -9,9 +9,10 @@ import OtisShared
 
 /// Sheet for adding or editing an appointment
 struct AddEditAppointmentSheet: View {
-    @ObservedObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore
+    @Environment(ContactStore.self) var contactStore
     var existingAppointment: DogAppointment?
+    var prefill: AppointmentPrefill?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -27,6 +28,7 @@ struct AddEditAppointmentSheet: View {
 
     // Linking
     @State private var linkedContactID: UUID?
+    @State private var linkedGroomingType: GroomingType?
 
     // Validation
     @State private var showingTitleError = false
@@ -59,6 +61,29 @@ struct AddEditAppointmentSheet: View {
                         }
                         // Suggest contact if available
                         suggestContact(for: newType)
+                        // Clear grooming type if not a grooming appointment
+                        if newType != .grooming {
+                            linkedGroomingType = nil
+                        }
+                    }
+
+                    // Grooming type picker (only for grooming appointments)
+                    if appointmentType == .grooming {
+                        Picker(Strings.Grooming.title, selection: $linkedGroomingType) {
+                            Text(Strings.Appointments.appointmentType)
+                                .tag(nil as GroomingType?)
+                            ForEach(GroomingType.allCases, id: \.self) { type in
+                                Label(type.label, systemImage: type.icon)
+                                    .tag(type as GroomingType?)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .onChange(of: linkedGroomingType) { _, newType in
+                            // Update title to reflect specific grooming type
+                            if let groomingType = newType {
+                                title = groomingType.label
+                            }
+                        }
                     }
                 }
 
@@ -70,7 +95,7 @@ struct AddEditAppointmentSheet: View {
                 } footer: {
                     if showingTitleError && title.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text(Strings.Contacts.nameRequired)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
 
@@ -169,7 +194,7 @@ struct AddEditAppointmentSheet: View {
 
         if suggestedContacts.isEmpty {
             Text(Strings.Appointments.noContact)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         } else {
             Picker(Strings.Appointments.linkedContact, selection: $linkedContactID) {
                 Text(Strings.Appointments.noContact).tag(nil as UUID?)
@@ -213,6 +238,23 @@ struct AddEditAppointmentSheet: View {
     // MARK: - Load Existing Appointment
 
     private func loadExistingAppointment() {
+        // Load prefill data first (for nudge-initiated appointments)
+        if let prefill = prefill {
+            appointmentType = prefill.appointmentType
+            title = prefill.title
+            notes = prefill.notes ?? ""
+
+            if let suggestedDate = prefill.suggestedDate {
+                startDate = suggestedDate
+                endDate = suggestedDate.addingTimeInterval(3600) // 1 hour later
+            }
+
+            // Suggest contact for the appointment type
+            suggestContact(for: prefill.appointmentType)
+            return
+        }
+
+        // Load existing appointment data (for editing)
         guard let appointment = existingAppointment else { return }
 
         appointmentType = appointment.appointmentType
@@ -224,6 +266,7 @@ struct AddEditAppointmentSheet: View {
         notes = appointment.notes ?? ""
         reminderMinutesBefore = appointment.reminderMinutesBefore
         linkedContactID = appointment.linkedContactID
+        linkedGroomingType = appointment.linkedGroomingType
     }
 
     // MARK: - Save
@@ -248,6 +291,9 @@ struct AddEditAppointmentSheet: View {
             }
         }
 
+        // Determine linkedMilestoneID from prefill or existing appointment
+        let milestoneID = prefill?.linkedMilestoneID ?? existingAppointment?.linkedMilestoneID
+
         let appointment = DogAppointment(
             id: existingAppointment?.id ?? UUID(),
             title: trimmedTitle,
@@ -255,12 +301,13 @@ struct AddEditAppointmentSheet: View {
             startDate: actualStartDate,
             endDate: actualEndDate,
             isAllDay: isAllDay,
-            location: location.isEmpty ? nil : location,
-            notes: notes.isEmpty ? nil : notes,
+            location: location.nilIfBlank,
+            notes: notes.nilIfBlank,
             reminderMinutesBefore: reminderMinutesBefore,
             recurrence: nil, // TODO: Add recurrence editor for premium
-            linkedMilestoneID: existingAppointment?.linkedMilestoneID,
+            linkedMilestoneID: milestoneID,
             linkedContactID: linkedContactID,
+            linkedGroomingType: appointmentType == .grooming ? linkedGroomingType : nil,
             calendarEventID: existingAppointment?.calendarEventID,
             isCompleted: existingAppointment?.isCompleted ?? false,
             completionNotes: existingAppointment?.completionNotes,
@@ -280,5 +327,5 @@ struct AddEditAppointmentSheet: View {
 
 #Preview {
     AddEditAppointmentSheet(appointmentStore: AppointmentStore())
-        .environmentObject(ContactStore())
+        .environment(ContactStore())
 }

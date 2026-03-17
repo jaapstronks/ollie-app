@@ -12,39 +12,85 @@ Execution sequencing is tracked in `ROADMAP-2026-H1.md`.
 
 ### Positioning statement
 
-Otis is the utility layer for dog life: timeline, planning, household coordination, and memory in one place.
-It is not a content store and should not compete on lesson volume.
+**Otis is an AI-powered puppy assistant that learns your puppy and guides you through the chaos.**
+
+It's not a content store, not a generic training app, and not a simple logger. Otis combines real-time tracking with personalized AI guidance that actually knows your puppy's patterns, progress, and needs.
+
+**One-liner:** "Your AI puppy coach — personalized guidance based on real data."
 
 ### Target user
 
-- Primary: first-time puppy owners in weeks 0-12 who feel overwhelmed.
-- Secondary: dog owners who want practical planning and data continuity across life phases.
+- Primary: first-time puppy owners in weeks 0-12 who feel overwhelmed and want smart guidance.
+- Secondary: committed dog owners who value personalized insights over generic advice.
+- NOT: price-sensitive users looking for free apps or bargain hunters.
 
 ### Core message hierarchy
 
-1. Reduce chaos and anxiety.
-2. Keep everything in one timeline.
-3. Stay in control of your own data (privacy-first, no ads/tracking).
-4. Use Apple-native workflows (widgets, watch, Siri, shortcuts) for low-friction daily use.
+1. **Personalized AI guidance** — not generic advice, but insights based on YOUR puppy's actual data.
+2. **Reduce chaos and anxiety** — know what to do next, always.
+3. **See patterns you'd miss** — AI analyzes your logs and surfaces what matters.
+4. **Apple-native experience** — widgets, watch, Siri, shortcuts for low-friction daily use.
+5. **Privacy-first** — your data stays yours, no ads, no tracking.
 
-### AI stance
+### AI stance — ALL IN
 
-AI is only valuable when it is operational and personalized on real user data.
+**AI is our core differentiator.** It's not a feature — it's the product.
 
-- Build: daily/weekly summaries, next-best-action suggestions, smart reminders.
-- Avoid: generic chatbot advice that can be copied by competitors.
+What makes Otis AI different from ChatGPT/generic advice:
+- Operates on YOUR puppy's actual logged data (potty times, sleep, training progress)
+- Learns patterns over days/weeks, not just answering questions
+- Proactive guidance ("time for a walk based on today's pattern") not reactive chat
+- Embedded in the UX, not a separate chatbot screen
+
+**AI surfaces (all premium):**
+- Training guidance — what to train next, session tips, encouragement
+- Potty analysis — personalized potty training insights from your logs
+- Socialization guidance — priority categories based on exposure gaps
+- Health insights — wellness observations from daily patterns
+- Smart notifications — AI-adjusted timing for reminders
+- Daily status — personalized headlines based on the day so far
+
+**Cost reality:** AI costs ~€1-2/user/month. This is baked into our pricing.
 
 ### Language and market focus (now)
 
 - Focus GTM execution on EN, NL, DE.
 - Keep other language assets archived for reuse after core funnel validation.
 
+### Pricing strategy — PREMIUM POSITIONING
+
+**No free tier.** Trial-to-paid model only.
+
+| Plan | Price | Net (after Apple) | AI cost | Margin |
+|------|-------|-------------------|---------|--------|
+| Monthly | €5.99/mo | €4.19 | ~€1.50 | ~€2.69 |
+| Yearly | €49.99/yr (€4.17/mo) | €35.00 | ~€18 | ~€17 |
+
+**Why this pricing:**
+- Sustainable unit economics with AI costs baked in
+- Still 3-4x cheaper than Woofz effective ARPU (€150/yr)
+- Positions as premium, not bargain
+- Annual plan encourages commitment, reduces churn
+
+**Trial model:**
+- 14-day full-access trial (all AI features)
+- No credit card required to start
+- Clear conversion moment at day 14
+- Trial→paid target: 8-12%
+
+**Why no free tier:**
+- AI costs make free unsustainable
+- Free users don't convert well anyway
+- Better to have fewer, committed users
+- The product is fundamentally better with AI — free without AI feels incomplete
+
 ### Near-term build priorities
 
-1. Adaptive "phase mode" UX (puppy chaos -> routine mode -> long-term mode).
-2. Owner wellbeing support (puppy blues check-ins, practical reassurance).
-3. Planning + accountability workflows (weekly plan, shared household visibility).
-4. Bookmark external learning resources (YouTube/articles) instead of building large internal content libraries.
+1. **Onboarding → trial conversion flow** — nail the first 14 days, show AI value early.
+2. Adaptive "phase mode" UX (puppy chaos -> routine mode -> long-term mode).
+3. Owner wellbeing support (puppy blues check-ins, practical reassurance).
+4. Planning + accountability workflows (weekly plan, shared household visibility).
+5. AI quality iteration — use interaction logs to improve prompts continuously.
 
 ---
 
@@ -157,54 +203,63 @@ Based on competitor analysis and reviews:
 
 ---
 
-## Otis's Position: The Anti-Content-Store
+## Otis's Position: AI-Powered Personal Guidance
 
-### Our Thesis
+### Our Thesis (Updated March 2026)
 
-**Woofz/Dogo/Zigzag = Content stores.** They sell training programs, lessons, access to trainers.
+**Woofz/Dogo/Zigzag = Content stores.** They sell training programs, lessons, access to trainers. Generic advice that's the same for every user.
 
-**Otis = Utility.** We wrap around your dog's life. We don't tell you what to do — we show you what's happening and help you make better decisions.
+**Otis = AI-powered personal guidance.** We learn YOUR puppy from YOUR data and give personalized recommendations that generic apps can't match.
+
+The key insight: **Competitors can copy features, but they can't copy your puppy's data.** Our AI advantage grows stronger the more users log.
 
 ### The Positioning
 
-**"De slimme puppy-app die meeleert"**
+**"Je persoonlijke AI puppy-coach"** / **"Your AI puppy coach"**
 
-Other apps tell you what to do. Otis shows you what's actually happening with your puppy and helps you make better decisions based on real data.
+Other apps give you the same advice as everyone else. Otis learns your puppy's patterns and gives guidance that's actually relevant to YOUR situation.
 
-**One-liner:** "Track your puppy's day. Train smarter, not harder."
+**One-liner:** "AI guidance based on your puppy's real data."
+
+**Elevator pitch:**
+> "Otis is like having a puppy expert who's watched your puppy all day. It knows when Luna usually needs to go out, which training she's ready for, and what you should focus on today — because it's actually analyzing your logs, not giving generic advice."
 
 ### Where We're Stronger
 
 | Advantage | Why It Matters |
 |-----------|----------------|
+| **AI-powered personalization** | Guidance based on YOUR data, not generic advice |
+| **Learns over time** | AI gets smarter the more you log |
 | **Modern native app** | SwiftUI, not cross-platform bloat |
 | **Siri Shortcuts** | "Hey Siri, Ollie went pee outside" |
 | **Widgets** | Glanceable status on home screen |
 | **Watch companion** | Log from your wrist |
-| **Lower price** | €2.99/mo vs $10/week |
-| **No content treadmill** | One-time features, not endless lessons |
-| **Timeline-first** | See the whole day, not just training |
+| **Fair pricing** | €5.99/mo vs Woofz's effective €12-14/mo |
+| **No content treadmill** | AI adapts vs. endless static lessons |
+| **Timeline-first** | See the whole day, AI surfaces what matters |
 | **Partner sharing** | Multi-caretaker households |
-| **Pattern recognition** | "Your puppy pees every 2h12m on average" |
+| **Pattern recognition** | AI-powered insights, not just averages |
 | **No gamification** | Respectful, not manipulative |
 
 ### Where We're Weaker
 
 | Gap | Reality Check |
 |-----|---------------|
-| **Training content volume** | We have 10 skills, they have 100+ |
-| **Behavioral problem-solving** | We track, we don't fix biting problems |
-| **Trainer access** | No 1:1 sessions, no chat |
+| **Training content volume** | We have 10 skills, they have 100+ (but AI prioritizes for you) |
+| **Behavioral problem-solving** | AI gives guidance, but no 1:1 trainer for severe issues |
+| **Trainer access** | No live sessions (AI is the "trainer") |
 | **Brand recognition** | They have millions of downloads |
-| **Video production** | We can't compete on polish |
+| **Video production** | We can't compete on production value |
 
 ### The Strategic Insight
 
-We don't need to beat them. We can **complement** them.
+**We're not complementing them anymore — we're competing on a different axis.**
 
-A user might use Dogo for training lessons AND Otis for tracking their day. Or they might use Otis instead because they don't want lessons — they just want to know "is my puppy on track?"
+They compete on content volume. We compete on personalization. Their 100 videos are the same for everyone. Our AI guidance is different for every puppy.
 
-Our target user: **"I want to understand my puppy, not be told what to do."**
+Our target user: **"I want guidance that's actually relevant to MY puppy."**
+
+This is a fundamentally different value proposition that content stores can't easily copy — they'd have to rebuild their entire product around user data.
 
 ---
 
@@ -214,73 +269,85 @@ Based on FEATURES.yaml analysis vs competitors:
 
 | Category | Otis | Woofz | Dogo | Zigzag |
 |----------|------|-------|------|--------|
+| **AI personalization** | ✅ Core feature | ❌ | ❌ | ❌ |
+| **AI training guidance** | ✅ Learns your progress | ❌ | ❌ | ❌ |
+| **AI potty insights** | ✅ Pattern analysis | ❌ | ❌ | ❌ |
+| **AI health insights** | ✅ Daily observations | ❌ | ❌ | ❌ |
 | **Event logging** | ✅ Best-in-class | Basic | ❌ | ❌ |
 | **Timeline view** | ✅ Core feature | Basic | ❌ | ❌ |
-| **Potty tracking** | ✅ Free | Premium | Premium | ❌ |
-| **Sleep analysis** | ✅ Free | ❌ | ❌ | ❌ |
-| **Potty predictions** | ✅ Premium | ❌ | ❌ | ❌ |
-| **Partner sharing** | ✅ Premium | Premium | ❌ | ❌ |
-| **Training library** | ✅ 10 free, more premium | Premium | Premium | Premium |
+| **Potty tracking** | ✅ | Premium | Premium | ❌ |
+| **Sleep analysis** | ✅ | ❌ | ❌ | ❌ |
+| **Potty predictions** | ✅ AI-enhanced | ❌ | ❌ | ❌ |
+| **Partner sharing** | ✅ | Premium | ❌ | ❌ |
+| **Training library** | ✅ AI-prioritized | Premium | Premium | Premium |
 | **Interactive sessions** | ✅ Clicker-based | Video + trainer | Video | Video |
-| **1:1 trainer access** | ❌ | ✅ | ❌ | ✅ |
-| **Socialization** | ✅ Premium | ❌ | ❌ | Premium |
-| **Development phases** | ✅ Premium | ❌ | ❌ | ✅ |
-| **Health records** | ✅ Premium | Basic | ❌ | ❌ |
+| **1:1 trainer access** | ❌ (AI is trainer) | ✅ | ❌ | ✅ |
+| **Socialization** | ✅ AI-guided | ❌ | ❌ | Premium |
+| **Development phases** | ✅ | ❌ | ❌ | ✅ |
+| **Health records** | ✅ | Basic | ❌ | ❌ |
 | **Walk tracking** | ✅ Basic | ✅ GPS | ❌ | ❌ |
 | **Widgets** | ✅ | ❌ | ❌ | ❌ |
 | **Watch app** | ✅ | ❌ | ❌ | ❌ |
 | **Siri Shortcuts** | ✅ | ❌ | ❌ | ❌ |
 
-**Otis feature count:** 97 features shipped (per FEATURES.yaml)
-**Unique differentiators:** Timeline, potty predictions, Apple ecosystem integration, pattern analysis
+**Otis feature count:** 105+ features shipped (per FEATURES.yaml, including 8 AI surfaces)
+**Unique differentiators:** AI personalization, Apple ecosystem, real-time pattern analysis
+
+**The AI gap:** No competitor has AI that operates on user data. This is our moat.
 
 ---
 
-## Path to 3,000 Subscribers
+## Path to Profitability (Updated Model)
 
-### The Math
+### The Math (Premium AI Model)
 
-**Target:** 3,000 paying subscribers × €2.99/mo = **~€9,000/mo**
+**Target:** 1,500 paying subscribers × €5.99/mo = **~€9,000/mo gross**
 
-### Conversion Benchmarks
+| Metric | Value |
+|--------|-------|
+| Gross revenue | €9,000/mo |
+| After Apple (70%) | €6,300/mo |
+| AI costs (~€1.50/user) | -€2,250/mo |
+| **Net margin** | **€4,050/mo** |
 
-| Model | Typical Conversion | Top Performers |
-|-------|-------------------|----------------|
-| Hard paywall | 2-5% of downloads | 8%+ |
-| Freemium | 2-3% of active users | 5-8% |
-| Trial → paid | 40-60% | 70%+ |
+With annual plans (higher % converts to annual):
+- 60% annual (€49.99/yr = €4.17/mo effective)
+- 40% monthly (€5.99/mo)
+- Blended ARPU: ~€4.90/mo
+- Better retention, more predictable revenue
 
-Sources: [RevenueCat State of Subscription Apps 2025](https://www.revenuecat.com/state-of-subscription-apps-2025/), [Business of Apps](https://www.businessofapps.com/data/app-conversion-rates/)
+### Conversion Benchmarks (Trial Model)
 
-### Funnel Math (Conservative)
+| Metric | Industry Average | Our Target |
+|--------|-----------------|------------|
+| Trial start rate | 30-50% of downloads | 40% |
+| Trial → paid | 40-60% | 50% |
+| Download → paid | 15-25% | 20% |
+
+Sources: [RevenueCat State of Subscription Apps 2025](https://www.revenuecat.com/state-of-subscription-apps-2025/)
+
+### Funnel Math (Trial Model)
 
 ```
-Downloads needed:      100,000
-  ↓ 30% retention
-Active users:           30,000
-  ↓ 20% try premium
-Trial starts:            6,000
+Downloads needed:       10,000
+  ↓ 40% start trial
+Trial starts:            4,000
   ↓ 50% convert
-Paying subscribers:      3,000 ✓
+Paying subscribers:      2,000 ✓
 ```
 
-**Or with harder paywall (aggressive):**
-```
-Downloads needed:       60,000
-  ↓ 5% direct convert
-Paying subscribers:      3,000 ✓
-```
+**Key insight:** Trial model needs far fewer downloads than freemium to reach same subscriber count. Quality over quantity.
 
-### Timeline to 100K Downloads
+### Revised Timeline
 
-| Milestone | Downloads | How |
-|-----------|-----------|-----|
-| Month 1-3 | 5,000 | Launch, friends & family, initial reviews |
-| Month 4-6 | 15,000 | ASO optimization, first content hits |
-| Month 6-12 | 40,000 | Consistent content, word-of-mouth |
-| Year 2 | 100,000 | Compound growth, PR, partnerships |
+| Milestone | Downloads | Subscribers | MRR |
+|-----------|-----------|-------------|-----|
+| Month 1-3 | 2,000 | 200 | €1,000 |
+| Month 4-6 | 5,000 | 600 | €3,000 |
+| Month 6-12 | 10,000 | 1,500 | €7,500 |
+| Year 2 | 25,000 | 3,500 | €17,500 |
 
-This is **achievable but not fast**. Zigzag took years to hit 1M. Woofz grew explosively but they optimized aggressively.
+**Profitability timeline:** Break-even on AI costs from Month 1. Net profitable from Month 3.
 
 ---
 
@@ -357,121 +424,168 @@ This is **achievable but not fast**. Zigzag took years to hit 1M. Woofz grew exp
 
 ---
 
-## Pricing Strategy (Refined)
+## Pricing Strategy (Premium AI Model)
 
-### Current Plan
-- **Monthly:** €2.99
-- **Yearly:** €24.99 (€2.08/mo, 30% discount)
-- **Trial:** 7 days
+### New Pricing Structure
 
-### Why This Works
+| Plan | Price | Effective Monthly | Annual Value |
+|------|-------|-------------------|--------------|
+| **Monthly** | €5.99/mo | €5.99 | €71.88/yr |
+| **Yearly** | €49.99/yr | €4.17 | €49.99/yr (30% off) |
+| **Trial** | 14 days free | Full access | — |
 
-1. **Low barrier to entry** — €2.99 is impulse-buy territory
-2. **Yearly discount meaningful** — 30% off encourages commitment
-3. **Trial reduces friction** — See value before paying
+### Why This Pricing
 
-### Consider Testing
+1. **Sustainable with AI costs** — €4.19 net (after Apple), minus €1.50 AI = €2.69 margin
+2. **Still cheaper than competitors** — Woofz effective ARPU is €12-14/mo
+3. **Premium positioning** — Not competing with free apps
+4. **Annual discount meaningful** — 30% off drives commitment and reduces churn
 
-- **Weekly pricing** — €1.49/week = €6/month effective. Higher ARPU but feels scammy. Probably not Otis's style.
-- **Lifetime option** — €49.99 one-time. Good for early adopters, caps revenue per user.
-- **Family plan** — €4.99/mo for household. Natural upsell from partner sharing.
+### What's NOT in the plan
 
-### Revenue Projection
+- **No free tier** — AI costs make this unsustainable
+- **No weekly pricing** — Feels predatory, not our style
+- **No lifetime option** — Ongoing AI costs require recurring revenue
 
-| Subscribers | Monthly Revenue | Annual Revenue |
-|-------------|-----------------|----------------|
-| 500 | €1,500 | €18,000 |
-| 1,000 | €3,000 | €36,000 |
-| 2,000 | €6,000 | €72,000 |
-| 3,000 | €9,000 | €108,000 |
-| 5,000 | €15,000 | €180,000 |
+### Consider Testing Later
 
-At 3,000 subscribers, ~€100K/year is achievable as a sustainable indie app business.
+- **Family plan** — €7.99/mo for household (2+ users). Natural upsell from partner sharing.
+- **Annual-only** — Some premium apps only offer annual to maximize LTV
+
+### Revenue Projection (Net After Apple + AI)
+
+| Subscribers | Gross MRR | Net (after Apple) | AI Costs | **Net Margin** |
+|-------------|-----------|-------------------|----------|----------------|
+| 500 | €2,500 | €1,750 | €750 | **€1,000** |
+| 1,000 | €5,000 | €3,500 | €1,500 | **€2,000** |
+| 1,500 | €7,500 | €5,250 | €2,250 | **€3,000** |
+| 2,000 | €10,000 | €7,000 | €3,000 | **€4,000** |
+| 3,000 | €15,000 | €10,500 | €4,500 | **€6,000** |
+
+**At 1,500 subscribers:** €36K ARR net margin. Solid indie business.
+**At 3,000 subscribers:** €72K ARR net margin. Full-time income potential.
 
 ---
 
 ## What to Build Next (Priority)
 
-Based on competitive analysis and growth strategy:
+Based on AI-first positioning and trial conversion focus:
 
-### High Impact (Do Now)
-1. **Onboarding optimization** — Competitors invest heavily here. Make it feel personalized.
-2. **Push notification excellence** — Potty predictions delivered at right time = magic moment.
-3. **Widget polish** — Our unique differentiator. Make it beautiful.
-4. **App Store screenshots** — Show the timeline, show the predictions, show the watch.
+### Critical Path (Do Now)
+1. **Trial conversion flow** — First 14 days must showcase AI value. Day 1, 3, 7, 12 touchpoints.
+2. **AI quality iteration** — Use interaction logs to improve prompts. This is the product.
+3. **Onboarding → AI moment** — Show AI insight within first session. "Based on Luna's age, here's what to focus on."
+4. **Trial expiry UX** — Clear, non-annoying conversion moment. Show what they'll lose.
 
-### Medium Impact (Do Soon)
-1. **Watch complications** — Quick log from wrist is genuinely useful.
-2. **Share card for milestones** — Social proof, organic growth.
-3. **Referral system** — Partner sharing is the seed.
+### High Impact (Do Soon)
+1. **Push notification excellence** — AI-timed reminders = magic moments that drive conversion.
+2. **App Store screenshots** — Lead with AI: "Your AI puppy coach" + AI card screenshots.
+3. **Widget polish** — Show AI insight on home screen.
 
-### Low Priority (Maybe Later)
-1. **More training content** — We won't beat them here. Focus elsewhere.
-2. **GPS walk tracking** — Apple Health does this. Don't reinvent.
-3. **AI features** — Commodity. Everyone has it. Not a differentiator.
+### Medium Impact (Next Quarter)
+1. **Watch complications** — Quick log drives data, data drives AI quality.
+2. **Share card for milestones** — Social proof, but secondary to conversion.
+3. **AI confidence indicators** — Show users when AI is learning vs confident.
+
+### Deprioritized (AI-first means less focus here)
+1. **More training content** — AI prioritizes existing content; volume doesn't matter.
+2. **GPS walk tracking** — Nice-to-have, not AI-relevant.
+3. **Advanced socialization features** — AI guidance covers this.
 
 ### Never Build
-- Video content production (too expensive, too much competition)
-- Live trainer chat (operationally impossible)
+- Free tier (incompatible with AI costs)
+- Video content production (can't compete, not our axis)
+- Live trainer chat (AI is the trainer)
 - Community/forum (moderation nightmare)
-- Gamification/streaks (not our style, often annoying)
+- Gamification/streaks (not our style)
 
 ---
 
 ## Competitive Response Scenarios
 
+### If Woofz adds AI
+- They probably will eventually (generic chatbot, not data-driven)
+- Our advantage: AI operates on logged data; they have no logging infrastructure
+- Response: Double down on "learns YOUR puppy" messaging. Their AI is generic, ours is personal.
+
 ### If Woofz adds tracking
-- They probably will eventually
-- Our advantage: we're tracking-first, they're training-first
-- Response: lean into integrations (Apple ecosystem), lean into simplicity
+- Would require major product rewrite
+- Our advantage: tracking is our core, not an afterthought
+- Response: AI integration with tracking is the moat — hard to replicate both.
 
 ### If someone clones us
-- Execution matters more than features
-- Our brand, our community, our reviews are defensible
-- Keep shipping, keep engaging
+- Need both tracking UX AND AI infrastructure AND prompt engineering
+- Our data flywheel: more users → more data → better AI → more value
+- Response: Ship faster, iterate prompts, build brand.
 
 ### If market shrinks
 - Puppies are always being born
 - Recession-resistant (pet spending holds up)
-- Freemium core protects us
+- Premium positioning means more committed users who churn less
 
 ---
 
 ## Success Metrics
 
 ### Monthly Tracking
-- Downloads
-- Active users (DAU/MAU)
-- Trial starts
-- Trial → paid conversion
-- MRR
+- Downloads (lower volume expected with premium positioning)
+- Trial starts (% of downloads)
+- Trial → paid conversion (THE key metric)
+- MRR and net margin (after AI costs)
 - Churn rate
 - App Store rating
+- AI usage (calls per user, cache hit rate)
 
 ### Target Numbers (Month 12)
-- Downloads: 40,000+
-- Active users: 12,000+
-- Paying subscribers: 1,500+
-- MRR: €4,500+
-- Rating: 4.7+ stars
-- Churn: <10%/month
+
+| Metric | Target | Why |
+|--------|--------|-----|
+| Downloads | 10,000+ | Quality over quantity |
+| Trial starts | 4,000+ (40%) | Healthy trial uptake |
+| Paying subscribers | 1,500+ | Core revenue base |
+| Trial→paid | 40%+ | Conversion excellence |
+| MRR | €7,500+ | Sustainable indie business |
+| Net margin | €3,000+/mo | After AI costs |
+| Rating | 4.7+ stars | Premium experience |
+| Churn | <8%/month | Sticky product |
 
 ---
 
 ## Summary
 
-**The opportunity:** Dog training apps market is growing 13.5% CAGR. Competitors are content-heavy and expensive. There's room for a lean, utility-focused alternative.
+**The opportunity:** Dog training apps market is growing 13.5% CAGR. Competitors sell static content. No one has AI that operates on user data.
 
-**Our bet:** People who want to *understand* their puppy, not just be told what to do. The "quantified self" for puppy owners.
+**Our bet:** AI-powered personalization beats generic content libraries. People will pay more for guidance that actually knows their puppy.
 
-**The path:** 100K downloads → 30K active users → 3K subscribers → €9K/month.
+**The differentiation:** Competitors can copy features. They can't copy your puppy's data. Our AI gets better the more users log — a flywheel they can't easily replicate.
 
-**How long:** 18-24 months with consistent execution.
+**The path:** 10K downloads → 4K trials → 1.5K subscribers → €7.5K MRR → €3K net margin.
 
-**What we need:** Great app (have it), consistent content marketing (need it), patience (essential).
+**How long:** 12 months to sustainable indie business. 24 months to full-time income potential.
+
+**What we need:**
+- ✅ Great app (have it)
+- ✅ AI infrastructure (have it)
+- 🔄 Trial conversion excellence (building it)
+- 🔄 AI quality iteration (ongoing)
+- 📋 Premium marketing positioning (this document)
 
 ---
 
-*"For mobile apps: <$10M ARR is all marketing game. >$100M ARR is all product game."* — [Indie Hackers](https://www.indiehackers.com/post/my-18-learnings-after-growing-my-app-from-0-to-500k-mo-in-12-months-bootstrapped-8c22f46d28)
+## The AI Moat
 
-We're in the marketing game. Ship the product, tell the story.
+> "Competitors can copy features, but they can't copy your data."
+
+Our defensibility comes from:
+1. **Data collection UX** — Best-in-class logging drives data quality
+2. **AI infrastructure** — Broker, caching, daily limits, prompt engineering
+3. **Feedback loop** — Interaction logs drive continuous improvement
+4. **User lock-in** — More data = better AI = more value = harder to leave
+
+This is not a feature-based moat. It's a data-based moat. Every day a user logs, we get smarter about their puppy. Competitors starting from scratch can't catch up.
+
+---
+
+*"The best AI products aren't the ones with the best models — they're the ones with the best data."*
+
+We have the data. Now we monetize it.

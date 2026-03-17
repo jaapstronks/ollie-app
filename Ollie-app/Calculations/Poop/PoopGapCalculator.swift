@@ -35,6 +35,26 @@ struct PoopGapCalculator {
         return gaps
     }
 
+    /// Optimized: Calculate gaps using lightweight EventRef (no struct copies)
+    static func calculateDaytimeGaps(poopRefs: [EventRef], currentTime: Date) -> [Int] {
+        guard poopRefs.count >= 2 else { return [] }
+
+        var gaps: [Int] = []
+
+        for i in 1..<poopRefs.count {
+            let start = poopRefs[i - 1].time
+            let end = poopRefs[i].time
+
+            let gap = calculateDaytimeGapMinutes(from: start, to: end)
+
+            if let gap = gap, gap > 0 && gap < 12 * 60 {
+                gaps.append(gap)
+            }
+        }
+
+        return gaps
+    }
+
     /// Calculate minutes between two times, excluding night hours
     /// Returns nil if the entire period is during night
     static func calculateDaytimeGapMinutes(from startTime: Date?, to endTime: Date) -> Int? {

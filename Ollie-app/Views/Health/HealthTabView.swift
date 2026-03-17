@@ -10,16 +10,18 @@ import OtisShared
 
 /// Health tab showing medical timeline, weight, potty training, and stats
 struct HealthTabView: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var momentsViewModel: MomentsViewModel
+    @Bindable var viewModel: TimelineViewModel
+    var momentsViewModel: MomentsViewModel
     let onSettingsTap: () -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
-    @EnvironmentObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var weightStore: WeightStore
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SubscriptionManager.self) var subscriptionManager
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(MilestoneStore.self) var milestoneStore
+    @Environment(AppointmentStore.self) var appointmentStore
+    @Environment(WeightStore.self) var weightStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(RoutineStore.self) var routineStore
+    @Environment(ContactStore.self) var contactStore
 
     @State private var showWeightSheet = false
     @State private var showGrowthChart = false
@@ -31,7 +33,7 @@ struct HealthTabView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
+            ScrollView(.vertical) {
                 VStack(spacing: 20) {
                     // MARK: - Development & Growth Section
 
@@ -88,6 +90,12 @@ struct HealthTabView: View {
                             .animatedAppear(delay: 0.15)
                     }
 
+                    // Grooming & Care section
+                    if profileStore.profile != nil {
+                        groomingCareSection
+                            .animatedAppear(delay: 0.18)
+                    }
+
                     // Combined potty training section (streak + gaps)
                     pottyTrainingSection
                         .animatedAppear(delay: 0.20)
@@ -118,8 +126,9 @@ struct HealthTabView: View {
                     .animatedAppear(delay: 0.30)
                 }
                 .padding()
-                .adaptiveContainer()
+                .clipped()
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
             .navigationTitle(Strings.Tabs.health)
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
@@ -155,17 +164,18 @@ struct HealthTabView: View {
                 MilestoneCompletionSheet(
                     milestone: milestone,
                     onDismiss: { selectedMilestone = nil },
-                    onComplete: { notes, photoID, vetClinic, completionDate in
+                    onComplete: { notes, photoID, linkedContactID, completionDate in
                         milestoneStore.completeMilestone(
                             milestone,
                             notes: notes,
                             photoID: photoID,
-                            vetClinicName: vetClinic,
+                            linkedContactID: linkedContactID,
                             completionDate: completionDate
                         )
                         selectedMilestone = nil
                     }
                 )
+                .environment(contactStore)
                 .adaptivePresentationDetents(
                     compact: [.large],
                     regular: [.medium, .large]
@@ -251,6 +261,20 @@ struct HealthTabView: View {
             InsightsSectionHeader(title: title, icon: icon, tint: tint)
             content()
         }
+    }
+
+    // MARK: - Grooming Care Section
+
+    @ViewBuilder
+    private var groomingCareSection: some View {
+        GroomingCareSection(
+            onShowSchedule: {
+                viewModel.sheetCoordinator.presentSheet(.groomingSettings)
+            },
+            onLogActivity: { type in
+                viewModel.sheetCoordinator.presentSheet(.groomingQuickLog(preselectedType: type))
+            }
+        )
     }
 
     // MARK: - Combined Potty Training Section
@@ -496,10 +520,11 @@ private struct HealthMilestoneRow: View {
         momentsViewModel: momentsViewModel,
         onSettingsTap: { print("Settings tapped") }
     )
-    .environmentObject(SubscriptionManager.shared)
-    .environmentObject(profileStore)
-    .environmentObject(MilestoneStore())
-    .environmentObject(AppointmentStore())
-    .environmentObject(WeightStore())
-    .environmentObject(SocializationStore())
+    .environment(SubscriptionManager.shared)
+    .environment(profileStore)
+    .environment(MilestoneStore())
+    .environment(AppointmentStore())
+    .environment(WeightStore())
+    .environment(SocializationStore())
+    .environment(RoutineStore())
 }

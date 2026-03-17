@@ -15,19 +15,7 @@ struct InsightsWeekOverviewSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "calendar.badge.clock")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.otisInfo)
-                    .accessibilityHidden(true)
-
-                Text(Strings.Insights.weekOverview)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 4)
-            .accessibilityAddTraits(.isHeader)
+            SectionHeader(title: Strings.Insights.weekOverview, icon: "calendar.badge.clock", tint: .otisInfo)
 
             // Week grid
             WeekGridView(weekStats: weekStats)

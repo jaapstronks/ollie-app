@@ -2,34 +2,67 @@
 //  SkillLearningFlowSheet.swift
 //  Otis-app
 //
-//  Paged learning flow for training skills using progressive disclosure
+//  Main entry point for skill learning flow.
+//  Shows SkillPhasesPage with theory + phases as list rows.
+//  Each row opens a detail sheet for that phase.
 //
 
 import SwiftUI
 import OtisShared
 
-/// Main container for the stepped learning flow
+/// Main coordinator for skill learning
 struct SkillLearningFlowSheet: View {
     let skill: Skill
     let status: SkillStatus
     let sessionCount: Int
     let recentSessions: [PuppyEvent]
-    let onStartTraining: (SkillPhase?) -> Void  // Now passes the current phase
+    let onStartTraining: (SkillPhase?) -> Void
     let onLogSession: () -> Void
     let onToggleMastered: () -> Void
     let onDismiss: () -> Void
 
-    @ObservedObject var progressStore: TrainingProgressStore
+    @Bindable var progressStore: TrainingProgressStore
+    var skillProgressStore: SkillProgressStore
+    @Bindable var theoryStore: TrainingTheoryStore
+
+    var body: some View {
+        SkillPhasesPage(
+            skill: skill,
+            skillProgressStore: skillProgressStore,
+            theoryStore: theoryStore,
+            onDismiss: onDismiss
+        )
+    }
+}
+
+// MARK: - Legacy Flow Sheet (for skills without phases)
+
+/// Original horizontal swipe flow for simpler skills
+struct SkillLearningLegacyFlowSheet: View {
+    let skill: Skill
+    let status: SkillStatus
+    let sessionCount: Int
+    let recentSessions: [PuppyEvent]
+    let onStartTraining: (SkillPhase?) -> Void
+    let onLogSession: () -> Void
+    let onToggleMastered: () -> Void
+    let onDismiss: () -> Void
+
+    @Bindable var progressStore: TrainingProgressStore
+    var skillProgressStore: SkillProgressStore
 
     @State private var currentPage: Int = 0
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private var progress: SkillProgress {
+        skillProgressStore.progress(for: skill.id)
+    }
+
     private var phases: [SkillPhase] {
         skill.effectivePhases
     }
 
-    /// Total pages: 1 overview + n phases
     private var totalPages: Int {
         1 + phases.count
     }
@@ -44,6 +77,7 @@ struct SkillLearningFlowSheet: View {
                     sessionCount: sessionCount,
                     phases: phases,
                     progressStore: progressStore,
+                    skillProgress: progress,
                     onStartLearning: {
                         withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) {
                             currentPage = 1
@@ -70,8 +104,9 @@ struct SkillLearningFlowSheet: View {
                         },
                         onStartTraining: {
                             onDismiss()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                onStartTraining(phase)  // Pass the current phase
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.3))
+                                onStartTraining(phase)
                             }
                         }
                     )
@@ -99,7 +134,6 @@ struct SkillLearningFlowSheet: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                // Bottom action bar (only show on last page)
                 if currentPage == totalPages - 1 {
                     bottomActionBar
                 }
@@ -107,19 +141,17 @@ struct SkillLearningFlowSheet: View {
         }
     }
 
-    // MARK: - Bottom Action Bar
-
     @ViewBuilder
     private var bottomActionBar: some View {
         VStack(spacing: 12) {
             Divider()
 
             HStack(spacing: 12) {
-                // Log session button
                 Button {
                     HapticFeedback.light()
                     onDismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         onLogSession()
                     }
                 } label: {
@@ -138,26 +170,23 @@ struct SkillLearningFlowSheet: View {
                     )
                 }
 
-                // Toggle mastered
-                if status == .practicing || status == .mastered {
-                    Button {
-                        HapticFeedback.medium()
-                        onToggleMastered()
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
-                            Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
-                        }
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
-                        )
+                Button {
+                    HapticFeedback.medium()
+                    onToggleMastered()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
+                        Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
                     }
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
+                    )
                 }
             }
             .padding(.horizontal)
@@ -170,9 +199,9 @@ struct SkillLearningFlowSheet: View {
 // MARK: - Preview
 
 private let previewSkill = Skill(
-    id: "collarLeash",
-    icon: "dog.fill",
-    category: .safety,
+    id: "sit",
+    icon: "figure.seated",
+    category: .basicCommands,
     sortOrder: 5,
     requires: [],
     method: nil,
@@ -180,9 +209,10 @@ private let previewSkill = Skill(
     sessionsPerDay: 2,
     steps: nil,
     phases: [
-        SkillPhase(id: "introduction", howToStepIndices: [0, 1], tipIndices: [0]),
-        SkillPhase(id: "buildDuration", howToStepIndices: [2], tipIndices: [1]),
-        SkillPhase(id: "leashWork", howToStepIndices: [3, 4], tipIndices: [2, 3])
+        SkillPhase(id: "lureToPosition", howToStepIndices: [0, 1, 2], tipIndices: [0, 1]),
+        SkillPhase(id: "captureAndStrengthen", howToStepIndices: [3, 4], tipIndices: [2]),
+        SkillPhase(id: "addVerbalCue", howToStepIndices: [5, 6, 7], tipIndices: [3]),
+        SkillPhase(id: "proofThreeDs", howToStepIndices: [8, 9, 10], tipIndices: [4, 5])
     ]
 )
 
@@ -196,6 +226,8 @@ private let previewSkill = Skill(
         onLogSession: {},
         onToggleMastered: {},
         onDismiss: {},
-        progressStore: TrainingProgressStore()
+        progressStore: TrainingProgressStore(),
+        skillProgressStore: SkillProgressStore(),
+        theoryStore: TrainingTheoryStore()
     )
 }

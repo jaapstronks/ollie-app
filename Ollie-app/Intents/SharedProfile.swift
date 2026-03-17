@@ -12,8 +12,8 @@ import OtisShared
 struct SharedProfile: Codable {
     let name: String
     let legacyPremiumUnlocked: Bool
-    /// ID of the current user's household member (for event attribution)
-    let currentUserMemberId: UUID?
+    /// CloudKit record ID of the current user (for event attribution)
+    let currentUserRecordID: String?
 
     /// Core logging is always free now - no time-gate
     var canLogEvents: Bool {
@@ -21,17 +21,18 @@ struct SharedProfile: Codable {
     }
 
     /// Create from full PuppyProfile
+    @MainActor
     init(from profile: PuppyProfile) {
         self.name = profile.name
         self.legacyPremiumUnlocked = profile.legacyPremiumUnlocked
-        self.currentUserMemberId = profile.householdMembers.currentUser()?.id
+        self.currentUserRecordID = UserIdentityStore.shared.currentUserRecordID
     }
 
     /// Direct initializer for decoding
-    init(name: String, legacyPremiumUnlocked: Bool, currentUserMemberId: UUID? = nil) {
+    init(name: String, legacyPremiumUnlocked: Bool, currentUserRecordID: String? = nil) {
         self.name = name
         self.legacyPremiumUnlocked = legacyPremiumUnlocked
-        self.currentUserMemberId = currentUserMemberId
+        self.currentUserRecordID = currentUserRecordID
     }
 
     // MARK: - Codable Migration
@@ -41,7 +42,8 @@ struct SharedProfile: Codable {
         case isPremiumUnlocked  // Legacy key for backwards compatibility
         case legacyPremiumUnlocked
         case freeDaysRemaining  // Legacy key (ignored)
-        case currentUserMemberId
+        case currentUserMemberId  // Legacy key (UUID)
+        case currentUserRecordID  // New key (CloudKit record ID string)
     }
 
     init(from decoder: Decoder) throws {
@@ -57,13 +59,20 @@ struct SharedProfile: Codable {
             legacyPremiumUnlocked = false
         }
 
-        currentUserMemberId = try container.decodeIfPresent(UUID.self, forKey: .currentUserMemberId)
+        // Try new CloudKit record ID field first, fall back to legacy UUID
+        if let recordID = try container.decodeIfPresent(String.self, forKey: .currentUserRecordID) {
+            currentUserRecordID = recordID
+        } else if let legacyId = try container.decodeIfPresent(UUID.self, forKey: .currentUserMemberId) {
+            currentUserRecordID = legacyId.uuidString  // Convert to string
+        } else {
+            currentUserRecordID = nil
+        }
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)
-        try container.encodeIfPresent(currentUserMemberId, forKey: .currentUserMemberId)
+        try container.encodeIfPresent(currentUserRecordID, forKey: .currentUserRecordID)
     }
 }

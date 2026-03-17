@@ -19,6 +19,7 @@
 		67DE47522F4CE78700F643A4 /* OtisShared in Frameworks */ = {isa = PBXBuildFile; productRef = 67SHARED022F500000000002 /* OtisShared */; };
 		67DE47532F4CE78700F643A4 /* OtisShared in Frameworks */ = {isa = PBXBuildFile; productRef = 67SHARED032F500000000003 /* OtisShared */; };
 		67DE47542F4CE78700F643A4 /* OtisShared in Frameworks */ = {isa = PBXBuildFile; productRef = 67SHARED042F500000000004 /* OtisShared */; };
+		67TCA00012F600000000001 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 67TCA00022F600000000002 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,6 +184,7 @@
 			files = (
 				67DE47522F4CE78700F643A4 /* OtisShared in Frameworks */,
 				673C41F42F49B3DA004333E6 /* Sentry in Frameworks */,
+				67TCA00012F600000000001 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +333,7 @@
 			packageProductDependencies = (
 				673C41F32F49B3DA004333E6 /* Sentry */,
 				67SHARED022F500000000002 /* OtisShared */,
+				67TCA00022F600000000002 /* ComposableArchitecture */,
 			);
 			productName = "Ollie-app";
 			productReference = 6786FEC02F470F4300CBFE93 /* Ollie-app.app */;
@@ -404,6 +407,7 @@
 			packageReferences = (
 				67SHARED012F500000000001 /* XCLocalSwiftPackageReference "OtisShared" */,
 				673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				67TCA00032F600000000003 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6786FEC12F470F4300CBFE93 /* Products */;
@@ -1027,6 +1031,14 @@
 				minimumVersion = 9.5.0;
 			};
 		};
+		67TCA00032F600000000003 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1051,6 +1063,11 @@
 		67SHARED042F500000000004 /* OtisShared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OtisShared;
+		};
+		67TCA00022F600000000002 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 67TCA00032F600000000003 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

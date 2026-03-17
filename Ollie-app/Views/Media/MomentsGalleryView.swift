@@ -9,7 +9,7 @@ import UIKit
 
 /// Grid gallery view of all photo moments
 struct MomentsGalleryView: View {
-    @ObservedObject var viewModel: MomentsViewModel
+    var viewModel: MomentsViewModel
     var onSettingsTap: (() -> Void)? = nil
     var onAddMoment: (() -> Void)? = nil
     @State private var selectedEvent: PuppyEvent?
@@ -39,13 +39,12 @@ struct MomentsGalleryView: View {
         NavigationStack {
             Group {
                 if viewModel.isLoading {
-                    // Skeleton loading grid
+                    // Skeleton loading grid - single shimmer on container only (no per-item animations)
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 2) {
-                            ForEach(0..<12, id: \.self) { index in
+                            ForEach(0..<12, id: \.self) { _ in
                                 SkeletonRect(height: 120, cornerRadius: 0)
                                     .aspectRatio(1, contentMode: .fill)
-                                    .animatedAppear(delay: StaggeredAnimation.delay(for: index))
                             }
                         }
                         .padding(.top)
@@ -159,7 +158,7 @@ struct MomentsGalleryView: View {
     private var diaryContent: some View {
         ScrollView {
             LazyVStack(spacing: 24) {
-                ForEach(Array(viewModel.eventsPerDay.enumerated()), id: \.element.id) { index, event in
+                ForEach(Array(viewModel.events.enumerated()), id: \.element.id) { index, event in
                     DiaryCardView(event: event)
                         .zoomTransitionSource(id: event.id, in: heroNamespace)
                         .onTapGesture {
@@ -188,47 +187,16 @@ struct MomentsGalleryView: View {
 }
 
 /// Single thumbnail in the gallery grid
+/// Uses EventThumbnailView for CloudKit download fallback
 struct GalleryThumbnail: View {
     let event: PuppyEvent
-    @State private var image: UIImage?
-
-    private var documentsURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
 
     var body: some View {
         GeometryReader { geometry in
-            Group {
-                if let image = image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width, height: geometry.size.width)
-                        .clipped()
-                } else {
-                    Rectangle()
-                        .fill(Color(.tertiarySystemBackground))
-                        .overlay {
-                            Image(systemName: "photo")
-                                .foregroundColor(.secondary)
-                        }
-                }
-            }
+            EventThumbnailView(event: event)
+                .frame(width: geometry.size.width, height: geometry.size.width)
+                .clipped()
         }
-        .task {
-            loadThumbnail()
-        }
-    }
-
-    private func loadThumbnail() {
-        // Try thumbnail first, fall back to full photo
-        let path = event.thumbnailPath ?? event.photo
-        guard let path = path else { return }
-
-        let url = documentsURL.appendingPathComponent(path)
-        guard let data = try? Data(contentsOf: url),
-              let loaded = UIImage(data: data) else { return }
-        image = loaded
     }
 }
 
@@ -236,6 +204,7 @@ struct GalleryThumbnail: View {
 struct EmptyMomentsView: View {
     var onAddMoment: (() -> Void)? = nil
     @State private var isAnimating = false
+    @State private var shouldAnimate = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -270,18 +239,25 @@ struct EmptyMomentsView: View {
                     )
                     .scaleEffect(isAnimating ? 1.0 : 0.92)
                     .opacity(isAnimating ? 1.0 : 0.8)
+                    .animation(
+                        shouldAnimate
+                            ? .easeInOut(duration: 1.8).repeatForever(autoreverses: true)
+                            : .default,
+                        value: isAnimating
+                    )
             }
             .onAppear {
                 guard !reduceMotion else {
                     isAnimating = true
                     return
                 }
-                withAnimation(
-                    .easeInOut(duration: 1.8)
-                    .repeatForever(autoreverses: true)
-                ) {
-                    isAnimating = true
-                }
+                shouldAnimate = true
+                isAnimating = true
+            }
+            .onDisappear {
+                // Stop animation when view disappears
+                shouldAnimate = false
+                isAnimating = false
             }
 
             VStack(spacing: 8) {
@@ -315,6 +291,7 @@ struct EmptyMomentsView: View {
 
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.MomentsGallery.noPhotos)

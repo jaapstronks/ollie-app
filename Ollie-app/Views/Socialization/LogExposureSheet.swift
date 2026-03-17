@@ -12,14 +12,14 @@ struct LogExposureSheet: View {
     let item: SocializationItem
     var onLogged: ((SocializationReaction) -> Void)?
 
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
 
     @State private var selectedDistance: ExposureDistance?
     @State private var selectedReaction: SocializationReaction?
     @State private var note: String = ""
+    @State private var isNoteExpanded: Bool = false
 
     private var canSave: Bool {
         selectedDistance != nil && selectedReaction != nil
@@ -32,7 +32,7 @@ struct LogExposureSheet: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 16) {
                     // Item header
                     itemHeader
 
@@ -42,10 +42,7 @@ struct LogExposureSheet: View {
                     // Reaction picker
                     reactionSection
 
-                    // Tip callout
-                    tipCallout
-
-                    // Note field
+                    // Note field (expandable)
                     noteSection
 
                     // Quick mark as done (only show if not already comfortable)
@@ -72,29 +69,32 @@ struct LogExposureSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.large])
     }
 
     // MARK: - Item Header
 
     @ViewBuilder
     private var itemHeader: some View {
-        VStack(spacing: 8) {
+        HStack(spacing: 12) {
             if let category = socializationStore.category(forItemId: item.id) {
                 Image(systemName: category.icon)
-                    .font(.system(size: 36))
-                    .foregroundStyle(.primary)
-            }
-
-            Text(item.localizedDisplayName)
-                .font(.title3)
-                .fontWeight(.semibold)
-
-            if let description = item.localizedDescription {
-                Text(description)
-                    .font(.caption)
+                    .font(.system(size: 28))
                     .foregroundStyle(.secondary)
             }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.localizedDisplayName)
+                    .font(.headline)
+
+                if let description = item.localizedDescription {
+                    Text(description)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
         }
     }
 
@@ -102,11 +102,12 @@ struct LogExposureSheet: View {
 
     @ViewBuilder
     private var distanceSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(Strings.Socialization.distance)
-                .font(.headline)
+                .font(.subheadline)
+                .fontWeight(.semibold)
 
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 ForEach(ExposureDistance.allCases) { distance in
                     distanceButton(distance)
                 }
@@ -122,22 +123,22 @@ struct LogExposureSheet: View {
             selectedDistance = distance
             HapticFeedback.light()
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {
                 Image(systemName: distance.icon)
-                    .font(.title2)
+                    .font(.title3)
 
                 Text(distance.label)
-                    .font(.caption)
+                    .font(.caption2)
                     .fontWeight(.medium)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
+            .padding(.vertical, 10)
             .background(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 10)
                     .fill(isSelected ? Color.otisAccent.opacity(0.2) : Color.secondary.opacity(0.1))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 10)
                     .stroke(isSelected ? Color.otisAccent : Color.clear, lineWidth: 2)
             )
         }
@@ -148,11 +149,12 @@ struct LogExposureSheet: View {
 
     @ViewBuilder
     private var reactionSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(Strings.Socialization.reaction)
-                .font(.headline)
+                .font(.subheadline)
+                .fontWeight(.semibold)
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 ForEach(SocializationReaction.allCases) { reaction in
                     reactionButton(reaction)
                 }
@@ -168,9 +170,9 @@ struct LogExposureSheet: View {
             selectedReaction = reaction
             HapticFeedback.light()
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {
                 Image(systemName: reaction.icon)
-                    .font(.title2)
+                    .font(.title3)
                     .foregroundStyle(reactionIconColor(for: reaction))
 
                 Text(reaction.label)
@@ -184,14 +186,14 @@ struct LogExposureSheet: View {
                     .lineLimit(2)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 8)
+            .padding(.vertical, 10)
+            .padding(.horizontal, 6)
             .background(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 10)
                     .fill(backgroundColor(for: reaction, isSelected: isSelected))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 10)
                     .stroke(borderColor(for: reaction, isSelected: isSelected), lineWidth: 2)
             )
         }
@@ -223,67 +225,54 @@ struct LogExposureSheet: View {
         }
     }
 
-    // MARK: - Tip Callout
-
-    @ViewBuilder
-    private var tipCallout: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "lightbulb.fill")
-                .foregroundStyle(.yellow)
-
-            Text(Strings.Socialization.calmIsGoal)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.yellow.opacity(colorScheme == .dark ? 0.1 : 0.15))
-        )
-    }
-
     // MARK: - Note Section
 
     @ViewBuilder
     private var noteSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(Strings.Socialization.noteOptional)
-                .font(.headline)
-
+        DisclosureGroup(isExpanded: $isNoteExpanded) {
             TextField(Strings.Socialization.notePlaceholder, text: $note, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .lineLimit(2...4)
+                .padding(.top, 8)
+        } label: {
+            HStack {
+                Image(systemName: "note.text")
+                    .foregroundStyle(.secondary)
+                Text(Strings.Socialization.noteOptional)
+                    .font(.subheadline)
+            }
         }
+        .tint(.primary)
     }
 
     // MARK: - Mark as Done Section
 
     @ViewBuilder
     private var markAsDoneSection: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 8) {
             Divider()
-                .padding(.vertical, 8)
 
-            VStack(spacing: 8) {
+            HStack {
                 Text(Strings.Socialization.alreadyComfortable)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
+
+                Spacer()
 
                 Button {
                     markAsDone()
                 } label: {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 6) {
                         Image(systemName: "checkmark.circle.fill")
                         Text(Strings.Socialization.markAsDone)
                     }
-                    .font(.subheadline)
+                    .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(Color.otisAccent)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
                     .background(
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: 16)
                             .fill(Color.otisAccent.opacity(0.15))
                     )
                 }
@@ -311,7 +300,7 @@ struct LogExposureSheet: View {
             itemId: item.id,
             distance: distance,
             reaction: reaction,
-            note: note.isEmpty ? nil : note
+            note: note.nilIfBlank
         )
 
         HapticFeedback.success()
@@ -349,6 +338,6 @@ struct LogExposureSheet: View {
             isWalkable: true
         )
     )
-    .environmentObject(SocializationStore())
-    .environmentObject(ProfileStore())
+    .environment(SocializationStore())
+    .environment(ProfileStore())
 }

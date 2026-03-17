@@ -11,7 +11,7 @@ import OtisShared
 struct DocumentThumbnailView: View {
     let document: Document
     let size: CGFloat
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
 
     @State private var image: UIImage?
 
@@ -29,7 +29,7 @@ struct DocumentThumbnailView: View {
                             Text("PDF")
                                 .font(.system(size: max(8, size * 0.15)))
                                 .fontWeight(.bold)
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 2)
                                 .background(.red, in: RoundedRectangle(cornerRadius: 3))
@@ -44,7 +44,7 @@ struct DocumentThumbnailView: View {
                     .overlay {
                         Image(systemName: document.type.icon)
                             .font(.system(size: size * 0.4))
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
             }
         }

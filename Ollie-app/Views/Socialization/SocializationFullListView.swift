@@ -9,8 +9,8 @@ import OtisShared
 
 /// Full list view showing all socialization categories
 struct SocializationFullListView: View {
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -54,7 +54,7 @@ struct SocializationFullListView: View {
 #Preview {
     NavigationStack {
         SocializationFullListView()
-            .environmentObject(SocializationStore())
-            .environmentObject(ProfileStore())
+            .environment(SocializationStore())
+            .environment(ProfileStore())
     }
 }

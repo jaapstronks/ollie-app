@@ -31,6 +31,9 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
     /// Health and wellness insights
     case healthInsights = "health_insights"
 
+    /// Morning briefing: synthesized daily guidance from all sources
+    case morningBriefing = "morning_briefing"
+
     // MARK: - Configuration
 
     /// Context components required for this surface
@@ -53,6 +56,10 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
 
         case .healthInsights:
             return [.dogIdentity, .health, .feeding, .exercise, .sleep, .recentEvents]
+
+        case .morningBriefing:
+            // Wide context for synthesized daily guidance
+            return [.dogIdentity, .training, .socialization, .health, .recentEvents]
         }
     }
 
@@ -60,22 +67,25 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
     var optionalComponents: Set<AIContextComponentKey> {
         switch self {
         case .insightBundle:
-            return [.training, .socialization, .health, .household]
+            return [.training, .socialization, .health, .household, .sentiment]
 
         case .notificationPolicy:
-            return [.household]
+            return [.household, .sentiment]
 
         case .trainingGuidance:
-            return [.household]
+            return [.household, .sentiment]
 
         case .pottyAnalysis:
-            return [.household]
+            return [.household, .sentiment]
 
         case .socializationGuidance:
-            return [.household]
+            return [.household, .sentiment]
 
         case .healthInsights:
-            return [.household]
+            return [.household, .sentiment]
+
+        case .morningBriefing:
+            return [.trainingDetail, .exercise, .feeding, .sleep, .pottyPatterns, .behavior, .household, .sentiment]
         }
     }
 
@@ -88,6 +98,7 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
         case .pottyAnalysis: return "potty_analysis_v1"
         case .socializationGuidance: return "socialization_guidance_v1"
         case .healthInsights: return "health_insights_v1"
+        case .morningBriefing: return "morning_briefing_v1"
         }
     }
 
@@ -105,6 +116,7 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
         case .pottyAnalysis: return 400
         case .socializationGuidance: return 500
         case .healthInsights: return 400
+        case .morningBriefing: return 800  // Rich, synthesized content
         }
     }
 
@@ -117,6 +129,7 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
         case .pottyAnalysis: return 60  // 1 hour
         case .socializationGuidance: return 360  // 6 hours
         case .healthInsights: return 720  // 12 hours
+        case .morningBriefing: return 720  // 12 hours - once per day is fine
         }
     }
 
@@ -129,6 +142,7 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
         case .pottyAnalysis: return 4
         case .socializationGuidance: return 2
         case .healthInsights: return 2
+        case .morningBriefing: return 2  // Once or twice a day max
         }
     }
 
@@ -141,6 +155,7 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
         case .pottyAnalysis: return 0.70
         case .socializationGuidance: return 0.60
         case .healthInsights: return 0.70
+        case .morningBriefing: return 0.55  // Flexible - we trust the LLM to synthesize well
         }
     }
 }
@@ -160,6 +175,8 @@ enum AIContextComponentKey: String, Codable, Hashable, Sendable {
     case socialization = "socialization"
     case recentEvents = "recent_events"
     case health = "health"
+    case sentiment = "sentiment"  // User sentiment ratings
+    case behavior = "behavior"    // Behavior challenges and interventions
 
     /// Estimated tokens for this component
     var estimatedTokens: Int {
@@ -175,6 +192,8 @@ enum AIContextComponentKey: String, Codable, Hashable, Sendable {
         case .socialization: return 100
         case .recentEvents: return 80
         case .health: return 70
+        case .sentiment: return 60
+        case .behavior: return 120
         }
     }
 }
@@ -190,17 +209,17 @@ protocol AISurfaceResponse: Codable, Sendable {
 
 struct InsightBundleResponse: AISurfaceResponse {
     let confidence: Double
-    let dailyStatus: DailyStatusResponse?
-    let activityOrdering: ActivityOrderingResponse?
+    let dailyStatusDecision: DailyStatusDecision?
+    let walkOrderingDecision: WalkOrderingDecision?
     let loggingRecommendations: [LoggingRecommendation]
 
-    struct DailyStatusResponse: Codable, Sendable {
+    struct DailyStatusDecision: Codable, Sendable {
         let headline: String
         let subtitle: String?
         let confidence: Double
     }
 
-    struct ActivityOrderingResponse: Codable, Sendable {
+    struct WalkOrderingDecision: Codable, Sendable {
         let orderedIds: [String]
         let confidence: Double
     }
@@ -299,4 +318,41 @@ struct HealthInsightsResponse: AISurfaceResponse {
 
     /// Recommended actions
     let recommendations: [String]?
+}
+
+struct MorningBriefingResponse: AISurfaceResponse {
+    let confidence: Double
+
+    /// Primary greeting/headline for the day (e.g., "Day 47 with Luna!")
+    let headline: String
+
+    /// Main focus message - the most important thing for today
+    let focusMessage: String
+
+    /// Type of focus: "socialization_urgency", "training_progress", "health_reminder", "celebration", "encouragement"
+    let focusType: String
+
+    /// Yesterday's summary - brief reflection on what happened
+    let yesterdaySummary: String?
+
+    /// Looking ahead - what to keep in mind for coming days/weeks
+    let lookingAhead: String?
+
+    /// Urgency indicators (socialization window, overdue milestones, etc.)
+    let urgencies: [Urgency]?
+
+    /// Quick wins - easy things to do today
+    let quickWins: [String]?
+
+    /// Encouragement message based on overall progress
+    let encouragement: String?
+
+    struct Urgency: Codable, Sendable {
+        /// Type: "socialization_window", "health_milestone", "training_regression", "vaccination_due"
+        let type: String
+        /// Human-readable message
+        let message: String
+        /// Days remaining (if applicable)
+        let daysRemaining: Int?
+    }
 }

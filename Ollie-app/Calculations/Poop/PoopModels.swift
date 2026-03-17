@@ -24,6 +24,16 @@ struct PoopStatus: Equatable {
 
     /// Median daily count from history (nil if no pattern data)
     let patternDailyMedian: Double?
+
+    /// Remaining expected poops today (based on lower bound of expected range)
+    var remainingExpected: Int {
+        max(0, expectedRange.lowerBound - todayCount)
+    }
+
+    /// Whether more poops are expected today (based on pattern data)
+    var hasRemainingExpected: Bool {
+        hasPatternData && remainingExpected > 0
+    }
 }
 
 // MARK: - Urgency Levels

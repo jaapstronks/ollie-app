@@ -8,21 +8,21 @@
 import SwiftUI
 import OtisShared
 
-/// Welcome step - first step of onboarding with brand messaging
+/// Welcome step - first step of onboarding with two clear choices
 struct OnboardingWelcomeStep: View {
     let onNext: () -> Void
+    var onJoinExisting: (() -> Void)? = nil
 
     @State private var hasAppeared = false
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-                .frame(height: 60)
 
             // Logo and tagline
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
                 Image(systemName: "pawprint.fill")
-                    .font(.system(size: 64))
+                    .font(.system(size: 72))
                     .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.7)
                     .opacity(hasAppeared ? 1.0 : 0.0)
@@ -39,55 +39,43 @@ struct OnboardingWelcomeStep: View {
                     .foregroundStyle(.primary)
                     .opacity(hasAppeared ? 1.0 : 0.0)
                     .offset(y: hasAppeared ? 0 : 8)
+            }
 
-                Text(Strings.Onboarding.welcomeSubtitle)
-                    .font(.callout)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.top, 4)
+            Spacer()
+
+            // Two choice buttons
+            VStack(spacing: 16) {
+                // Primary: Add my dog
+                Button(action: onNext) {
+                    WelcomeChoiceButton(
+                        icon: "plus.circle.fill",
+                        title: Strings.Onboarding.addMyDog,
+                        subtitle: Strings.Onboarding.addMyDogSubtitle,
+                        isPrimary: true
+                    )
+                }
+                .buttonStyle(.plain)
+                .opacity(hasAppeared ? 1.0 : 0.0)
+                .offset(y: hasAppeared ? 0 : 20)
+
+                // Secondary: Join shared dog
+                if let onJoinExisting {
+                    Button(action: onJoinExisting) {
+                        WelcomeChoiceButton(
+                            icon: "person.2.fill",
+                            title: Strings.Onboarding.joinSharedDog,
+                            subtitle: Strings.Onboarding.joinSharedDogSubtitle,
+                            isPrimary: false
+                        )
+                    }
+                    .buttonStyle(.plain)
                     .opacity(hasAppeared ? 1.0 : 0.0)
-                    .offset(y: hasAppeared ? 0 : 8)
+                    .offset(y: hasAppeared ? 0 : 20)
+                }
             }
 
             Spacer()
-                .frame(height: 40)
-
-            // Two personas
-            VStack(spacing: 12) {
-                PersonaCard(
-                    icon: "book.fill",
-                    title: Strings.Onboarding.preparingTitle,
-                    subtitle: Strings.Onboarding.preparingSubtitle
-                )
-                .opacity(hasAppeared ? 1.0 : 0.0)
-                .offset(y: hasAppeared ? 0 : 20)
-
-                PersonaCard(
-                    icon: "exclamationmark.bubble.fill",
-                    title: Strings.Onboarding.alreadyInTitle,
-                    subtitle: Strings.Onboarding.alreadyInSubtitle
-                )
-                .opacity(hasAppeared ? 1.0 : 0.0)
-                .offset(y: hasAppeared ? 0 : 20)
-            }
-
-            Spacer()
-
-            // Get started button
-            Button(action: onNext) {
-                Text(Strings.Onboarding.getStarted)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(Color.otisAccent)
-                    .foregroundStyle(.white)
-                    .cornerRadius(14)
-            }
-            .opacity(hasAppeared ? 1.0 : 0.0)
-
-            Spacer()
-                .frame(height: 8)
+                .frame(height: 60)
         }
         .padding(.horizontal, 24)
         .onAppear {
@@ -98,38 +86,46 @@ struct OnboardingWelcomeStep: View {
     }
 }
 
-/// Card showing a persona scenario
-private struct PersonaCard: View {
+/// Big choice button for welcome screen
+private struct WelcomeChoiceButton: View {
     let icon: String
     let title: String
     let subtitle: String
+    var isPrimary: Bool = true
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(spacing: 16) {
             Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(Color.otisAccent)
+                .font(.system(size: 32))
+                .foregroundStyle(isPrimary ? .white : Color.otisAccent)
+                .frame(width: 44)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .font(.headline)
+                    .foregroundStyle(isPrimary ? .white : .primary)
 
                 Text(subtitle)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(isPrimary ? .white.opacity(0.8) : .secondary)
             }
 
             Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(isPrimary ? .white.opacity(0.7) : .secondary)
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(LayoutConstants.cornerRadiusM)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 20)
+        .background(isPrimary ? Color.otisAccent : Color(.secondarySystemBackground))
+        .cornerRadius(16)
     }
 }
 
 #Preview {
-    OnboardingWelcomeStep {
-        print("Next tapped")
-    }
+    OnboardingWelcomeStep(
+        onNext: { print("Next tapped") },
+        onJoinExisting: { print("Join existing tapped") }
+    )
 }

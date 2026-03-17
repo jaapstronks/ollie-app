@@ -12,14 +12,15 @@ struct MilestoneCompletionSheet: View {
     let milestone: Milestone
     /// Called when user cancels (taps Cancel or swipes down)
     let onDismiss: () -> Void
-    /// Callback with (notes, photoID, vetClinic, completionDate)
-    let onComplete: (String?, UUID?, String?, Date) -> Void
+    /// Callback with (notes, photoID, linkedContactID, completionDate)
+    let onComplete: (String?, UUID?, UUID?, Date) -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
+    @Environment(ContactStore.self) var contactStore
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var notes: String = ""
-    @State private var vetClinic: String = ""
+    @State private var linkedContactID: UUID? = nil
     @State private var completionDate: Date = Date()
     @State private var addToCalendar: Bool = false
     @State private var showPhotoPicker: Bool = false
@@ -29,7 +30,16 @@ struct MilestoneCompletionSheet: View {
     @State private var photoPickerSource: MediaPickerSource = .library
     @State private var showPhotoSaveError: Bool = false
 
-    @StateObject private var mediaStore = MediaStore()
+    @State private var mediaStore = MediaStore()
+
+    // Available vet contacts for picker
+    private var vetContacts: [DogContact] {
+        contactStore.contacts.filter { $0.contactType == .vet || $0.contactType == .emergencyVet }
+    }
+
+    private var selectedVetContact: DogContact? {
+        linkedContactID.flatMap { contactStore.contact(withId: $0) }
+    }
 
     var body: some View {
         NavigationStack {
@@ -79,15 +89,14 @@ struct MilestoneCompletionSheet: View {
                                 .textFieldStyle(.roundedBorder)
                         }
 
-                        // Vet clinic field (Premium)
+                        // Vet contact picker (Premium)
                         if milestone.category == .health {
                             premiumField(
                                 feature: .milestoneNotes,
                                 icon: "cross.case",
-                                title: Strings.Health.vetClinic
+                                title: Strings.Health.selectVet
                             ) {
-                                TextField(Strings.Health.vetClinicPlaceholder, text: $vetClinic)
-                                    .textFieldStyle(.roundedBorder)
+                                vetContactPickerContent
                             }
                         }
 
@@ -290,6 +299,63 @@ struct MilestoneCompletionSheet: View {
         .glassCard(tint: .accent)
     }
 
+    // MARK: - Vet Contact Picker
+
+    @ViewBuilder
+    private var vetContactPickerContent: some View {
+        if vetContacts.isEmpty {
+            HStack {
+                Text(Strings.Health.noVetContactsHint)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 8) {
+                // Selected contact display
+                if let contact = selectedVetContact {
+                    selectedContactRow(contact)
+                }
+
+                // Contact picker
+                Picker(Strings.Health.selectVet, selection: $linkedContactID) {
+                    Text(Strings.Common.none).tag(nil as UUID?)
+                    ForEach(vetContacts) { contact in
+                        Text(contactPickerLabel(for: contact)).tag(contact.id as UUID?)
+                    }
+                }
+                .pickerStyle(.menu)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func selectedContactRow(_ contact: DogContact) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(Color.otisSuccess)
+            Text(contact.name)
+                .font(.subheadline)
+            Spacer()
+            Button {
+                linkedContactID = nil
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(8)
+        .background(Color.otisSuccess.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+
+    private func contactPickerLabel(for contact: DogContact) -> String {
+        if contact.contactType == .emergencyVet {
+            return "\(contact.name) (\(Strings.Contacts.emergencyVet))"
+        }
+        return contact.name
+    }
+
     // MARK: - Premium Field
 
     @ViewBuilder
@@ -337,7 +403,7 @@ struct MilestoneCompletionSheet: View {
 
     private func completeAndDismiss() {
         let notesValue = subscriptionManager.hasAccess(to: .milestoneNotes) && !notes.isEmpty ? notes : nil
-        let vetValue = subscriptionManager.hasAccess(to: .milestoneNotes) && !vetClinic.isEmpty ? vetClinic : nil
+        let contactValue = subscriptionManager.hasAccess(to: .milestoneNotes) ? linkedContactID : nil
         let photoValue = subscriptionManager.hasAccess(to: .photoVideoAttachments) ? selectedPhotoID : nil
 
         // Track milestone completion
@@ -349,7 +415,7 @@ struct MilestoneCompletionSheet: View {
         )
 
         HapticFeedback.success()
-        onComplete(notesValue, photoValue, vetValue, completionDate)
+        onComplete(notesValue, photoValue, contactValue, completionDate)
     }
 }
 
@@ -357,15 +423,17 @@ struct MilestoneCompletionSheet: View {
 
 #Preview {
     let milestone = DefaultMilestones.create()[1]
+    let contactStore = ContactStore()
 
     return MilestoneCompletionSheet(
         milestone: milestone,
         onDismiss: {
             print("Dismissed")
         },
-        onComplete: { notes, photoID, vetClinic, completionDate in
-            print("Completed with notes: \(notes ?? "none"), date: \(completionDate)")
+        onComplete: { notes, photoID, linkedContactID, completionDate in
+            print("Completed with notes: \(notes ?? "none"), contactID: \(linkedContactID?.uuidString ?? "none"), date: \(completionDate)")
         }
     )
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
+    .environment(contactStore)
 }

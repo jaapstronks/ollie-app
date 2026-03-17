@@ -1,0 +1,278 @@
+# System Features: Notifications, Data, Sharing, Settings, Subscription
+# Part of Ollie Feature Registry - see ../FEATURES.yaml for meta
+
+# =============================================================================
+# NOTIFICATIONS
+# =============================================================================
+notifications:
+
+  - id: potty-reminders
+    name: Potty Reminders
+    description: Time-based potty prediction alerts
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [notifications]
+    key_files:
+      - Services/Notifications/PottyNotificationScheduler.swift
+    depends_on: [potty-predictions]
+    tested: false
+    docs: false
+
+  - id: meal-reminders
+    name: Meal Reminders
+    description: Scheduled meal time alerts
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [notifications]
+    key_files:
+      - Services/Notifications/MealNotificationScheduler.swift
+    tested: false
+    docs: false
+
+  - id: walk-reminders
+    name: Walk Reminders
+    description: Recommended walk time alerts
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [notifications]
+    key_files:
+      - Services/Notifications/WalkNotificationScheduler.swift
+    tested: false
+    docs: false
+
+  - id: appointment-reminders
+    name: Appointment Reminders
+    description: Upcoming appointment alerts
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [notifications]
+    key_files:
+      - Services/Notifications/AppointmentNotificationScheduler.swift
+    depends_on: [appointments]
+    tested: false
+    docs: false
+
+# =============================================================================
+# DATA & SYNC
+# =============================================================================
+data:
+
+  - id: data-import
+    name: Data Import
+    description: Import historical data from web app via GitHub
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings]
+    key_files:
+      - Views/Settings/ImportSheet.swift
+      - Services/DataImporter.swift
+    tested: false
+    docs: false
+
+  - id: data-export
+    name: Data Export
+    description: Export all data to CSV/JSON or PDF
+    tier: premium
+    premium_feature: exportPDF
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings]
+    key_files:
+      - Views/Settings/ExportDataView.swift
+      - Services/ExportService.swift
+    tested: false
+    docs: false
+
+  - id: icloud-sync
+    name: iCloud Sync
+    description: Backup and sync data via iCloud
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings]
+    key_files:
+      - Views/Settings/SyncSection.swift
+      - Services/CloudKitService.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# MULTI-USER & SHARING
+# =============================================================================
+sharing:
+
+  - id: multi-puppy
+    name: Multi-Puppy Support
+    description: Support for up to 5 puppy profiles
+    tier: premium
+    premium_feature: multiPuppy
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings, profile-picker]
+    key_files:
+      - Views/Settings/ProfilePickerSheet.swift
+      - Views/Settings/DogSettingsCard.swift
+      - Services/ProfileStore.swift
+    tested: false
+    docs: false
+
+  - id: household-sharing
+    name: Household Sharing
+    description: Share data with family members via CloudKit
+    tier: premium
+    premium_feature: unlimitedPartnerSharing
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings]
+    key_files:
+      - Views/Settings/HouseholdSettingsView.swift
+      - Views/Settings/AddEditHouseholdMemberSheet.swift
+      - Views/Settings/SharingSection.swift
+    tested: false
+    docs: false
+
+  - id: partner-activity
+    name: Partner Activity Tracking
+    description: See what household members logged
+    tier: premium
+    premium_feature: unlimitedPartnerSharing
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Cards/PartnerActivitySummaryCard.swift
+      - ViewModels/TimelineViewModel+PartnerActivity.swift
+      - OtisShared/Sources/OtisShared/Calculations/PartnerActivityCalculations.swift
+    depends_on: [household-sharing]
+    tested: false
+    docs: false
+
+# =============================================================================
+# SETTINGS & PREFERENCES
+# =============================================================================
+settings:
+
+  - id: app-settings
+    name: App Settings
+    description: Appearance, units, and general preferences
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/AppSettingsView.swift
+    tested: false
+    docs: false
+
+  - id: notification-settings
+    name: Notification Settings
+    description: Per-type notification toggles and quiet hours
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/NotificationSettingsView.swift
+    tested: false
+    docs: false
+
+  - id: medication-management
+    name: Medication Management
+    description: Track medications and schedules
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/MedicationSettingsView.swift
+      - Views/Settings/AddEditMedicationSheet.swift
+      - Services/MedicationStore.swift
+    tested: false
+    docs: false
+
+  - id: siri-shortcuts
+    name: Siri & Shortcuts
+    description: Log events via Siri and create custom shortcuts
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/SiriSection.swift
+    tested: false
+    docs: false
+
+  - id: webhooks
+    name: Webhook Integrations
+    description: Custom webhook configuration for real-time event forwarding
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/WebhookSettingsView.swift
+      - Services/WebhookService.swift
+    tested: false
+    docs: false
+
+  - id: food-recall-alerts
+    name: Food Recall Alerts
+    description: Brand monitoring and recall notifications
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/FoodRecallSettingsView.swift
+      - Services/FoodRecallService.swift
+    tested: false
+    docs: false
+
+  - id: celebration-settings
+    name: Celebration Settings
+    description: Customize celebration styles and tiers
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/CelebrationSettingsView.swift
+    depends_on: [advanced-celebrations]
+    tested: false
+    docs: false
+
+  - id: beta-feedback
+    name: Beta Features & Feedback
+    description: Beta feature toggles and in-app feedback
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab]
+    key_files:
+      - Views/Settings/BetaFeedbackSection.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# SUBSCRIPTION
+# =============================================================================
+subscription:
+
+  - id: subscription-management
+    name: Subscription Management
+    description: Monthly/yearly plans, trial, restore purchases
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-tab, paywall]
+    key_files:
+      - Views/OtisPlusSheet.swift
+      - Views/Settings/PremiumSection.swift
+      - Services/SubscriptionManager.swift
+    tested: false
+    docs: false

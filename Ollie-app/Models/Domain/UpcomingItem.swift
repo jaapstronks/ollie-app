@@ -27,7 +27,12 @@ enum UpcomingItemType {
 
 /// Represents an upcoming scheduled item (meal or walk)
 struct UpcomingItem: Identifiable {
-    let id = UUID()
+    /// Stable ID based on item type and target time
+    /// This ensures ForEach can correctly track items across re-renders
+    var id: String {
+        "\(itemType)-\(Int(targetTime.timeIntervalSince1970))"
+    }
+
     let icon: String             // SF Symbol name
     let label: String
     let detail: String?
@@ -59,6 +64,31 @@ struct UpcomingItem: Identifiable {
 
     var timeString: String {
         targetTime.timeString
+    }
+
+    /// Display time string, rounded up to 5 minutes for walks
+    /// Walks aren't planned to the minute, so we show 16:30 instead of 16:27
+    var displayTimeString: String {
+        switch itemType {
+        case .walk:
+            return roundedUpTimeString
+        case .meal:
+            return targetTime.timeString
+        }
+    }
+
+    /// Time string rounded up to the nearest 5-minute increment
+    private var roundedUpTimeString: String {
+        let calendar = Calendar.current
+        let minute = calendar.component(.minute, from: targetTime)
+
+        // Calculate minutes to add to reach next 5-minute boundary
+        let remainder = minute % 5
+        let minutesToAdd = remainder == 0 ? 0 : (5 - remainder)
+
+        // Add the minutes to get the rounded time
+        let roundedTime = calendar.date(byAdding: .minute, value: minutesToAdd, to: targetTime) ?? targetTime
+        return roundedTime.timeString
     }
 
     /// Minutes until target time (negative if past)
@@ -209,7 +239,12 @@ enum ActionableItemState {
 
 /// An item that requires action (within 10 min or overdue)
 struct ActionableItem: Identifiable {
-    let id = UUID()
+    /// Stable ID derived from the underlying item
+    /// This ensures ForEach can correctly track items across re-renders
+    var id: String {
+        "actionable-\(item.id)"
+    }
+
     let item: UpcomingItem
     let state: ActionableItemState
 }

@@ -10,7 +10,8 @@ import OtisShared
 
 /// Settings view for managing medications
 struct MedicationSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
+    var medicationStore: MedicationStore
     var profileId: UUID? = nil
     @State private var showingAddSheet = false
     @State private var medicationToEdit: Medication?
@@ -112,15 +113,16 @@ struct MedicationSettingsView: View {
     private var medicationsList: some View {
         Section {
             ForEach(medications) { medication in
-                MedicationRow(
-                    medication: medication,
-                    onToggleActive: {
-                        profileStore.toggleMedicationActive(id: medication.id, for: profileId)
-                    },
-                    onEdit: {
-                        medicationToEdit = medication
-                    }
-                )
+                NavigationLink {
+                    MedicationDetailView(
+                        medication: medication,
+                        profileStore: profileStore,
+                        medicationStore: medicationStore,
+                        profileId: profileId
+                    )
+                } label: {
+                    MedicationRow(medication: medication)
+                }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
                         medicationToDelete = medication
@@ -138,9 +140,18 @@ struct MedicationSettingsView: View {
                 }
             }
         } footer: {
-            Text(Strings.Medications.addMedication)
+            Text(Strings.Medications.settingsFooter)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        }
+
+        // Overall adherence section
+        if !medications.isEmpty {
+            Section {
+                weeklyAdherenceRow
+            } header: {
+                Text(Strings.Medications.thisWeek)
+            }
         }
 
         Section {
@@ -151,63 +162,115 @@ struct MedicationSettingsView: View {
             }
         }
     }
+
+    // MARK: - Weekly Adherence
+
+    @ViewBuilder
+    private var weeklyAdherenceRow: some View {
+        let adherence = calculateWeeklyAdherence()
+
+        HStack {
+            Text(Strings.Medications.adherence)
+
+            Spacer()
+
+            // Progress bar
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.secondary.opacity(0.2))
+
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(colorForAdherence(adherence))
+                        .frame(width: geometry.size.width * CGFloat(adherence) / 100)
+                }
+            }
+            .frame(width: 80, height: 8)
+
+            Text("\(adherence)%")
+                .font(.subheadline.monospacedDigit())
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func calculateWeeklyAdherence() -> Int {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        var expected = 0
+        var taken = 0
+
+        for dayOffset in 0..<7 {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+
+            for medication in medications where medication.isActive && medication.isScheduledFor(date: date) {
+                expected += medication.times.count
+
+                for time in medication.times {
+                    if medicationStore.isComplete(medicationId: medication.id, timeId: time.id, for: date) {
+                        taken += 1
+                    }
+                }
+            }
+        }
+
+        return expected > 0 ? Int(Double(taken) / Double(expected) * 100) : 100
+    }
+
+    private func colorForAdherence(_ percentage: Int) -> Color {
+        switch percentage {
+        case 90...100: return .otisSuccess
+        case 70..<90: return .otisAccent
+        case 50..<70: return .orange
+        default: return .otisWarning
+        }
+    }
 }
 
 // MARK: - Medication Row
 
 private struct MedicationRow: View {
     let medication: Medication
-    let onToggleActive: () -> Void
-    let onEdit: () -> Void
 
     var body: some View {
-        Button(action: onEdit) {
-            HStack(spacing: 12) {
-                // Icon
-                Image(systemName: medication.icon)
-                    .font(.title2)
-                    .foregroundStyle(medication.isActive ? Color.otisAccent : .secondary)
-                    .frame(width: 32)
+        HStack(spacing: 12) {
+            // Icon
+            Image(systemName: medication.icon)
+                .font(.title2)
+                .foregroundStyle(medication.isActive ? Color.otisAccent : .secondary)
+                .frame(width: 32)
 
-                // Name and schedule
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(medication.name)
-                        .font(.body)
-                        .foregroundStyle(medication.isActive ? .primary : .secondary)
+            // Name and schedule
+            VStack(alignment: .leading, spacing: 2) {
+                Text(medication.name)
+                    .font(.body)
+                    .foregroundStyle(medication.isActive ? .primary : .secondary)
 
-                    HStack(spacing: 8) {
-                        Text(medication.recurrence.label)
+                HStack(spacing: 8) {
+                    Text(medication.recurrence.label)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if !medication.times.isEmpty {
+                        Text(formatTimes(medication.times))
                             .font(.caption)
-                            .foregroundStyle(.secondary)
-
-                        if !medication.times.isEmpty {
-                            Text(formatTimes(medication.times))
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
+                            .foregroundStyle(.tertiary)
                     }
                 }
-
-                Spacer()
-
-                // Active/Paused indicator
-                Text(medication.isActive ? Strings.Medications.active : Strings.Medications.paused)
-                    .font(.caption)
-                    .foregroundStyle(medication.isActive ? Color.otisSuccess : .secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(
-                        Capsule()
-                            .fill(medication.isActive ? Color.otisSuccess.opacity(0.15) : Color.secondary.opacity(0.1))
-                    )
-
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
             }
-            .contentShape(Rectangle())
+
+            Spacer()
+
+            // Active/Paused indicator
+            Text(medication.isActive ? Strings.Medications.active : Strings.Medications.paused)
+                .font(.caption)
+                .foregroundStyle(medication.isActive ? Color.otisSuccess : .secondary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(
+                    Capsule()
+                        .fill(medication.isActive ? Color.otisSuccess.opacity(0.15) : Color.secondary.opacity(0.1))
+                )
         }
-        .buttonStyle(.plain)
     }
 
     private func formatTimes(_ times: [MedicationTime]) -> String {
@@ -219,6 +282,9 @@ private struct MedicationRow: View {
 
 #Preview("MedicationSettingsView") {
     NavigationStack {
-        MedicationSettingsView(profileStore: ProfileStore())
+        MedicationSettingsView(
+            profileStore: ProfileStore(),
+            medicationStore: MedicationStore()
+        )
     }
 }

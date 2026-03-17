@@ -70,22 +70,55 @@ public struct WalkStatsCalculations {
     ) -> WalkStats {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-
-        // Filter to walks within the period (excluding today to avoid incomplete day)
         let periodStart = today.addingDays(-periodDays)
-        let walks = events.walks().filter { event in
-            let eventDay = calendar.startOfDay(for: event.time)
-            return eventDay >= periodStart && eventDay < today
-        }
 
-        // Group walks by day
+        // Single pass: filter walks and group by day simultaneously
         var walksByDay: [Date: Int] = [:]
-        for walk in walks {
-            let day = calendar.startOfDay(for: walk.time)
-            walksByDay[day, default: 0] += 1
+        var totalWalks = 0
+
+        for event in events {
+            guard event.type == .uitlaten else { continue }
+            let eventDay = calendar.startOfDay(for: event.time)
+            guard eventDay >= periodStart && eventDay < today else { continue }
+
+            totalWalks += 1
+            walksByDay[eventDay, default: 0] += 1
         }
 
-        let totalWalks = walks.count
+        let daysWithData = walksByDay.count
+        let averageWalksPerDay = daysWithData > 0 ? Double(totalWalks) / Double(daysWithData) : 0
+
+        return WalkStats(
+            periodDays: periodDays,
+            totalWalks: totalWalks,
+            daysWithData: daysWithData,
+            averageWalksPerDay: averageWalksPerDay,
+            scheduledWalksPerDay: scheduledWalksPerDay
+        )
+    }
+
+    /// Optimized: Calculate using pre-categorized events
+    public static func calculateRollingStats(
+        categories: EventCategories,
+        periodDays: Int = 14,
+        scheduledWalksPerDay: Int
+    ) -> WalkStats {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let periodStart = today.addingDays(-periodDays)
+
+        // Use lightweight refs instead of full structs
+        var walksByDay: [Date: Int] = [:]
+        var totalWalks = 0
+
+        for walkRef in categories.walks {
+            let eventDay = calendar.startOfDay(for: walkRef.time)
+            guard eventDay >= periodStart && eventDay < today else { continue }
+
+            totalWalks += 1
+            walksByDay[eventDay, default: 0] += 1
+        }
+
         let daysWithData = walksByDay.count
         let averageWalksPerDay = daysWithData > 0 ? Double(totalWalks) / Double(daysWithData) : 0
 

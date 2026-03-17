@@ -9,14 +9,23 @@ import OtisShared
 
 /// Settings screen for dog profile identity information
 struct DogProfileSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     let profileId: UUID
 
     @State private var showingPhotoPicker = false
+    @State private var showDeleteConfirmation = false
+    @State private var showLeaveConfirmation = false
+    @Environment(\.dismiss) private var dismiss
+    @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
 
     /// The profile being edited (looked up by ID)
     private var targetProfile: PuppyProfile? {
         profileStore.profile(for: profileId)
+    }
+
+    /// Whether this is the last profile (will trigger re-onboarding if deleted)
+    private var isLastProfile: Bool {
+        profileStore.profiles.count == 1
     }
 
     var body: some View {
@@ -36,6 +45,19 @@ struct DogProfileSettingsView: View {
                     profileStore: profileStore,
                     profileId: profileId
                 )
+
+                // Delete/Leave section
+                DeleteProfileSection(
+                    profile: profile,
+                    isLastProfile: isLastProfile,
+                    onDeleteTapped: {
+                        if profile.ownership == .shared {
+                            showLeaveConfirmation = true
+                        } else {
+                            showDeleteConfirmation = true
+                        }
+                    }
+                )
             }
         }
         .navigationTitle(targetProfile?.name ?? Strings.Settings.profile)
@@ -52,6 +74,64 @@ struct DogProfileSettingsView: View {
                 )
             }
         }
+        // Delete confirmation for owned profiles
+        .confirmationDialog(
+            Strings.DeleteProfile.deleteTitle,
+            isPresented: $showDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(Strings.DeleteProfile.deleteConfirm, role: .destructive) {
+                performDelete()
+            }
+            Button(Strings.Common.cancel, role: .cancel) { }
+        } message: {
+            Text(Strings.DeleteProfile.deleteMessage)
+        }
+        // Leave confirmation for shared profiles
+        .confirmationDialog(
+            Strings.DeleteProfile.leaveTitle,
+            isPresented: $showLeaveConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(Strings.DeleteProfile.leaveConfirm, role: .destructive) {
+                performLeave()
+            }
+            Button(Strings.Common.cancel, role: .cancel) { }
+        } message: {
+            Text(Strings.DeleteProfile.leaveMessage)
+        }
+    }
+
+    // MARK: - Delete/Leave Actions
+
+    private func performDelete() {
+        let willTriggerOnboarding = isLastProfile
+        Task {
+            HapticFeedback.warning()
+            await profileStore.deleteProfileWithMediaCleanup(profileId, mediaStore: MediaStore())
+            HapticFeedback.success()
+
+            // If this was the last profile, reset onboarding state
+            if willTriggerOnboarding {
+                hasCompletedOnboarding = false
+            }
+
+            dismiss()
+        }
+    }
+
+    private func performLeave() {
+        let willTriggerOnboarding = isLastProfile
+        HapticFeedback.warning()
+        profileStore.leaveSharedProfile(profileId)
+        HapticFeedback.success()
+
+        // If this was the last profile, reset onboarding state
+        if willTriggerOnboarding {
+            hasCompletedOnboarding = false
+        }
+
+        dismiss()
     }
 
     // MARK: - Profile Photo Helpers
@@ -63,24 +143,67 @@ struct DogProfileSettingsView: View {
 
     private func saveProfilePhoto(_ image: UIImage) {
         guard let profile = targetProfile else { return }
-        do {
-            // Delete old photo if exists
+
+        Task {
+            // Delete old photo if exists (including from CloudKit)
             if let oldFilename = profile.profilePhotoFilename {
-                ProfilePhotoStore.shared.delete(filename: oldFilename)
+                ProfilePhotoStore.shared.delete(filename: oldFilename, profileId: profile.id)
             }
 
-            let filename = try ProfilePhotoStore.shared.save(image: image)
-            profileStore.updateProfilePhoto(filename, for: profileId)
-        } catch {
-            print("Failed to save profile photo: \(error)")
+            do {
+                // Save new photo with CloudKit sync
+                let filename = try await ProfilePhotoStore.shared.save(image: image, for: profile.id)
+                await MainActor.run {
+                    profileStore.updateProfilePhoto(filename, for: profileId)
+                }
+            } catch {
+                print("Failed to save profile photo: \(error)")
+            }
         }
     }
 
     private func removeProfilePhoto() {
-        if let filename = targetProfile?.profilePhotoFilename {
-            ProfilePhotoStore.shared.delete(filename: filename)
+        guard let profile = targetProfile else { return }
+
+        if let filename = profile.profilePhotoFilename {
+            ProfilePhotoStore.shared.delete(filename: filename, profileId: profile.id)
         }
         profileStore.updateProfilePhoto(nil, for: profileId)
+    }
+}
+
+// MARK: - Delete Profile Section
+
+/// Section for deleting or leaving a dog profile
+private struct DeleteProfileSection: View {
+    let profile: PuppyProfile
+    let isLastProfile: Bool
+    let onDeleteTapped: () -> Void
+
+    var body: some View {
+        Section {
+            Button(role: .destructive) {
+                onDeleteTapped()
+            } label: {
+                Label {
+                    if profile.ownership == .shared {
+                        Text(Strings.DeleteProfile.leaveButton(profile.name))
+                    } else {
+                        Text(Strings.DeleteProfile.deleteButton(profile.name))
+                    }
+                } icon: {
+                    Image(systemName: profile.ownership == .shared
+                        ? "rectangle.portrait.and.arrow.right"
+                        : "trash")
+                }
+            }
+        } footer: {
+            if isLastProfile {
+                Text(Strings.DeleteProfile.lastProfileWarning)
+            } else {
+                Text(Strings.DeleteProfile.deleteWarningFooter)
+            }
+        }
     }
 }
 

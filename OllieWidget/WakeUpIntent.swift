@@ -7,6 +7,7 @@
 
 import AppIntents
 import Foundation
+import OtisShared
 
 @available(iOS 17.0, *)
 struct WakeUpIntent: LiveActivityIntent {
@@ -26,18 +27,15 @@ struct WakeUpIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        // Post notification for the app to handle
-        NotificationCenter.default.post(
-            name: .wakeUpFromLiveActivity,
-            object: nil,
-            userInfo: ["activityId": activityId]
-        )
+        // Write to App Groups UserDefaults for the main app to handle
+        // NotificationCenter doesn't work across processes
+        LiveActivitySharedState.shared.writePendingWakeUp(activityId: activityId)
 
         return .result()
     }
 }
 
-// MARK: - Notification Name
+// MARK: - Notification Name (for in-process use)
 
 extension Notification.Name {
     /// Posted when user taps Wake Up in Dynamic Island

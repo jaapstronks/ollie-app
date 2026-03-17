@@ -9,7 +9,7 @@ import OtisShared
 
 /// Main view for listing and managing documents
 struct DocumentsView: View {
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
 
     @State private var showingAddSheet = false
     @State private var documentToDelete: Document?

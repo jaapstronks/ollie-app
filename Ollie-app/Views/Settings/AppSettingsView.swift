@@ -12,15 +12,22 @@ import OtisShared
 
 /// Settings screen for all app-related configuration
 struct AppSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var dataImporter: DataImporter
-    @ObservedObject var eventStore: EventStore
-    @ObservedObject var cloudKit = CloudKitService.shared
+    var profileStore: ProfileStore
+    var dataImporter: DataImporter
+    var eventStore: EventStore
+    var cloudKit = CloudKitService.shared
+    var userIdentityStore = UserIdentityStore.shared
+    var onTriggerTour: (() -> Void)? = nil
 
     @State private var showingOtisPlusSheet = false
     @State private var showingSubscriptionSuccess = false
     @State private var showingImportSheet = false
     @State private var showingExportSheet = false
+    @Environment(\.dismiss) private var dismiss
+
+    // Guided tour
+    @AppStorage(UserPreferences.Key.hasCompletedGuidedTour.rawValue) private var hasCompletedGuidedTour = false
+    @AppStorage(UserPreferences.Key.guidedTourStep.rawValue) private var guidedTourStep = 0
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
@@ -35,9 +42,6 @@ struct AppSettingsView: View {
     // Training settings
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
 
-    // Celebration debug settings
-    @AppStorage(UserPreferences.Key.forceCelebrateEveryLog.rawValue) private var forceCelebrateEveryLog = false
-
     var body: some View {
         Form {
             if let profile = profileStore.profile {
@@ -48,6 +52,9 @@ struct AppSettingsView: View {
                     showingSubscriptionSuccess: $showingSubscriptionSuccess
                 )
             }
+
+            // User profile
+            userProfileSection
 
             // iCloud Sync
             SyncSection(eventStore: eventStore, cloudKit: cloudKit)
@@ -76,6 +83,9 @@ struct AppSettingsView: View {
             // Celebrations
             celebrationsSection
 
+            // Help section
+            helpSection
+
             // Advanced section
             Section(Strings.Settings.advanced) {
                 // Data import
@@ -89,7 +99,7 @@ struct AppSettingsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(Strings.DataImport.lastImportResult)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(Strings.DataImport.importSummary(
                             components: result.componentsImported,
                             items: result.itemsImported
@@ -117,12 +127,8 @@ struct AppSettingsView: View {
             // Beta feedback section (visible in debug and TestFlight)
             if AppEnvironment.current.isBeta {
                 BetaFeedbackSection()
-                    .environmentObject(profileStore)
+                    .environment(profileStore)
             }
-
-            #if DEBUG
-            DebugSection()
-            #endif
         }
         .navigationTitle(Strings.Settings.appSettings)
         .toolbar {
@@ -155,6 +161,72 @@ struct AppSettingsView: View {
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportDataView(profileStore: profileStore)
+        }
+    }
+
+    // MARK: - User Profile Section
+
+    private var userProfileSection: some View {
+        Section {
+            NavigationLink {
+                UserProfileSettingsView(userIdentityStore: userIdentityStore)
+            } label: {
+                HStack(spacing: 12) {
+                    // Avatar
+                    if let identity = userIdentityStore.currentIdentity {
+                        if let avatarData = identity.avatarData,
+                           let uiImage = UIImage(data: avatarData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        } else {
+                            Circle()
+                                .fill(Color(hex: identity.colorHex))
+                                .frame(width: 40, height: 40)
+                                .overlay {
+                                    Text(identity.initial)
+                                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                                        .foregroundStyle(.white)
+                                }
+                        }
+                    } else {
+                        Circle()
+                            .fill(Color.secondary.opacity(0.3))
+                            .frame(width: 40, height: 40)
+                            .overlay {
+                                Image(systemName: "person.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(userIdentityStore.currentIdentity?.name ?? Strings.UserProfile.me)
+                            .font(.body)
+                        Text(Strings.UserProfile.settingsDescription)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+
+            // Nudge preferences (what this user sees for the active dog)
+            NavigationLink {
+                NudgePreferencesView(userIdentityStore: userIdentityStore, profileStore: profileStore)
+            } label: {
+                HStack {
+                    Label(Strings.Settings.nudgePreferences, systemImage: "bell.badge")
+                    Spacer()
+                    if let profile = profileStore.activeProfile {
+                        Text(userIdentityStore.responsibilityLevel(for: profile.id, ownership: profile.ownership).label)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        } header: {
+            Text(Strings.UserProfile.title)
         }
     }
 
@@ -279,8 +351,8 @@ struct AppSettingsView: View {
 
             Toggle(isOn: $atmosphereState) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.Atmosphere.puppyState)
-                    Text(Strings.Atmosphere.puppyStateDescription)
+                    Text(Strings.Atmosphere.activityState)
+                    Text(Strings.Atmosphere.activityStateDescription)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -301,6 +373,26 @@ struct AppSettingsView: View {
         }
     }
 
+    // MARK: - Help Section
+
+    private var helpSection: some View {
+        Section(Strings.Settings.help) {
+            Button {
+                // Reset tour state and trigger replay
+                hasCompletedGuidedTour = false
+                guidedTourStep = 0
+                dismiss()
+                // Allow settings sheet to dismiss before starting tour
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.3))
+                    onTriggerTour?()
+                }
+            } label: {
+                Label(Strings.Settings.viewAppTour, systemImage: "questionmark.circle")
+            }
+        }
+    }
+
     // MARK: - Celebrations Section
 
     private var celebrationsSection: some View {
@@ -312,15 +404,6 @@ struct AppSettingsView: View {
                     Label(Strings.Celebrations.celebrationStyle, systemImage: "sparkles")
                     Spacer()
                     Text(currentCelebrationStyle.displayName)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Toggle(isOn: $forceCelebrateEveryLog) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.Settings.celebrateEveryLog)
-                    Text(Strings.Settings.celebrateEveryLogDescription)
-                        .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }

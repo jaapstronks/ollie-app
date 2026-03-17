@@ -151,3 +151,74 @@ extension Color {
         )
     }
 }
+
+// MARK: - Adaptive Opacity Helpers
+
+extension Color {
+    /// Returns a color with adaptive opacity based on color scheme
+    /// Dark mode typically needs higher opacity for visibility
+    /// - Parameters:
+    ///   - dark: Opacity for dark mode (typically higher)
+    ///   - light: Opacity for light mode (typically lower)
+    ///   - colorScheme: The current color scheme
+    func adaptiveOpacity(dark: Double, light: Double, colorScheme: ColorScheme) -> Color {
+        self.opacity(colorScheme == .dark ? dark : light)
+    }
+
+    /// Common adaptive background opacity (0.15 dark, 0.08 light)
+    func backgroundOpacity(colorScheme: ColorScheme) -> Color {
+        adaptiveOpacity(dark: 0.15, light: 0.08, colorScheme: colorScheme)
+    }
+
+    /// Subtle adaptive background (0.08 dark, 0.05 light)
+    func subtleBackgroundOpacity(colorScheme: ColorScheme) -> Color {
+        adaptiveOpacity(dark: 0.08, light: 0.05, colorScheme: colorScheme)
+    }
+
+    /// Badge/chip adaptive opacity (0.2 dark, 0.1 light)
+    func badgeOpacity(colorScheme: ColorScheme) -> Color {
+        adaptiveOpacity(dark: 0.2, light: 0.1, colorScheme: colorScheme)
+    }
+}
+
+// MARK: - SkillLearningPhase Colors & Labels
+
+extension SkillLearningPhase {
+    /// Color associated with this learning phase
+    public var color: Color {
+        switch self {
+        case .notStarted: return .secondary
+        case .luring: return .otisInfo
+        case .addingCue: return .otisPurple
+        case .proofing: return .otisAccent
+        case .generalizing: return .otisSuccess.opacity(0.8)
+        case .maintaining: return .otisSuccess
+        case .needsWork: return .otisDanger
+        }
+    }
+
+    /// Localized display label for the phase
+    public var label: String {
+        switch self {
+        case .notStarted: return Strings.Training.statusNotStarted
+        case .luring: return Strings.Training.phaseLuring
+        case .addingCue: return Strings.Training.phaseAddingCue
+        case .proofing: return Strings.Training.phaseProofing
+        case .generalizing: return Strings.Training.phaseGeneralizing
+        case .maintaining: return Strings.Training.statusMastered
+        case .needsWork: return Strings.Training.refresherNeeded
+        }
+    }
+
+    /// Short label for compact displays (e.g., phase timelines)
+    public var shortLabel: String {
+        switch self {
+        case .luring: return "Lure"
+        case .addingCue: return "Cue"
+        case .proofing: return "Proof"
+        case .generalizing: return "Gen."
+        case .maintaining: return "Done"
+        default: return ""
+        }
+    }
+}

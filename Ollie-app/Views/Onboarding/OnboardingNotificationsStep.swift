@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Pre-permission screen explaining notification benefits before requesting
 struct OnboardingNotificationsStep: View {
-    @EnvironmentObject var notificationService: NotificationService
+    @Environment(NotificationService.self) var notificationService
     let onNext: () -> Void
 
     @State private var showingCheckmark = false
@@ -126,7 +126,8 @@ struct OnboardingNotificationsStep: View {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                         showingCheckmark = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.5))
                         onNext()
                     }
                 } else {
@@ -158,5 +159,5 @@ private struct PermissionBenefitRow: View {
 
 #Preview {
     OnboardingNotificationsStep(onNext: {})
-        .environmentObject(NotificationService())
+        .environment(NotificationService())
 }

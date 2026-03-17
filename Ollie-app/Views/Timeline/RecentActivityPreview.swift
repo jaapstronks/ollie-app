@@ -16,10 +16,33 @@ struct RecentActivityPreview: View {
     var onDeleteEvent: ((PuppyEvent) -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+    private let userIdentityStore = UserIdentityStore.shared
+    private let participantResolver = ParticipantResolver.shared
 
-    /// Filter events to show recent activity
-    /// Shows events from the last 3 hours OR most recent 5, whichever is more
+    init(
+        events: [PuppyEvent],
+        onViewFullTimeline: @escaping () -> Void,
+        onEditEvent: ((PuppyEvent) -> Void)? = nil,
+        onDeleteEvent: ((PuppyEvent) -> Void)? = nil
+    ) {
+        self.events = events
+        self.onViewFullTimeline = onViewFullTimeline
+        self.onEditEvent = onEditEvent
+        self.onDeleteEvent = onDeleteEvent
+    }
+
+    /// PERF: Cached recent events to avoid recomputation on every access
+    @State private var cachedRecentEvents: [PuppyEvent] = []
+    /// PERF: Cached event groups to avoid recomputation on every access
+    @State private var cachedEventGroups: [EventGroup] = []
+
+    /// Filter events to show recent activity - returns cached value
     private var recentEvents: [PuppyEvent] {
+        cachedRecentEvents
+    }
+
+    /// Computes recent events - called when events change
+    private func computeRecentEvents() -> [PuppyEvent] {
         let now = Date()
         let threeHoursAgo = now.addingTimeInterval(-3 * 60 * 60)
 
@@ -37,6 +60,82 @@ struct RecentActivityPreview: View {
         }
     }
 
+    /// Represents a group of events logged by the same person
+    @MainActor
+    private struct EventGroup: Identifiable {
+        let events: [PuppyEvent]
+        let loggedByRecordID: String?
+        let isPartner: Bool  // true if logged by someone other than current user
+
+        var id: String {
+            let loggerPart = loggedByRecordID ?? "unknown"
+            let firstEventId = events.first?.id.uuidString ?? "empty"
+            return "\(loggerPart)-\(firstEventId)"
+        }
+
+        var partnerName: String? {
+            guard isPartner, let recordID = loggedByRecordID else { return nil }
+            return ParticipantResolver.shared.resolve(cloudKitRecordID: recordID).displayName
+        }
+    }
+
+    /// Group consecutive events by the same logger - returns cached value
+    private var eventGroups: [EventGroup] {
+        cachedEventGroups
+    }
+
+    /// Computes event groups - called when recent events change
+    private func computeEventGroups(from recent: [PuppyEvent]) -> [EventGroup] {
+        guard !recent.isEmpty else { return [] }
+
+        var groups: [EventGroup] = []
+        var currentGroupEvents: [PuppyEvent] = []
+        var currentLoggedBy: String?
+
+        for event in recent {
+            let eventLoggedBy = event.loggedBy
+
+            // Check if this event belongs to the same group
+            if eventLoggedBy == currentLoggedBy {
+                currentGroupEvents.append(event)
+            } else {
+                // Save the previous group if it exists
+                if !currentGroupEvents.isEmpty {
+                    let isPartner = currentLoggedBy != nil &&
+                        !userIdentityStore.isCurrentUser(currentLoggedBy!)
+                    groups.append(EventGroup(
+                        events: currentGroupEvents,
+                        loggedByRecordID: currentLoggedBy,
+                        isPartner: isPartner
+                    ))
+                }
+                // Start a new group
+                currentGroupEvents = [event]
+                currentLoggedBy = eventLoggedBy
+            }
+        }
+
+        // Don't forget the last group
+        if !currentGroupEvents.isEmpty {
+            let isPartner = currentLoggedBy != nil &&
+                !userIdentityStore.isCurrentUser(currentLoggedBy!)
+            groups.append(EventGroup(
+                events: currentGroupEvents,
+                loggedByRecordID: currentLoggedBy,
+                isPartner: isPartner
+            ))
+        }
+
+        return groups
+    }
+
+    /// Updates all cached values - called on appear and when events change
+    private func updateCache() {
+        let recent = computeRecentEvents()
+        cachedRecentEvents = recent
+        cachedEventGroups = computeEventGroups(from: recent)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Section header
@@ -52,17 +151,49 @@ struct RecentActivityPreview: View {
                 if recentEvents.isEmpty {
                     emptyState
                 } else {
-                    // Event rows
-                    ForEach(recentEvents) { event in
-                        RecentActivityRow(
-                            event: event,
-                            onTap: { onEditEvent?(event) },
-                            onDelete: onDeleteEvent != nil ? { onDeleteEvent?(event) } : nil
-                        )
+                    // Event rows with grouped attribution
+                    ForEach(eventGroups) { group in
+                        if group.isPartner, let partnerName = group.partnerName {
+                            // Partner-logged events: wrap in visual container
+                            PartnerEventGroupContainer(
+                                name: partnerName,
+                                recordID: group.loggedByRecordID,
+                                eventCount: group.events.count
+                            ) {
+                                ForEach(group.events) { event in
+                                    RecentActivityRow(
+                                        event: event,
+                                        onTap: { onEditEvent?(event) },
+                                        onDelete: onDeleteEvent != nil ? { onDeleteEvent?(event) } : nil
+                                    )
 
-                        if event.id != recentEvents.last?.id {
-                            Divider()
-                                .padding(.leading, 44)
+                                    // Divider between events within the group
+                                    if event.id != group.events.last?.id {
+                                        Divider()
+                                            .padding(.leading, 44)
+                                    }
+                                }
+                            }
+
+                            // Divider after partner group if not the last group
+                            if group.id != eventGroups.last?.id {
+                                Divider()
+                            }
+                        } else {
+                            // Current user events: no special styling
+                            ForEach(group.events) { event in
+                                RecentActivityRow(
+                                    event: event,
+                                    onTap: { onEditEvent?(event) },
+                                    onDelete: onDeleteEvent != nil ? { onDeleteEvent?(event) } : nil
+                                )
+
+                                // Divider after each event except the last overall
+                                if event.id != recentEvents.last?.id {
+                                    Divider()
+                                        .padding(.leading, 44)
+                                }
+                            }
                         }
                     }
                 }
@@ -100,6 +231,12 @@ struct RecentActivityPreview: View {
                 RoundedRectangle(cornerRadius: 12)
                     .strokeBorder(borderColor, lineWidth: 0.5)
             )
+        }
+        .onAppear {
+            updateCache()
+        }
+        .onChange(of: events) { _, _ in
+            updateCache()
         }
     }
 
@@ -283,9 +420,66 @@ private struct RecentActivityRow: View {
     }
 }
 
+// MARK: - Partner Event Group Container
+
+/// Container that visually groups events logged by a partner with a left accent bar
+private struct PartnerEventGroupContainer<Content: View>: View {
+    let name: String
+    let recordID: String?
+    let eventCount: Int
+    @ViewBuilder let content: Content
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var accentColor: Color {
+        Color.otisAccent
+    }
+
+    private var backgroundColor: Color {
+        colorScheme == .dark
+            ? accentColor.opacity(0.08)
+            : accentColor.opacity(0.04)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // Attribution header inside the group
+            HStack(spacing: 6) {
+                UserAvatarFromRecordID(cloudKitRecordID: recordID, size: 18)
+
+                Text(Strings.Handoff.loggedThese(name))
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+            }
+            .padding(.horizontal, 12)
+            .padding(.top, 8)
+            .padding(.bottom, 4)
+
+            // Event rows
+            content
+        }
+        .background(
+            HStack(spacing: 0) {
+                // Left accent bar
+                Rectangle()
+                    .fill(accentColor)
+                    .frame(width: 3)
+
+                // Background fill
+                Rectangle()
+                    .fill(backgroundColor)
+            }
+        )
+    }
+}
+
 // MARK: - Preview
 
-#Preview {
+#Preview("Mixed Events") {
+    // Simulate events from different users - the loggedBy field determines attribution
     let sampleEvents: [PuppyEvent] = [
         PuppyEvent(time: Date().addingTimeInterval(-30 * 60), type: .plassen, location: .buiten),
         PuppyEvent(time: Date().addingTimeInterval(-60 * 60), type: .eten),
@@ -302,6 +496,56 @@ private struct RecentActivityRow: View {
         .padding()
 
         Spacer()
+    }
+    .background(Color(.systemGray6))
+}
+
+#Preview("Partner Group Container") {
+    VStack(spacing: 16) {
+        // Example of the new partner event group styling
+        PartnerEventGroupContainer(
+            name: "Sarah",
+            recordID: nil,
+            eventCount: 3
+        ) {
+            VStack(spacing: 0) {
+                HStack {
+                    Text("09:30")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("Potty (outside)")
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+
+                Divider().padding(.leading, 44)
+
+                HStack {
+                    Text("10:15")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("Training - Sit")
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+
+                Divider().padding(.leading, 44)
+
+                HStack {
+                    Text("11:00")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("Walk")
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(.horizontal)
     }
     .background(Color(.systemGray6))
 }

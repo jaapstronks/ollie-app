@@ -144,6 +144,21 @@ extension Array where Element == PuppyEvent {
         return filter { $0.time >= cutoff }
     }
 
+    /// Filter to events from "this week" (last 7 days)
+    func thisWeek() -> [PuppyEvent] {
+        filter { $0.time.isThisWeek }
+    }
+
+    /// Filter to events from "last week" (7-14 days ago)
+    func lastWeek() -> [PuppyEvent] {
+        filter { $0.time.isLastWeek }
+    }
+
+    /// Filter to events from "this month" (last 30 days)
+    func thisMonth() -> [PuppyEvent] {
+        filter { $0.time.isThisMonth }
+    }
+
     // MARK: - Media Filtering
 
     /// Filter to events with photos

@@ -1,0 +1,908 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeftijd"
+          }
+        }
+      }
+    },
+    "Age-Based Screenings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeftijdsgebonden Onderzoeken"
+          }
+        }
+      }
+    },
+    "Allergies" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allergieën"
+          }
+        }
+      }
+    },
+    "Annual care" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaarlijkse zorg"
+          }
+        }
+      }
+    },
+    "Appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraken"
+          }
+        }
+      }
+    },
+    "Breed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ras"
+          }
+        }
+      }
+    },
+    "Breed Health Risks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ras Gezondheidsrisico's"
+          }
+        }
+      }
+    },
+    "Breed Risk Awareness" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ras Risico Bewustzijn"
+          }
+        }
+      }
+    },
+    "Breed-Specific Screenings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rasspecifieke Onderzoeken"
+          }
+        }
+      }
+    },
+    "Cognitive health check" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cognitieve gezondheidscontrole"
+          }
+        }
+      }
+    },
+    "Complete puppy vaccinations" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltooi puppy vaccinaties"
+          }
+        }
+      }
+    },
+    "Copied to clipboard" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekopieerd naar klembord"
+          }
+        }
+      }
+    },
+    "Copy to Clipboard" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieer naar Klembord"
+          }
+        }
+      }
+    },
+    "Current Conditions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige Aandoeningen"
+          }
+        }
+      }
+    },
+    "Current Medications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige Medicatie"
+          }
+        }
+      }
+    },
+    "Dental health check" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tandheelkundige controle"
+          }
+        }
+      }
+    },
+    "Diagnosed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gediagnosticeerd"
+          }
+        }
+      }
+    },
+    "Discuss any changes in behavior, sleep patterns, or confusion that might indicate cognitive decline." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bespreek eventuele veranderingen in gedrag, slaappatronen of verwardheid die kunnen wijzen op cognitieve achteruitgang."
+          }
+        }
+      }
+    },
+    "Discuss developmental progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bespreek ontwikkelingsvoortgang"
+          }
+        }
+      }
+    },
+    "Discuss monitoring and prevention options with your vet." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bespreek monitoring- en preventieopties met je dierenarts."
+          }
+        }
+      }
+    },
+    "Ensure core vaccinations are on schedule for protection against distemper, parvo, and rabies." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zorg dat kernvaccinaties op schema liggen voor bescherming tegen hondenziekte, parvo en hondsdolheid."
+          }
+        }
+      }
+    },
+    "Establish dental baseline" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stel tandheelkundige basislijn vast"
+          }
+        }
+      }
+    },
+    "Evaluate joint health and discuss pain management options if needed." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evalueer gewrichtsgezondheid en bespreek pijnbestrijdingsopties indien nodig."
+          }
+        }
+      }
+    },
+    "Follow-up Reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vervolgherinneringen"
+          }
+        }
+      }
+    },
+    "Gender" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geslacht"
+          }
+        }
+      }
+    },
+    "Generated by Ollie App" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegenereerd door Ollie App"
+          }
+        }
+      }
+    },
+    "Good time to establish dental health baseline and discuss home care routine." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed moment om tandheelkundige basislijn vast te stellen en thuiszorgroutine te bespreken."
+          }
+        }
+      }
+    },
+    "Health Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gezondheidskalender"
+          }
+        }
+      }
+    },
+    "Health Milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gezondheidsmijlpalen"
+          }
+        }
+      }
+    },
+    "Maintaining healthy weight reduces strain on joints and organs." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een gezond gewicht behouden vermindert belasting op gewrichten en organen."
+          }
+        }
+      }
+    },
+    "Medication review" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medicatie beoordeling"
+          }
+        }
+      }
+    },
+    "Medications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medicatie"
+          }
+        }
+      }
+    },
+    "Mobility assessment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mobiliteitscontrole"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam"
+          }
+        }
+      }
+    },
+    "Never completed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nooit voltooid"
+          }
+        }
+      }
+    },
+    "No breed-specific risks identified" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen rasspecifieke risico's geïdentificeerd"
+          }
+        }
+      }
+    },
+    "No current conditions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen huidige aandoeningen"
+          }
+        }
+      }
+    },
+    "No current medications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen huidige medicatie"
+          }
+        }
+      }
+    },
+    "No events scheduled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen evenementen gepland"
+          }
+        }
+      }
+    },
+    "No follow-ups scheduled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen vervolgafspraken gepland"
+          }
+        }
+      }
+    },
+    "No symptoms logged in last 30 days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen symptomen gelogd in de afgelopen 30 dagen"
+          }
+        }
+      }
+    },
+    "No upcoming vet visits" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen komende dierenarts bezoeken"
+          }
+        }
+      }
+    },
+    "Overdue Follow-ups" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achterstallige Vervolgafspraken"
+          }
+        }
+      }
+    },
+    "Parasite prevention" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parasietpreventie"
+          }
+        }
+      }
+    },
+    "Prepare for senior years" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereid je voor op de seniorjaren"
+          }
+        }
+      }
+    },
+    "Prepare for Visit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereid bezoek voor"
+          }
+        }
+      }
+    },
+    "Prepare Visit Summary" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak Bezoek Samenvatting"
+          }
+        }
+      }
+    },
+    "Preventive care" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preventieve zorg"
+          }
+        }
+      }
+    },
+    "Profile Information" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profielinformatie"
+          }
+        }
+      }
+    },
+    "Purpose" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doel"
+          }
+        }
+      }
+    },
+    "Questions to consider asking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vragen om te overwegen"
+          }
+        }
+      }
+    },
+    "Recent Health Assessments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recente Gezondheidsbeoordelingen"
+          }
+        }
+      }
+    },
+    "Recent Symptoms (30 days)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recente Symptomen (30 dagen)"
+          }
+        }
+      }
+    },
+    "Recurring" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terugkerend"
+          }
+        }
+      }
+    },
+    "Regular bloodwork helps catch age-related issues early. Discuss kidney, liver, and thyroid function." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regelmatig bloedonderzoek helpt leeftijdsgerelateerde problemen vroeg op te sporen. Bespreek nier-, lever- en schildklierfunctie."
+          }
+        }
+      }
+    },
+    "Regular dental exams prevent periodontal disease and related health issues." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regelmatige tandheelkundige controles voorkomen tandvleesaandoeningen en gerelateerde gezondheidsproblemen."
+          }
+        }
+      }
+    },
+    "Review flea, tick, and heartworm prevention schedule." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk het schema voor vlo-, teek- en hartwormpreventie."
+          }
+        }
+      }
+    },
+    "Review growth milestones, socialization progress, and any behavioral concerns." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bespreek groeimijlpalen, socialisatievoortgang en eventuele gedragsproblemen."
+          }
+        }
+      }
+    },
+    "Routine care" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routinezorg"
+          }
+        }
+      }
+    },
+    "Schedule Appointment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan Afspraak"
+          }
+        }
+      }
+    },
+    "Schedule Now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan Nu"
+          }
+        }
+      }
+    },
+    "Schedule Screening" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan Onderzoek"
+          }
+        }
+      }
+    },
+    "Screening Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderzoeksstatus"
+          }
+        }
+      }
+    },
+    "Senior bloodwork panel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senior bloedonderzoek"
+          }
+        }
+      }
+    },
+    "Share as PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel als PDF"
+          }
+        }
+      }
+    },
+    "Share as Text" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel als Tekst"
+          }
+        }
+      }
+    },
+    "Size" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte"
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komend"
+          }
+        }
+      }
+    },
+    "Upcoming Follow-ups" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komende Vervolgafspraken"
+          }
+        }
+      }
+    },
+    "Upcoming Vet Visit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komend Dierenarts Bezoek"
+          }
+        }
+      }
+    },
+    "Vet notes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dierenarts notities"
+          }
+        }
+      }
+    },
+    "Vet Visit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dierenarts Bezoek"
+          }
+        }
+      }
+    },
+    "Vet Visit Summary" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dierenarts Bezoek Samenvatting"
+          }
+        }
+      }
+    },
+    "View Tips" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk Tips"
+          }
+        }
+      }
+    },
+    "Visit in %lld day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezoek over %lld dag"
+          }
+        }
+      }
+    },
+    "Visit in %lld days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezoek over %lld dagen"
+          }
+        }
+      }
+    },
+    "Visit Tips" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezoektips"
+          }
+        }
+      }
+    },
+    "Visit Today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezoek Vandaag"
+          }
+        }
+      }
+    },
+    "Visit Tomorrow" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezoek Morgen"
+          }
+        }
+      }
+    },
+    "Weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht"
+          }
+        }
+      }
+    },
+    "Weight assessment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewichtsbeoordeling"
+          }
+        }
+      }
+    },
+    "Weight History" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewichtshistorie"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

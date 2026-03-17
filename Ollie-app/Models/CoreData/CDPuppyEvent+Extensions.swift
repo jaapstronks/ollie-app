@@ -5,7 +5,7 @@
 //  Extensions for converting between PuppyEvent and CDPuppyEvent
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDPuppyEvent {
@@ -30,6 +30,7 @@ extension CDPuppyEvent {
         self.video = event.video
         self.thumbnailPath = event.thumbnailPath
         self.cloudPhotoSynced = event.cloudPhotoSynced ?? false
+        self.cloudPhotoOwner = event.cloudPhotoOwner
         self.latitude = event.latitude ?? 0
         self.longitude = event.longitude ?? 0
         self.spotId = event.spotId
@@ -39,7 +40,7 @@ extension CDPuppyEvent {
         self.gapType = event.gapType?.rawValue
         self.endTime = event.endTime
         self.gapLocation = event.gapLocation
-        self.loggedBy = event.loggedBy
+        self.loggedBy = event.loggedBy  // Now a String (CloudKit record ID)
         self.napLocation = event.napLocation?.rawValue
 
         // Training session outcome fields
@@ -55,6 +56,16 @@ extension CDPuppyEvent {
         }
         self.trainingContext = event.trainingContext
         self.skillPhase = event.skillPhase
+
+        // Social fields - encode likes as JSON data
+        if let likes = event.likes, !likes.isEmpty {
+            self.likesData = try? JSONEncoder().encode(likes)
+        } else {
+            self.likesData = nil
+        }
+
+        // Contact linking
+        self.linkedContactID = event.linkedContactID
     }
 
     /// Create a new CDPuppyEvent from a PuppyEvent struct
@@ -98,6 +109,14 @@ extension CDPuppyEvent {
             napLocation = nil
         }
 
+        // Decode likes from JSON data
+        let likes: [EventLike]?
+        if let likesData = self.likesData {
+            likes = try? JSONDecoder().decode([EventLike].self, from: likesData)
+        } else {
+            likes = nil
+        }
+
         return PuppyEvent(
             id: id,
             time: time,
@@ -116,6 +135,7 @@ extension CDPuppyEvent {
             longitude: self.longitude != 0 ? self.longitude : nil,
             thumbnailPath: self.thumbnailPath,
             cloudPhotoSynced: self.cloudPhotoSynced,
+            cloudPhotoOwner: self.cloudPhotoOwner,
             weightKg: self.weightKg != 0 ? self.weightKg : nil,
             spotId: self.spotId,
             spotName: self.spotName,
@@ -129,7 +149,9 @@ extension CDPuppyEvent {
             successReps: self.successReps?.intValue,
             failedReps: self.failedReps?.intValue,
             trainingContext: self.trainingContext,
-            skillPhase: self.skillPhase
+            skillPhase: self.skillPhase,
+            likes: likes,
+            linkedContactID: self.linkedContactID
         )
     }
 }
@@ -151,7 +173,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "time >= %@ AND time < %@", startOfDay as CVarArg, endOfDay as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events in a date range
@@ -160,7 +186,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "time >= %@ AND time <= %@", startDate as CVarArg, endDate as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch event by ID
@@ -168,7 +198,11 @@ extension CDPuppyEvent {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        nonisolated(unsafe) var result: CDPuppyEvent?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch events by type
@@ -177,7 +211,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "type == %@", type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch recent events (last N events)
@@ -186,7 +224,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         request.fetchLimit = limit
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch all events
@@ -194,7 +236,11 @@ extension CDPuppyEvent {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events modified after a given date
@@ -203,7 +249,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "modifiedAt > %@", date as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "modifiedAt", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch the earliest event by time
@@ -212,7 +262,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         request.fetchLimit = 1
 
-        return try? context.fetch(request).first
+        nonisolated(unsafe) var result: CDPuppyEvent?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     // MARK: - Profile-Scoped Fetch Methods (Multi-Puppy Support)
@@ -232,7 +286,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events in a date range, scoped to a profile
@@ -244,7 +302,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events by type, scoped to a profile
@@ -256,7 +318,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch recent events, scoped to a profile
@@ -266,7 +332,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         request.fetchLimit = limit
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch all events for a profile
@@ -275,7 +345,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events modified after a given date, scoped to a profile
@@ -287,7 +361,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "modifiedAt", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch the earliest event for a profile
@@ -297,7 +375,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         request.fetchLimit = 1
 
-        return try? context.fetch(request).first
+        nonisolated(unsafe) var result: CDPuppyEvent?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Link orphaned events to a profile (for migration)
@@ -305,12 +387,15 @@ extension CDPuppyEvent {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "profile == nil")
 
-        guard let orphanedEvents = try? context.fetch(request) else { return 0 }
-
-        for event in orphanedEvents {
-            event.profile = profile
+        nonisolated(unsafe) let unsafeProfile = profile
+        nonisolated(unsafe) var count = 0
+        context.performAndWait {
+            guard let orphanedEvents = try? context.fetch(request) else { return }
+            for event in orphanedEvents {
+                event.profile = unsafeProfile
+            }
+            count = orphanedEvents.count
         }
-
-        return orphanedEvents.count
+        return count
     }
 }

@@ -14,6 +14,7 @@ struct PolaroidThumbnail: View {
     var rotation: Double = 3 // degrees
 
     @State private var image: UIImage?
+    @State private var loadFailed: Bool = false
 
     var body: some View {
         ZStack {
@@ -31,6 +32,15 @@ struct PolaroidThumbnail: View {
                         .scaledToFill()
                         .frame(width: size, height: size)
                         .clipped()
+                } else if loadFailed {
+                    Rectangle()
+                        .fill(Color(.tertiarySystemBackground))
+                        .frame(width: size, height: size)
+                        .overlay {
+                            Image(systemName: "photo")
+                                .font(.system(size: size * 0.4))
+                                .foregroundStyle(.secondary)
+                        }
                 } else {
                     Rectangle()
                         .fill(Color(.tertiarySystemBackground))
@@ -57,6 +67,8 @@ struct PolaroidThumbnail: View {
             if !Task.isCancelled {
                 image = loaded
             }
+        } else {
+            loadFailed = true
         }
     }
 }

@@ -9,7 +9,7 @@ import OtisShared
 
 /// Sheet for adding or editing a contact
 struct AddEditContactSheet: View {
-    @ObservedObject var contactStore: ContactStore
+    var contactStore: ContactStore
     var existingContact: DogContact?
 
     @Environment(\.dismiss) private var dismiss
@@ -59,7 +59,7 @@ struct AddEditContactSheet: View {
                 } footer: {
                     if showingNameError && name.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text(Strings.Contacts.nameRequired)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
 
@@ -149,7 +149,7 @@ struct AddEditContactSheet: View {
                 LocationPickerMapView(
                     selectedLatitude: $latitude,
                     selectedLongitude: $longitude,
-                    address: address.isEmpty ? nil : address,
+                    address: address.nilIfBlank,
                     onConfirm: {}
                 )
             }
@@ -196,10 +196,10 @@ struct AddEditContactSheet: View {
             id: existingContact?.id ?? UUID(),
             name: trimmedName,
             contactType: contactType,
-            phone: phone.isEmpty ? nil : phone,
-            email: email.isEmpty ? nil : email,
-            address: address.isEmpty ? nil : address,
-            notes: notes.isEmpty ? nil : notes,
+            phone: phone.nilIfBlank,
+            email: email.nilIfBlank,
+            address: address.nilIfBlank,
+            notes: notes.nilIfBlank,
             latitude: latitude,
             longitude: longitude,
             createdAt: existingContact?.createdAt ?? Date(),

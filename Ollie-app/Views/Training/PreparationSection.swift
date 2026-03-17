@@ -37,7 +37,7 @@ enum ConceptType: Identifiable {
 
 /// Section showing preparation items that must be completed before training
 struct PreparationSection: View {
-    @ObservedObject var progressStore: TrainingProgressStore
+    var progressStore: TrainingProgressStore
     let preparationItems: [PreparationItem]
 
     @State private var sheetToShow: ConceptType?

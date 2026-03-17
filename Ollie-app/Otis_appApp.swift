@@ -3,241 +3,14 @@
 //  Otis-app
 //
 
-import SwiftUI
-import OtisShared
 import CloudKit
 import CoreData
-import UserNotifications
-import TipKit
+import OtisShared
 import os
-
-// MARK: - CloudKit Share URL Handler
-
-@MainActor
-private final class ShareAcceptanceRegistry {
-    static let shared = ShareAcceptanceRegistry()
-    private var inFlightKeys = Set<String>()
-
-    func beginIfNeeded(for metadata: CKShare.Metadata) -> Bool {
-        let key = keyForMetadata(metadata)
-        guard !inFlightKeys.contains(key) else { return false }
-        inFlightKeys.insert(key)
-        return true
-    }
-
-    func end(for metadata: CKShare.Metadata) {
-        inFlightKeys.remove(keyForMetadata(metadata))
-    }
-
-    private func keyForMetadata(_ metadata: CKShare.Metadata) -> String {
-        let recordID = metadata.share.recordID
-        return "\(recordID.zoneID.ownerName)|\(recordID.zoneID.zoneName)|\(recordID.recordName)"
-    }
-}
-
-@MainActor
-private func sharedProfileIDSnapshot() -> Set<UUID> {
-    guard let sharedStore = PersistenceController.shared.getSharedStore() else { return [] }
-    let profiles = CDPuppyProfile.fetchAllProfiles(in: PersistenceController.shared.viewContext, from: sharedStore)
-    return Set(profiles.compactMap(\.id))
-}
-
-@MainActor
-private func waitForSharedProfileName(
-    previousSharedProfileIDs: Set<UUID>,
-    timeoutSeconds: TimeInterval = 30
-) async -> String? {
-    guard let sharedStore = PersistenceController.shared.getSharedStore() else { return nil }
-    let deadline = Date().addingTimeInterval(timeoutSeconds)
-
-    while Date() <= deadline {
-        let profiles = CDPuppyProfile.fetchAllProfiles(in: PersistenceController.shared.viewContext, from: sharedStore)
-        let newlyAdded = profiles.filter { profile in
-            guard let id = profile.id else { return false }
-            return !previousSharedProfileIDs.contains(id)
-        }
-
-        if let newest = newlyAdded.max(by: { ($0.modifiedAt ?? .distantPast) < ($1.modifiedAt ?? .distantPast) }),
-           let name = newest.name,
-           !name.isEmpty {
-            return name
-        }
-
-        try? await Task.sleep(for: .seconds(1))
-    }
-
-    return nil
-}
-
-/// Handle CloudKit share URL by fetching metadata and accepting
-@MainActor
-func handleCloudKitShareURL(_ url: URL, profileStore: ProfileStore) async {
-    let logger = Logger.otis(category: "ShareHandler")
-    logger.info("🔗 handleCloudKitShareURL called with: \(url.absoluteString)")
-
-    let container = CKContainer(identifier: "iCloud.nl.jaapstronks.Otis")
-
-    // Fetch share metadata from the URL
-    let operation = CKFetchShareMetadataOperation(shareURLs: [url])
-    operation.perShareMetadataResultBlock = { url, result in
-        switch result {
-        case .success(let metadata):
-            logger.info("✅ Got share metadata for URL")
-            let ownerName = metadata.ownerIdentity.nameComponents?.formatted() ?? "someone"
-            logger.info("🔗 Owner: \(ownerName)")
-            logger.info("🔗 Container: \(metadata.containerIdentifier)")
-
-            Task { @MainActor in
-                // Check if user has existing profile - show conflict warning
-                if profileStore.hasExistingPrivateProfile() {
-                    let existingName = profileStore.profile?.name ?? ""
-                    showExistingProfileWarning(
-                        existingName: existingName,
-                        ownerName: ownerName,
-                        metadata: metadata,
-                        profileStore: profileStore,
-                        logger: logger
-                    )
-                } else {
-                    // No conflict - accept share directly
-                    await acceptShareInvitation(metadata: metadata, profileStore: profileStore, logger: logger)
-                }
-            }
-
-        case .failure(let error):
-            logger.error("❌ Failed to fetch share metadata: \(error.localizedDescription)")
-
-            Task { @MainActor in
-                let errorAlert = UIAlertController(
-                    title: Strings.CloudSharing.shareError,
-                    message: "\(Strings.CloudSharing.couldNotFetchShareInfo): \(error.localizedDescription)",
-                    preferredStyle: .alert
-                )
-                errorAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
-                presentAlert(errorAlert)
-            }
-        }
-    }
-
-    operation.qualityOfService = .userInitiated
-    container.add(operation)
-}
-
-/// Show warning when user has existing profile and is accepting a share
-@MainActor
-private func showExistingProfileWarning(
-    existingName: String,
-    ownerName: String,
-    metadata: CKShare.Metadata,
-    profileStore: ProfileStore,
-    logger: Logger
-) {
-    // With multi-puppy support, we no longer need to replace the existing profile
-    // The shared profile will be ADDED to the user's profile list
-    let message = existingName.isEmpty
-        ? Strings.CloudSharing.addSharedProfileMessageGeneric(ownerName: ownerName)
-        : Strings.CloudSharing.addSharedProfileMessage(existingName: existingName, sharedOwner: ownerName)
-
-    let alert = UIAlertController(
-        title: Strings.CloudSharing.addSharedProfileTitle,
-        message: message,
-        preferredStyle: .alert
-    )
-
-    alert.addAction(UIAlertAction(title: Strings.Common.cancel, style: .cancel))
-    alert.addAction(UIAlertAction(title: Strings.CloudSharing.acceptShare, style: .default) { _ in
-        Task { @MainActor in
-            // No longer deleting private profile - multi-puppy support allows both
-            await acceptShareInvitation(metadata: metadata, profileStore: profileStore, logger: logger)
-        }
-    })
-
-    presentAlert(alert)
-}
-
-/// Accept the share invitation and reload profile
-@MainActor
-private func acceptShareInvitation(
-    metadata: CKShare.Metadata,
-    profileStore: ProfileStore?,
-    logger: Logger
-) async {
-    guard ShareAcceptanceRegistry.shared.beginIfNeeded(for: metadata) else {
-        logger.info("Share acceptance already in progress for this invitation")
-        return
-    }
-    defer { ShareAcceptanceRegistry.shared.end(for: metadata) }
-
-    // Show accepting alert
-    let acceptingAlert = UIAlertController(
-        title: Strings.CloudSharing.acceptingShare,
-        message: Strings.CloudSharing.connectingToSharedData,
-        preferredStyle: .alert
-    )
-    presentAlert(acceptingAlert)
-
-    do {
-        let previousSharedProfileIDs = profileStore?.currentSharedProfileIDs() ?? sharedProfileIDSnapshot()
-
-        // Accept via PersistenceController so the shared data is routed into the shared store
-        // This is required for NSPersistentCloudKitContainer's two-store architecture
-        try await PersistenceController.shared.acceptShareInvitation(from: metadata)
-
-        // Update CloudKit service state
-        CloudKitService.shared.markAsParticipant()
-
-        // Notify stores to refresh their data and skip onboarding
-        NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
-
-        // Wait for shared profile import before showing "dog added" confirmation.
-        // Acceptance and data import are separate phases in CloudKit sharing.
-        let importedSharedDogName: String?
-        if let profileStore {
-            importedSharedDogName = await profileStore.awaitNewlySharedProfile(
-                previousSharedProfileIDs: previousSharedProfileIDs,
-                timeoutSeconds: 30
-            )?.name
-        } else {
-            importedSharedDogName = await waitForSharedProfileName(
-                previousSharedProfileIDs: previousSharedProfileIDs,
-                timeoutSeconds: 30
-            )
-        }
-
-        acceptingAlert.dismiss(animated: true) {
-            let successAlert = UIAlertController(
-                title: importedSharedDogName == nil ? Strings.CloudSharing.shareAccepted : Strings.CloudSharing.sharedDogReadyTitle,
-                message: importedSharedDogName.map { Strings.CloudSharing.sharedDogReadyMessage(name: $0) } ?? Strings.CloudSharing.shareAcceptedSyncingMessage,
-                preferredStyle: .alert
-            )
-            successAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
-            presentAlert(successAlert)
-        }
-
-        logger.info("✅ Share accepted successfully")
-    } catch {
-        logger.error("❌ Failed to accept share: \(error.localizedDescription)")
-
-        acceptingAlert.dismiss(animated: true) {
-            let errorAlert = UIAlertController(
-                title: Strings.CloudSharing.shareFailed,
-                message: error.localizedDescription,
-                preferredStyle: .alert
-            )
-            errorAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
-            presentAlert(errorAlert)
-        }
-    }
-}
-
-/// Helper to present alerts on the current window
-@MainActor
-private func presentAlert(_ alert: UIAlertController) {
-    UIApplication.shared.connectedScenes
-        .compactMap { $0 as? UIWindowScene }
-        .first?.windows.first?.rootViewController?
-        .present(alert, animated: true)
-}
+import Sentry
+import SwiftUI
+import TipKit
+import UserNotifications
 
 @main
 struct OtisApp: App {
@@ -246,279 +19,499 @@ struct OtisApp: App {
     // Core Data persistence controller (must be initialized first)
     let persistenceController = PersistenceController.shared
 
-    @StateObject private var profileStore = ProfileStore()
-    @StateObject private var eventStore = EventStore()
-    @StateObject private var dataImporter = DataImporter()
-    @StateObject private var weatherService = WeatherService()
-    @StateObject private var notificationService = NotificationService()
-    @StateObject private var spotStore = SpotStore()
-    @StateObject private var locationManager = LocationManager()
-    @StateObject private var medicationStore = MedicationStore()
-    @StateObject private var socializationStore = SocializationStore()
-    @StateObject private var milestoneStore = MilestoneStore()
-    @StateObject private var documentStore = DocumentStore()
-    @StateObject private var contactStore = ContactStore()
-    @StateObject private var appointmentStore = AppointmentStore()
-    @StateObject private var weightStore = WeightStore()
-    @StateObject private var skillProgressStore = SkillProgressStore()
-    @StateObject private var regressionLogStore = RegressionLogStore()
-    @StateObject private var subscriptionManager = SubscriptionManager.shared
-    @StateObject private var atmosphereProvider = AtmosphereProvider()
-    @StateObject private var foodRecallService = FoodRecallService()
-    @ObservedObject private var cloudKit = CloudKitService.shared
+    // MARK: - State Objects
+
+    @State private var profileStore = ProfileStore()
+    @State private var eventStore = EventStore()
+    @State private var dataImporter = DataImporter()
+    @State private var weatherService = WeatherService()
+    @State private var notificationService = NotificationService()
+    @State private var spotStore = SpotStore()
+    @State private var locationManager = LocationManager()
+    @State private var medicationStore = MedicationStore()
+    @State private var socializationStore = SocializationStore()
+    @State private var milestoneStore = MilestoneStore()
+    @State private var documentStore = DocumentStore()
+    @State private var contactStore = ContactStore()
+    @State private var appointmentStore = AppointmentStore()
+    @State private var weightStore = WeightStore()
+    @State private var skillProgressStore = SkillProgressStore()
+    @State private var trainingTheoryStore = TrainingTheoryStore()
+    @State private var regressionLogStore = RegressionLogStore()
+    @State private var routineStore = RoutineStore()
+    @State private var subscriptionManager = SubscriptionManager.shared
+    @State private var atmosphereProvider = AtmosphereProvider()
+    @State private var foodRecallService = FoodRecallService()
+    @State private var unitPreferences = UnitPreferences.shared
+    @State private var trainingMasteryStore = TrainingMasteryStore.shared
+    @State private var walkTrackingService = WalkTrackingService()
+    @State private var explorationStore = ExplorationStore()
+    private var cloudKit = CloudKitService.shared
+    private let dailyAggregateService = DailyAggregateService.shared
     @State private var toastManager = ToastManager()
 
+    // View models that need to be created once (not on every MainTabView init)
+    @State private var momentsViewModel: MomentsViewModel?
+    @State private var placesMapViewModel: PlacesMapViewModel?
+
+    // MARK: - Initialization
+
     init() {
-        // Initialize crash reporting first (before any other code that might crash)
         CrashReporter.start()
-
-        // Track app launch for analytics
         OtisAnalytics.shared.trackAppLaunch()
-
         UserPreferences.registerDefaults()
         AINudgeRollout.registerDefaults()
-
-        // Configure TipKit for contextual tips
         configureTips()
 
-        // Install seed data for UI testing (screenshot automation) - always runs regardless of build config
+        // Install seed data for UI testing or development
         if SeedData.isUITesting {
             SeedData.installSeedDataIfNeeded()
         }
         #if DEBUG
-        // Install seed data for development (when not UI testing)
         if !SeedData.isUITesting {
             SeedData.installSeedDataIfNeeded()
         }
         #endif
     }
 
+    // MARK: - Body
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.viewContext)
-                .environmentObject(profileStore)
-                .environmentObject(eventStore)
-                .environmentObject(dataImporter)
-                .environmentObject(weatherService)
-                .environmentObject(notificationService)
-                .environmentObject(spotStore)
-                .environmentObject(locationManager)
-                .environmentObject(medicationStore)
-                .environmentObject(socializationStore)
-                .environmentObject(milestoneStore)
-                .environmentObject(documentStore)
-                .environmentObject(contactStore)
-                .environmentObject(appointmentStore)
-                .environmentObject(weightStore)
-                .environmentObject(subscriptionManager)
-                .environmentObject(skillProgressStore)
-                .environmentObject(cloudKit)
-                .environmentObject(atmosphereProvider)
-                .environmentObject(foodRecallService)
+                .environment(profileStore)
+                .environment(eventStore)
+                .environment(dataImporter)
+                .environment(weatherService)
+                .environment(notificationService)
+                .environment(spotStore)
+                .environment(locationManager)
+                .environment(medicationStore)
+                .environment(socializationStore)
+                .environment(milestoneStore)
+                .environment(documentStore)
+                .environment(contactStore)
+                .environment(appointmentStore)
+                .environment(weightStore)
+                .environment(subscriptionManager)
+                .environment(skillProgressStore)
+                .environment(trainingTheoryStore)
+                .environment(cloudKit)
+                .environment(atmosphereProvider)
+                .environment(foodRecallService)
+                .environment(routineStore)
+                .environment(unitPreferences)
+                .environment(trainingMasteryStore)
+                .environment(walkTrackingService)
+                .environment(explorationStore)
+                .environment(momentsViewModel)
+                .environment(placesMapViewModel)
                 .toastContainer()
                 .environment(toastManager)
                 .task {
-                    // Run Core Data migration from JSONL files (one-time, on first launch after update)
-                    do {
-                        try await CoreDataMigrationCoordinator.shared.migrateIfNeeded(using: persistenceController)
-                    } catch {
-                        Logger.otis(category: "App").error("Migration failed: \(error.localizedDescription)")
+                    // Create view models once at app launch (not on every MainTabView init)
+                    if momentsViewModel == nil {
+                        momentsViewModel = MomentsViewModel(eventStore: eventStore)
                     }
-
-                    // Wire up event store with profile store for profile-scoped queries
-                    eventStore.setProfileStore(profileStore)
-
-                    // Wire up location manager to weather service
-                    weatherService.setLocationManager(locationManager)
-
-                    // Wire up atmosphere provider to weather service
-                    atmosphereProvider.setWeatherService(weatherService)
-
-                    // Note: Location authorization is now requested during onboarding
-                    // No automatic request here - the user can enable location from Settings if skipped
-
-                    // Check subscription status on app launch
-                    await subscriptionManager.checkSubscriptionStatus()
-                    await subscriptionManager.loadProducts()
-
-                    // Setup CloudKit service and check availability
-                    await CloudKitService.shared.setup()
-
-                    // Initial CloudKit sync for profile, spots, and medications
-                    await profileStore.initialSync()
-                    await spotStore.initialSync()
-                    await medicationStore.initialSync()
-
-                    // Seed default milestones if this is a fresh install
-                    milestoneStore.seedDefaultMilestonesIfNeeded()
-
-                    // Wire up DocumentStore with ProfileStore and migrate any orphaned documents
-                    documentStore.setProfileStore(profileStore)
-                    documentStore.migrateOrphanedDocuments()
-
-                    // Wire up AppointmentStore with ProfileStore and migrate any orphaned appointments
-                    appointmentStore.setProfileStore(profileStore)
-                    appointmentStore.migrateOrphanedAppointments()
-
-                    // Wire up WeightStore with ProfileStore and run migration
-                    weightStore.setProfileStore(profileStore)
-                    await CoreDataMigrationCoordinator.shared.migrateWeightEventsIfNeeded(using: persistenceController)
-                    weightStore.migrateOrphanedMeasurements()
-
-                    // Initial sync to Apple Watch
-                    WatchSyncService.shared.syncToWatch()
-
-                    // Check for food recalls if enabled
-                    await foodRecallService.checkForRecalls()
-
-                    // Wire up AI services with data providers
-                    AI.setup(
-                        skillProgressStore: skillProgressStore,
-                        regressionLogStore: regressionLogStore,
-                        socializationStore: socializationStore
-                    )
+                    if placesMapViewModel == nil, let momentsVM = momentsViewModel {
+                        placesMapViewModel = PlacesMapViewModel(
+                            spotStore: spotStore,
+                            contactStore: contactStore,
+                            momentsViewModel: momentsVM
+                        )
+                    }
+                    await performInitialSetup()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                    // Import any events logged via Siri/Shortcuts while app was in background
-                    eventStore.importPendingIntentEvents(profile: profileStore.profile)
-
-                    // Sync when app comes to foreground
-                    Task {
-                        await eventStore.forceSync()
-                        await profileStore.forceSync()
-                        await spotStore.forceSync()
-                        await medicationStore.forceSync()
-
-                        // Check if participant access was revoked
-                        await CloudKitService.shared.checkShareAccessStatus()
-                    }
-                    // Sync data to Apple Watch
-                    WatchSyncService.shared.syncToWatch()
+                    handleForegroundEntry()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .shareAccessRevoked)) { _ in
-                    // Handle share access revocation
-                    Task { @MainActor in
-                        let alert = UIAlertController(
-                            title: "Share Access Removed",
-                            message: "You no longer have access to the shared puppy data. The owner may have stopped sharing.",
-                            preferredStyle: .alert
-                        )
-                        alert.addAction(UIAlertAction(title: "OK", style: .default))
-                        UIApplication.shared.connectedScenes
-                            .compactMap { $0 as? UIWindowScene }
-                            .first?.windows.first?.rootViewController?
-                            .present(alert, animated: true)
-                    }
+                    handleShareAccessRevoked()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareReceived)) { notification in
+                    handleShareReceived(notification)
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                    // Track app usage for review prompt timing
                     ReviewService.shared.recordAppActive()
                     Analytics.trackDay2ReturnIfEligible(profileId: profileStore.profile?.id)
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)) { _ in
-                    // Clear image cache on memory warning
                     ImageCache.shared.handleMemoryWarning()
                 }
-                // Handle CloudKit share URLs directly (since userDidAcceptCloudKitShareWith isn't reliable in SwiftUI)
                 .onOpenURL { url in
-                    Logger.otis(category: "App").info("🔗 onOpenURL called: \(url.absoluteString)")
-                    Logger.otis(category: "App").info("🔗 URL scheme: \(url.scheme ?? "nil")")
-
-                    // Check if this is a CloudKit share URL
-                    // CloudKit share URLs come as: cloudkit-{containerID}:// or https://www.icloud.com/share/...
-                    let isCloudKitScheme = url.scheme?.hasPrefix("cloudkit") == true
-                    let isICloudShareURL = url.absoluteString.contains("icloud.com/share")
-
-                    if isCloudKitScheme || isICloudShareURL {
-                        Logger.otis(category: "App").info("🔗 Detected CloudKit share URL, fetching metadata...")
-
-                        Task {
-                            await handleCloudKitShareURL(url, profileStore: profileStore)
-                        }
-                    }
+                    handleOpenURL(url)
+                }
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                    handleUserActivity(userActivity)
                 }
         }
     }
 }
 
-// MARK: - App Delegate for CloudKit Remote Notifications
+// MARK: - Setup & Lifecycle
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-    private let logger = Logger.otis(category: "AppDelegate")
+private extension OtisApp {
 
-    func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-    ) -> Bool {
-        // Initialize WatchConnectivity session as early as possible (Apple best practice)
-        // This ensures WCSession is ready before any sync attempts
-        _ = WatchSyncService.shared
+    /// Initialize the CKSyncEngine-based sync coordinator
+    @MainActor
+    func initializeSyncCoordinator(persistence: PersistenceController) async {
+        let logger = Logger.otis(category: "App")
+        logger.info("Initializing SyncCoordinator...")
 
-        // Register for remote notifications (required for CloudKit silent push)
-        application.registerForRemoteNotifications()
-        return true
+        // Configure with Core Data context
+        SyncCoordinator.shared.configure(with: persistence.viewContext)
+
+        // Register all entity handlers
+        SyncCoordinator.shared.registerAllHandlers()
+
+        // Wire up store assignment for shared records
+        // This ensures records from the shared CloudKit database go to the shared Core Data store
+        SyncCoordinator.shared.getSharedStore = { [weak persistence] in
+            persistence?.getSharedStore()
+        }
+
+        // Set up callback to refresh stores when remote changes arrive
+        // Capture all stores that need refreshing
+        let milStore = milestoneStore
+        let contactStore = contactStore
+        let socStore = socializationStore
+        let spotStore = spotStore
+        let medStore = medicationStore
+        let docStore = documentStore
+        let apptStore = appointmentStore
+        let wgtStore = weightStore
+        let rtStore = routineStore
+        let skillStore = skillProgressStore
+        let explStore = explorationStore
+
+        SyncCoordinator.shared.onRemoteChanges = { [weak profileStore, weak eventStore] in
+            Task { @MainActor in
+                // First load profiles so relationships can be resolved
+                profileStore?.loadAllProfiles()
+                // Link any newly synced orphaned events to the current profile
+                profileStore?.migrateOrphanedEventsIfNeeded()
+
+                // Refresh all stores that depend on profile
+                await eventStore?.refreshFromCloud()
+                milStore.performInitialLoad()
+                contactStore.performInitialLoad()
+                socStore.performInitialLoad()
+                spotStore.performInitialLoad()
+                medStore.performInitialLoad()
+                docStore.performInitialLoad()
+                apptStore.performInitialLoad()
+                wgtStore.performInitialLoad()
+                rtStore.performInitialLoad()
+                skillStore.performInitialLoad()
+                explStore.performInitialLoad()
+            }
+        }
+
+        // Start the sync engines
+        await SyncCoordinator.shared.start()
+
+        // Schedule initial fetch after a brief delay to avoid CKSyncEngine delegate callback issues
+        // CKSyncEngine doesn't allow awaiting fetchChanges from within its delegate chain
+        logger.info("SyncCoordinator initialized, scheduling initial fetch...")
+
+        scheduleInitialCloudKitFetch(persistence: persistence)
     }
 
-    func application(
-        _ application: UIApplication,
-        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
-    ) {
-        // CloudKit uses this automatically
-        logger.info("Registered for remote notifications")
+    /// Schedule initial CloudKit fetch in a way that avoids CKSyncEngine delegate callback deadlocks
+    nonisolated func scheduleInitialCloudKitFetch(persistence: PersistenceController) {
+        // Use DispatchQueue to break out of the CKSyncEngine delegate callback chain
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            Task { @MainActor in
+                let logger = Logger.otis(category: "App")
+                logger.info("Fetching changes from CloudKit...")
+
+                await SyncCoordinator.shared.fetchChanges()
+
+                // Save any fetched data
+                if persistence.viewContext.hasChanges {
+                    do {
+                        try persistence.save()
+                        logger.info("Saved fetched CloudKit data to Core Data")
+                    } catch {
+                        logger.error("Failed to save fetched CloudKit data: \(error.localizedDescription)")
+                    }
+                }
+
+                logger.info("Initial CloudKit fetch complete")
+            }
+        }
     }
 
-    func application(
-        _ application: UIApplication,
-        didFailToRegisterForRemoteNotificationsWithError error: Error
-    ) {
-        logger.error("Failed to register for remote notifications: \(error.localizedDescription)")
+    func performInitialSetup() async {
+        let logger = Logger.otis(category: "App")
+
+        // Debug: Check if there's pending share metadata
+        if let pendingMetadata = PendingShareMetadata.shared.metadata {
+            logger.info("🔗 STARTUP: Found pending share METADATA - will process after CloudKit setup")
+            logger.info("🔗   Container: \(pendingMetadata.containerIdentifier)")
+        } else if let pendingURL = PendingShareMetadata.shared.pendingURL {
+            logger.info("🔗 STARTUP: Found pending share URL: \(pendingURL.absoluteString)")
+        } else {
+            logger.info("🔗 STARTUP: No pending share metadata or URL found")
+        }
+
+        // Start app launch transaction for Sentry performance monitoring
+        let launchTransaction = CrashReporter.startTransaction(name: "App Launch", operation: "app.launch")
+
+        // ============================================================
+        // PHASE 1: Critical path - minimum needed to show UI (target: <500ms)
+        // ============================================================
+
+        // Make ProfileStore available to SceneDelegate for CloudKit share handling
+        ProfileStoreProvider.shared.store = profileStore
+
+        // Run Core Data migration (fast - typically <1ms)
+        let migrationSpan = launchTransaction?.startChild(operation: "db.migrate", description: "Core Data Migration")
+        do {
+            try await CoreDataMigrationCoordinator.shared.migrateIfNeeded(using: persistenceController)
+        } catch {
+            logger.error("Migration failed: \(error.localizedDescription)")
+        }
+        migrationSpan?.finish()
+
+        // Wire up dependencies (synchronous, fast)
+        let wireupSpan = launchTransaction?.startChild(operation: "app.wireup", description: "Wire Dependencies")
+        eventStore.setProfileStore(profileStore)
+        eventStore.setDailyAggregateService(dailyAggregateService)
+        weatherService.setLocationManager(locationManager)
+        atmosphereProvider.setWeatherService(weatherService)
+        documentStore.setProfileStore(profileStore)
+        appointmentStore.setProfileStore(profileStore)
+        weightStore.setProfileStore(profileStore)
+        routineStore.setProfileStore(profileStore)
+        routineStore.setEventStore(eventStore)
+        skillProgressStore.configureProfileStore(profileStore)
+        milestoneStore.configureProfileStore(profileStore)
+        UserIdentityStore.shared.configureProfileStore(profileStore)
+        explorationStore.configureProfileStore(profileStore)
+        wireupSpan?.finish()
+
+        // Seed default milestones (local operation, fast)
+        milestoneStore.seedDefaultMilestonesIfNeeded()
+
+        // Wire up AI services (synchronous setup, fast)
+        AI.setup(
+            skillProgressStore: skillProgressStore,
+            regressionLogStore: regressionLogStore,
+            socializationStore: socializationStore,
+            sentimentStore: SentimentStore.shared,
+            profileStore: profileStore
+        )
+
+        // Finish the critical launch transaction - UI is now interactive
+        launchTransaction?.finish()
+
+        // ============================================================
+        // PHASE 2: Background tasks - run in parallel, don't block UI
+        // ============================================================
+
+        // Track background work separately (UI is already interactive at this point)
+        CrashReporter.addBreadcrumb(category: "app.launch", message: "Starting background sync tasks")
+
+        // Capture stores for background tasks (avoid capturing self in sendable closures)
+        let subManager = subscriptionManager
+        let profStore = profileStore
+        let sptStore = spotStore
+        let medStore = medicationStore
+        let milStore = milestoneStore
+        let docStore = documentStore
+        let apptStore = appointmentStore
+        let wgtStore = weightStore
+        let rtStore = routineStore
+        let evtStore = eventStore
+        let recallService = foodRecallService
+        let persistence = persistenceController
+        let aggregateService = dailyAggregateService
+
+        // Run slow network operations in parallel using async let
+        // These run concurrently, reducing total time from ~4.3s to ~2s (max of the parallel tasks)
+        async let subscriptionTask: Void = {
+            await subManager.checkSubscriptionStatus()
+            await subManager.loadProducts()
+        }()
+
+        async let cloudKitTask: Void = {
+            await CloudKitService.shared.setup()
+            await UserIdentityStore.shared.setup()
+
+            // Initialize CKSyncEngine-based sync
+            await initializeSyncCoordinator(persistence: persistence)
+
+            await profStore.initialSync()
+        }()
+
+        async let secondarySyncTask: Void = {
+            // Small delay to let CloudKit setup complete first
+            try? await Task.sleep(for: .milliseconds(100))
+            await sptStore.initialSync()
+            await medStore.initialSync()
+            await milStore.initialSync()
+        }()
+
+        // Wait for parallel tasks to complete
+        _ = await (subscriptionTask, cloudKitTask, secondarySyncTask)
+
+        // Process pending share (depends on CloudKit being set up)
+        await CloudKitShareHandler.processPendingShare(profileStore: profStore)
+
+        // Refresh participants (depends on CloudKit being set up)
+        await ParticipantResolver.shared.refreshFromCloudKit()
+
+        CrashReporter.addBreadcrumb(category: "app.launch", message: "Background sync tasks completed")
+
+        // ============================================================
+        // PHASE 3: Deferred tasks - low priority, run after UI stable
+        // ============================================================
+
+        Task { @MainActor in
+            // Run migrations (one-time operations)
+            docStore.migrateOrphanedDocuments()
+            apptStore.migrateOrphanedAppointments()
+            await CoreDataMigrationCoordinator.shared.migrateWeightEventsIfNeeded(using: persistence)
+            wgtStore.migrateOrphanedMeasurements()
+            rtStore.migrateOrphanedItems()
+        }
+
+        Task { @MainActor in
+            // Sync to Apple Watch
+            WatchSyncService.shared.syncToWatch()
+
+            // Check for food recalls
+            await recallService.checkForRecalls()
+
+            // Photo sync (already delayed)
+            try? await Task.sleep(for: .seconds(2))
+            let recentEvents = await evtStore.getEventsAsync(from: Date.daysAgo(30), to: Date())
+            PhotoSyncService.shared.performInitialSync(events: recentEvents)
+
+            // Pre-populate daily aggregates (uses same events fetch)
+            if let profileId = profStore.profile?.id {
+                await aggregateService.prepopulate(
+                    days: 30,
+                    profileId: profileId,
+                    events: recentEvents
+                )
+            }
+        }
     }
 
-    func application(
-        _ application: UIApplication,
-        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
-    ) {
-        // Handle CloudKit silent push notification
-        // NSPersistentCloudKitContainer handles sync automatically
-        // We just need to process persistent history for local cache updates
-        guard let notification = CKNotification(fromRemoteNotificationDictionary: userInfo) else {
-            completionHandler(.noData)
+    func handleForegroundEntry() {
+        // Import events logged via Siri/Shortcuts while app was in background
+        eventStore.importPendingIntentEvents(profile: profileStore.profile)
+
+        // Retry failed photo uploads
+        PhotoSyncService.shared.retryFailedUploads()
+
+        Task {
+            await CloudKitShareHandler.processPendingShare(profileStore: profileStore)
+            await eventStore.forceSync()
+            await profileStore.forceSync()
+            await spotStore.forceSync()
+            await medicationStore.forceSync()
+            await CloudKitService.shared.checkShareAccessStatus()
+            await ParticipantResolver.shared.refreshFromCloudKit()
+        }
+
+        WatchSyncService.shared.syncToWatch()
+    }
+
+    @MainActor
+    func handleShareAccessRevoked() {
+        let alert = UIAlertController(
+            title: "Share Access Removed",
+            message: "You no longer have access to the shared puppy data. The owner may have stopped sharing.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.windows.first?.rootViewController?
+            .present(alert, animated: true)
+    }
+
+    func handleShareReceived(_ notification: Notification) {
+        let logger = Logger.otis(category: "App")
+        logger.info("🔗 Received cloudKitShareReceived notification - processing with correct ProfileStore")
+
+        // Get the metadata from the notification or from pending storage
+        guard let metadata = notification.object as? CKShare.Metadata ?? PendingShareMetadata.shared.metadata else {
+            logger.error("🔗 No share metadata found in notification or pending storage")
             return
         }
 
-        if notification.notificationType == .recordZone {
-            // CloudKit zone changed - NSPersistentCloudKitContainer handles sync automatically
-            // Post notification so stores can refresh their local caches
-            NotificationCenter.default.post(name: .NSPersistentStoreRemoteChange, object: nil)
-            logger.info("Received CloudKit remote change notification")
-            completionHandler(.newData)
-        } else {
-            completionHandler(.noData)
+        // Clear the pending metadata since we're processing it now
+        PendingShareMetadata.shared.metadata = nil
+
+        Task {
+            await CloudKitShareHandler.acceptShareInvitation(
+                metadata: metadata,
+                profileStore: profileStore
+            )
         }
     }
 
-    // MARK: - CloudKit Share Acceptance
+    func handleOpenURL(_ url: URL) {
+        let logger = Logger.otis(category: "App")
+        logger.info("🔗 onOpenURL called: \(url.absoluteString)")
+        logger.info("🔗 URL scheme: \(url.scheme ?? "nil")")
 
-    /// Handle CloudKit share acceptance when user taps share link
-    /// This is the system callback for CloudKit share URLs - it provides pre-fetched metadata
-    func application(
-        _ application: UIApplication,
-        userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata
-    ) {
-        logger.info("🔗 userDidAcceptCloudKitShareWith called!")
-        logger.info("🔗 Share URL: \(cloudKitShareMetadata.share.url?.absoluteString ?? "nil")")
-        logger.info("🔗 Container ID: \(cloudKitShareMetadata.containerIdentifier)")
-        logger.info("🔗 Zone ID: \(cloudKitShareMetadata.share.recordID.zoneID.zoneName)")
-        logger.info("🔗 Owner: \(cloudKitShareMetadata.share.recordID.zoneID.ownerName)")
+        // Handle otis:// deep links
+        if url.scheme == "otis" {
+            handleOtisDeepLink(url, logger: logger)
+            return
+        }
 
-        Task { @MainActor in
-            await acceptShareInvitation(
-                metadata: cloudKitShareMetadata,
-                profileStore: nil,
-                logger: logger
-            )
+        let isCloudKitScheme = url.scheme?.hasPrefix("cloudkit") == true
+        let isICloudShareURL = url.absoluteString.contains("icloud.com/share")
+
+        if isCloudKitScheme || isICloudShareURL {
+            logger.info("🔗 Detected CloudKit share URL, fetching metadata...")
+            Task {
+                await CloudKitShareHandler.handleShareURL(url, profileStore: profileStore)
+            }
+        }
+    }
+
+    private func handleOtisDeepLink(_ url: URL, logger: Logger) {
+        guard let host = url.host else {
+            logger.warning("🔗 Otis deep link missing host: \(url.absoluteString)")
+            return
+        }
+
+        switch host {
+        case "start-walk":
+            logger.info("🔗 Start walk deep link received")
+            // Set pending walk start - MainTabView will pick this up
+            IntentDataStore.shared.setPendingWalkStart()
+            // Post notification to trigger immediate check
+            NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+        default:
+            logger.info("🔗 Unknown Otis deep link: \(host)")
+        }
+    }
+
+    func handleUserActivity(_ userActivity: NSUserActivity) {
+        let logger = Logger.otis(category: "App")
+        logger.info("🔗 onContinueUserActivity for web browsing")
+
+        guard let url = userActivity.webpageURL else {
+            logger.info("🔗 No webpage URL in activity")
+            return
+        }
+
+        logger.info("🔗 Web URL: \(url.absoluteString)")
+
+        if url.absoluteString.contains("icloud.com/share") {
+            logger.info("🔗 Detected iCloud share URL from user activity")
+            Task {
+                await CloudKitShareHandler.handleShareURL(url, profileStore: profileStore)
+            }
         }
     }
 }

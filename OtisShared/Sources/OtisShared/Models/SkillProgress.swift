@@ -6,194 +6,13 @@
 //  including learning phases, 3D proofing levels, success rates,
 //  and spaced repetition scheduling.
 //
+//  Supporting types are in separate files:
+//  - SkillLearningPhase.swift - Learning phase enum
+//  - SkillProgressTypes.swift - TrainingContext, ProofingLevels, ProofingDimension, SessionOutcome
+//  - SkillProgressHelpers.swift - MaintenanceIntervals, StandardTrainingContext
+//
 
 import Foundation
-
-// MARK: - Skill Learning Phase
-
-/// The lifecycle phase of a training skill
-/// Based on professional dog training methodology (AKC, Susan Garrett, guide dog programs)
-public enum SkillLearningPhase: String, Codable, CaseIterable, Sendable {
-    /// Never practiced - skill not yet started
-    case notStarted
-
-    /// Learning the physical behavior through luring or shaping
-    /// No verbal cue yet - dog is discovering the behavior
-    case luring
-
-    /// Pairing a verbal command and/or hand signal with the behavior
-    /// Behavior is established, now adding the cue
-    case addingCue
-
-    /// Testing and reinforcing across the 3Ds: Duration, Distance, Distraction
-    /// Only increase one D at a time
-    case proofing
-
-    /// Practicing in novel environments to ensure transfer
-    /// Skill should work in multiple contexts
-    case generalizing
-
-    /// Skill is mastered, enters spaced repetition cycle
-    /// Periodic maintenance checks with expanding intervals
-    case maintaining
-
-    /// Regression from maintenance - skill failed a check
-    /// Gets highest priority until re-stabilized at 80%+
-    case needsWork
-
-    /// Display label key for the phase (localization handled by UI layer)
-    public var labelKey: String {
-        rawValue
-    }
-
-    /// Whether this phase is considered "active learning"
-    public var isActiveLearning: Bool {
-        switch self {
-        case .luring, .addingCue, .proofing, .generalizing:
-            return true
-        default:
-            return false
-        }
-    }
-
-    /// Whether this skill needs maintenance reviews
-    public var requiresMaintenance: Bool {
-        self == .maintaining
-    }
-
-    /// Whether this skill is in regression state
-    public var isRegression: Bool {
-        self == .needsWork
-    }
-
-    /// Sort order for priority (lower = higher priority)
-    public var priorityOrder: Int {
-        switch self {
-        case .needsWork: return 1      // Highest priority
-        case .luring: return 2
-        case .addingCue: return 3
-        case .proofing: return 4
-        case .generalizing: return 5
-        case .maintaining: return 6
-        case .notStarted: return 7     // Lowest priority
-        }
-    }
-}
-
-// MARK: - Training Context
-
-/// A context (location/environment) where training has occurred
-public struct TrainingContext: Codable, Identifiable, Hashable, Sendable {
-    public var id: String  // e.g., "home", "garden", "park", "street", "indoor_public"
-
-    /// Last time this skill was successfully practiced in this context
-    public var lastSuccessAt: Date
-
-    /// Success rate in this specific context (0.0 - 1.0)
-    public var successRate: Double
-
-    /// Total reps attempted in this context
-    public var totalReps: Int
-
-    /// Successful reps in this context
-    public var successReps: Int
-
-    public init(
-        id: String,
-        lastSuccessAt: Date = Date(),
-        successRate: Double = 0.0,
-        totalReps: Int = 0,
-        successReps: Int = 0
-    ) {
-        self.id = id
-        self.lastSuccessAt = lastSuccessAt
-        self.successRate = successRate
-        self.totalReps = totalReps
-        self.successReps = successReps
-    }
-
-    /// Update with new session results
-    public mutating func recordSession(successes: Int, failures: Int) {
-        let newReps = successes + failures
-        totalReps += newReps
-        successReps += successes
-
-        // Recalculate success rate
-        successRate = totalReps > 0 ? Double(successReps) / Double(totalReps) : 0.0
-
-        if successes > 0 {
-            lastSuccessAt = Date()
-        }
-    }
-}
-
-// MARK: - Proofing Level
-
-/// Levels for each of the 3Ds in proofing (0-5 scale)
-public struct ProofingLevels: Codable, Equatable, Sendable {
-    /// Duration level (0-5): How long the dog holds the behavior
-    /// 0 = instant, 5 = 60+ seconds
-    public var duration: Int
-
-    /// Distance level (0-5): How far the handler is from the dog
-    /// 0 = next to dog, 5 = 30+ feet away
-    public var distance: Int
-
-    /// Distraction level (0-5): Environmental complexity
-    /// 0 = quiet room, 5 = busy public space with other dogs
-    public var distraction: Int
-
-    public init(duration: Int = 0, distance: Int = 0, distraction: Int = 0) {
-        self.duration = min(max(duration, 0), 5)
-        self.distance = min(max(distance, 0), 5)
-        self.distraction = min(max(distraction, 0), 5)
-    }
-
-    /// Overall proofing progress (0.0 - 1.0)
-    public var overallProgress: Double {
-        Double(duration + distance + distraction) / 15.0
-    }
-
-    /// Whether all 3Ds are at maximum level
-    public var isFullyProofed: Bool {
-        duration >= 5 && distance >= 5 && distraction >= 5
-    }
-
-    /// Reset to easy when increasing one dimension
-    /// "Only increase one D at a time" rule
-    public mutating func resetOtherDimensions(increasing dimension: ProofingDimension) {
-        switch dimension {
-        case .duration:
-            distance = 0
-            distraction = 0
-        case .distance:
-            duration = 0
-            distraction = 0
-        case .distraction:
-            duration = 0
-            distance = 0
-        }
-    }
-}
-
-/// The three dimensions of proofing
-public enum ProofingDimension: String, Codable, CaseIterable, Sendable {
-    case duration
-    case distance
-    case distraction
-
-    public var labelKey: String {
-        rawValue
-    }
-
-    public var icon: String {
-        switch self {
-        case .duration: return "clock.fill"
-        case .distance: return "ruler.fill"
-        case .distraction: return "sparkles"
-        }
-    }
-}
 
 // MARK: - Skill Progress
 
@@ -243,10 +62,22 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
     /// Last time this skill was practiced
     public var lastPracticedAt: Date?
 
+    // MARK: - Maintenance Mode
+
+    /// Whether this skill is in simplified maintenance mode
+    /// When true, the skill bypasses the normal phase progression and uses
+    /// simplified weekly reminders instead of the full training lifecycle
+    public var isInMaintenanceMode: Bool
+
     // MARK: - Generalization Contexts
 
     /// Locations/environments where this skill has been practiced
     public var practicedContexts: [TrainingContext]
+
+    // MARK: - Practice Matrix (Phase x Location)
+
+    /// Practice matrix tracking progress for each phase at each location
+    public var phaseLocationMatrix: [PhaseLocationCell]
 
     // MARK: - Timestamps
 
@@ -279,6 +110,27 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         practicedContexts.filter { $0.successRate >= 0.8 }.count
     }
 
+    /// Days since last practice
+    public var daysSinceLastPractice: Int? {
+        guard let lastPractice = lastPracticedAt else { return nil }
+        return Calendar.current.dateComponents([.day], from: lastPractice, to: Date()).day
+    }
+
+    /// Whether the skill needs a maintenance refresh (for maintenance mode)
+    /// Skills in maintenance mode should be refreshed weekly
+    public var needsMaintenanceRefresh: Bool {
+        guard isInMaintenanceMode else { return false }
+        guard let days = daysSinceLastPractice else { return true }
+        return days >= 7
+    }
+
+    /// Whether the skill is overdue for maintenance (2+ weeks without practice)
+    public var isMaintenanceOverdue: Bool {
+        guard isInMaintenanceMode else { return false }
+        guard let days = daysSinceLastPractice else { return true }
+        return days >= 14
+    }
+
     /// Whether skill qualifies for generalization phase
     /// Requires 80%+ success rate in proofing
     public var readyForGeneralization: Bool {
@@ -309,7 +161,9 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         maintenanceTier: Int = 0,
         nextReviewDate: Date? = nil,
         lastPracticedAt: Date? = nil,
+        isInMaintenanceMode: Bool = false,
         practicedContexts: [TrainingContext] = [],
+        phaseLocationMatrix: [PhaseLocationCell] = [],
         createdAt: Date = Date(),
         modifiedAt: Date? = nil
     ) {
@@ -324,7 +178,9 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         self.maintenanceTier = maintenanceTier
         self.nextReviewDate = nextReviewDate
         self.lastPracticedAt = lastPracticedAt
+        self.isInMaintenanceMode = isInMaintenanceMode
         self.practicedContexts = practicedContexts
+        self.phaseLocationMatrix = phaseLocationMatrix
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt ?? createdAt
     }
@@ -343,43 +199,11 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         case maintenanceTier = "maintenance_tier"
         case nextReviewDate = "next_review_date"
         case lastPracticedAt = "last_practiced_at"
+        case isInMaintenanceMode = "is_in_maintenance_mode"
         case practicedContexts = "practiced_contexts"
+        case phaseLocationMatrix = "phase_location_matrix"
         case createdAt = "created_at"
         case modifiedAt = "modified_at"
-    }
-}
-
-// MARK: - Session Outcome
-
-/// Records the outcome of a single training session
-public struct SessionOutcome: Codable, Equatable, Sendable {
-    public var successReps: Int
-    public var failedReps: Int
-    public var timestamp: Date
-    public var context: String?
-
-    public init(
-        successReps: Int,
-        failedReps: Int,
-        timestamp: Date = Date(),
-        context: String? = nil
-    ) {
-        self.successReps = successReps
-        self.failedReps = failedReps
-        self.timestamp = timestamp
-        self.context = context
-    }
-
-    /// Success rate for this session
-    public var successRate: Double {
-        let total = successReps + failedReps
-        guard total > 0 else { return 0.0 }
-        return Double(successReps) / Double(total)
-    }
-
-    /// Whether this session met the 80% threshold
-    public var metThreshold: Bool {
-        successRate >= 0.8
     }
 }
 
@@ -537,78 +361,176 @@ extension SkillProgress {
         copy.modifiedAt = Date()
         return copy
     }
+
+    // MARK: - Maintenance Mode Methods
+
+    /// Enable simplified maintenance mode for this skill
+    /// This bypasses the normal phase progression and uses weekly reminders
+    public mutating func enableMaintenanceMode() {
+        isInMaintenanceMode = true
+        phase = .maintaining
+        maintenanceTier = 3  // Start at weekly tier
+        lastPracticedAt = lastPracticedAt ?? Date()
+        modifiedAt = Date()
+    }
+
+    /// Disable maintenance mode and return to normal phase progression
+    public mutating func disableMaintenanceMode() {
+        isInMaintenanceMode = false
+        modifiedAt = Date()
+    }
+
+    /// Record a maintenance refresh (simplified session recording)
+    public mutating func recordMaintenanceRefresh() {
+        lastPracticedAt = Date()
+        modifiedAt = Date()
+
+        // If in maintenance mode, just update the timestamp
+        // No need to track success/failure for simple refreshes
+        if isInMaintenanceMode {
+            return
+        }
+
+        // For normal maintenance phase, use regular tracking
+        if phase == .maintaining {
+            maintenanceTier = min(maintenanceTier + 1, 6)
+            scheduleNextReview()
+        }
+    }
 }
 
-// MARK: - Maintenance Intervals
+// MARK: - Phase Location Matrix Methods
 
-/// Spaced repetition intervals for maintenance phase
-public enum MaintenanceIntervals {
-    /// Get the interval in seconds for a given tier
-    public static func interval(forTier tier: Int) -> TimeInterval {
-        switch tier {
-        case 1: return 1 * 24 * 60 * 60        // 1 day
-        case 2: return 3 * 24 * 60 * 60        // 3 days
-        case 3: return 7 * 24 * 60 * 60        // 1 week
-        case 4: return 14 * 24 * 60 * 60       // 2 weeks
-        case 5: return 30 * 24 * 60 * 60       // 1 month
-        default: return 60 * 24 * 60 * 60      // 2 months (tier 6+)
+extension SkillProgress {
+
+    /// Get cell for a specific phase and location
+    public func cell(for phaseId: String, location: LocationTier) -> PhaseLocationCell? {
+        phaseLocationMatrix.first { $0.phaseId == phaseId && $0.location == location }
+    }
+
+    /// Update cell state for a specific phase and location
+    public mutating func updateCell(phaseId: String, location: LocationTier, state: PhaseLocationState) {
+        if let index = phaseLocationMatrix.firstIndex(where: { $0.phaseId == phaseId && $0.location == location }) {
+            phaseLocationMatrix[index].state = state
+            if state == .inProgress || state == .mastered {
+                phaseLocationMatrix[index].lastPracticedAt = Date()
+            }
+        } else {
+            // Create if doesn't exist
+            let newCell = PhaseLocationCell(
+                phaseId: phaseId,
+                location: location,
+                state: state,
+                lastPracticedAt: (state == .inProgress || state == .mastered) ? Date() : nil
+            )
+            phaseLocationMatrix.append(newCell)
+        }
+        modifiedAt = Date()
+    }
+
+    /// Initialize matrix with phase IDs (creates cells for all phases x locations)
+    public mutating func initializeMatrix(phaseIds: [String]) {
+        // Don't re-initialize if already populated
+        guard phaseLocationMatrix.isEmpty else { return }
+
+        for (index, phaseId) in phaseIds.enumerated() {
+            for location in LocationTier.allCases {
+                // First phase, inside = notStarted (unlocked)
+                // Everything else starts locked
+                let initialState: PhaseLocationState
+                if index == 0 && location == .inside {
+                    initialState = .notStarted
+                } else {
+                    initialState = .locked
+                }
+
+                let cell = PhaseLocationCell(
+                    phaseId: phaseId,
+                    location: location,
+                    state: initialState
+                )
+                phaseLocationMatrix.append(cell)
+            }
+        }
+        modifiedAt = Date()
+    }
+
+    /// Recalculate unlock states based on mastery progression
+    /// Unlock logic: Phase N, Inside unlocks when Phase N-1 mastered Inside
+    /// Phase N, Outside unlocks when Phase N mastered Inside
+    public mutating func recalculateUnlockStates(phaseIds: [String]) {
+        for (index, phaseId) in phaseIds.enumerated() {
+            // Inside cell unlock logic
+            let insideCell = cell(for: phaseId, location: .inside)
+            let shouldInsideBeUnlocked: Bool
+            if index == 0 {
+                // First phase inside is always unlocked
+                shouldInsideBeUnlocked = true
+            } else {
+                // Subsequent phases unlock when previous phase mastered inside
+                let prevPhaseId = phaseIds[index - 1]
+                let prevInsideCell = cell(for: prevPhaseId, location: .inside)
+                shouldInsideBeUnlocked = prevInsideCell?.state == .mastered
+            }
+
+            // If should be unlocked but is locked, change to notStarted
+            if shouldInsideBeUnlocked && insideCell?.state == .locked {
+                updateCell(phaseId: phaseId, location: .inside, state: .notStarted)
+            }
+
+            // Outside cell unlock logic
+            let outsideCell = cell(for: phaseId, location: .outside)
+            let currentInsideCell = cell(for: phaseId, location: .inside)
+            let shouldOutsideBeUnlocked = currentInsideCell?.state == .mastered
+
+            // If should be unlocked but is locked, change to notStarted
+            if shouldOutsideBeUnlocked && outsideCell?.state == .locked {
+                updateCell(phaseId: phaseId, location: .outside, state: .notStarted)
+            }
         }
     }
 
-    /// Get the tier key for localization (UI layer handles actual localization)
-    public static func tierKey(forTier tier: Int) -> String {
-        switch tier {
-        case 1: return "1day"
-        case 2: return "3days"
-        case 3: return "1week"
-        case 4: return "2weeks"
-        case 5: return "1month"
-        default: return "2months"
+    /// Get suggested next cell to practice (first available cell in progression order)
+    public func suggestedNextCell(phaseIds: [String]) -> (phaseId: String, location: LocationTier)? {
+        for phaseId in phaseIds {
+            // Check inside first
+            if let insideCell = cell(for: phaseId, location: .inside) {
+                if insideCell.state == .notStarted || insideCell.state == .inProgress {
+                    return (phaseId, .inside)
+                }
+            }
+
+            // Then check outside
+            if let outsideCell = cell(for: phaseId, location: .outside) {
+                if outsideCell.state == .notStarted || outsideCell.state == .inProgress {
+                    return (phaseId, .outside)
+                }
+            }
         }
-    }
-}
-
-// MARK: - Standard Context IDs
-
-/// Standard context identifiers for generalization tracking
-public enum StandardTrainingContext: String, CaseIterable, Sendable {
-    case home = "home"
-    case garden = "garden"
-    case quietStreet = "quiet_street"
-    case busyStreet = "busy_street"
-    case park = "park"
-    case indoorPublic = "indoor_public"  // Pet store, vet, etc.
-    case carRide = "car_ride"
-    case other = "other"
-
-    public var labelKey: String {
-        rawValue
+        return nil
     }
 
-    public var icon: String {
-        switch self {
-        case .home: return "house.fill"
-        case .garden: return "leaf.fill"
-        case .quietStreet: return "road.lanes"
-        case .busyStreet: return "car.fill"
-        case .park: return "tree.fill"
-        case .indoorPublic: return "building.2.fill"
-        case .carRide: return "car.side.fill"
-        case .other: return "mappin.circle.fill"
-        }
+    /// Count of mastered cells
+    public var masteredCellCount: Int {
+        phaseLocationMatrix.filter { $0.state == .mastered }.count
     }
 
-    /// Distraction level for this context (0-5)
-    public var distractionLevel: Int {
-        switch self {
-        case .home: return 0
-        case .garden: return 1
-        case .quietStreet: return 2
-        case .carRide: return 2
-        case .indoorPublic: return 3
-        case .park: return 4
-        case .busyStreet: return 5
-        case .other: return 2
-        }
+    /// Total cell count
+    public var totalCellCount: Int {
+        phaseLocationMatrix.count
+    }
+
+    /// Whether all cells are mastered
+    public var isFullyMastered: Bool {
+        !phaseLocationMatrix.isEmpty && phaseLocationMatrix.allSatisfy { $0.state == .mastered }
+    }
+
+    /// Count of mastered phases (both inside and outside mastered)
+    public func masteredPhaseCount(phaseIds: [String]) -> Int {
+        phaseIds.filter { phaseId in
+            let insideMastered = cell(for: phaseId, location: .inside)?.state == .mastered
+            let outsideMastered = cell(for: phaseId, location: .outside)?.state == .mastered
+            return insideMastered && outsideMastered
+        }.count
     }
 }

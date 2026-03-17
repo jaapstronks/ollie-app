@@ -69,11 +69,9 @@ extension Strings {
         static func sleepingFor(duration: String) -> String {
             String(localized: "Been sleeping for \(duration)", table: table)
         }
-        static func awakeTooLong(duration: String) -> String {
-            String(localized: "Awake for \(duration) — time for a nap!", table: table)
-        }
-        static func awakeWithNapSuggestion(duration: String, remaining: Int) -> String {
-            String(localized: "Awake \(duration) — nap in \(remaining) min?", table: table)
+        static let awakeTooLong = String(localized: "Time for a nap!", table: table)
+        static func awakeWithNapSuggestion(remaining: Int) -> String {
+            String(localized: "Nap in ~\(remaining) min?", table: table)
         }
         static func awakeSince(duration: String) -> String {
             String(localized: "Awake for \(duration)", table: table)
@@ -85,6 +83,9 @@ extension Strings {
         static func awakeSinceTime(time: String) -> String {
             String(localized: "Awake since: \(time)", table: table)
         }
+        static func awakeSinceTimeWithDuration(time: String, duration: String) -> String {
+            String(localized: "Awake since \(time) (\(duration))", table: table)
+        }
 
         // Pending activities while sleeping (shown in subtitle)
         static let afterWakeTimeForWalk = String(localized: "After waking: time for a walk", table: table)
@@ -95,7 +96,7 @@ extension Strings {
             String(localized: "After waking: \(label) at \(time)", table: table)
         }
         static func afterWakeTimeForMealWithDetails(label: String, time: String) -> String {
-            String(localized: "After waking: \(label) at \(time)", table: table)
+            String(localized: "After waking: meal (\(label)) at \(time)", table: table)
         }
     }
 
@@ -111,6 +112,12 @@ extension Strings {
         static let deleteSessionMessage = String(localized: "This will delete both the sleep and wake-up events.", table: table)
         static let editStartTime = String(localized: "Edit sleep time", table: table)
         static let editEndTime = String(localized: "Edit wake-up time", table: table)
+
+        // Post-wake walk prompt
+        static let wakeUpLogged = String(localized: "Awake!", table: table)
+        static let postWakeWalkPrompt = String(localized: "Time for a quick potty break outside?", table: table)
+        static let startWalk = String(localized: "Start Walk", table: table)
+        static let maybeLater = String(localized: "Maybe later", table: table)
     }
 
     // MARK: - Duration Picker
@@ -250,6 +257,15 @@ extension Strings {
         static let approaching = String(localized: "Soon", table: table)
         static let due = String(localized: "Now", table: table)
         static let overdueLabel = String(localized: "Overdue", table: table)
+
+        // Poop expectation for walk cards
+        static func poopsExpectedToday(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 more poop expected today", table: table)
+            } else {
+                return String(localized: "\(count) more poops expected today", table: table)
+            }
+        }
     }
 
     // MARK: - Digest Card
@@ -363,11 +379,13 @@ extension Strings {
         // Activity in progress
         static let walkInProgress = String(localized: "Walk in progress", table: table)
         static let napInProgress = String(localized: "Napping", table: table)
+        static let tapToEnd = String(localized: "Tap to end", table: table)
         static func inProgressSince(time: String) -> String {
             String(localized: "Started \(time)", table: table)
         }
 
         // End activity
+        static let end = String(localized: "End", table: table)
         static let endNow = String(localized: "End now", table: table)
         static let endWalk = String(localized: "End walk", table: table)
         static let wakeUp = String(localized: "Woke up", table: table)
@@ -444,7 +462,22 @@ extension Strings {
         /// Morning overnight sleep - puppy hasn't peed since last night
         static let pottyFirstThingMorning = String(localized: "Hasn't peed since last night", table: table)
         static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon", table: table)
-        static let whenWakesTakeOutside = String(localized: "When she wakes, take her outside", table: table)
+        /// Gender-specific wake/potty message with full sentence translations
+        /// Uses complete sentences to ensure proper localization across languages
+        static let whenWakesTakeOutsideMale = String(localized: "When he wakes, take him outside", table: table)
+        static let whenWakesTakeOutsideFemale = String(localized: "When she wakes, take her outside", table: table)
+        static let whenWakesTakeOutsideNeutral = String(localized: "When they wake, take them outside", table: table)
+
+        /// Returns the appropriate wake/potty message for the given gender
+        static func whenWakesTakeOutside(isMale: Bool?, isFemale: Bool?) -> String {
+            if isMale == true {
+                return whenWakesTakeOutsideMale
+            } else if isFemale == true {
+                return whenWakesTakeOutsideFemale
+            } else {
+                return whenWakesTakeOutsideNeutral
+            }
+        }
         static let wakeUp = String(localized: "Woke up", table: table)
         static let sleepingPottyLabel = String(localized: "Sleeping", table: table)
 
@@ -453,7 +486,22 @@ extension Strings {
         static let alsoTimeForMeal = String(localized: "Also time for a meal", table: table)
 
         // Post-wake card
-        static let awakeTimePotty = String(localized: "She's awake — time for potty!", table: table)
+        /// Gender-specific awake/potty message with full sentence translations
+        /// Uses complete sentences to ensure proper localization across languages
+        static let awakeTimePottyMale = String(localized: "He's awake — time for potty!", table: table)
+        static let awakeTimePottyFemale = String(localized: "She's awake — time for potty!", table: table)
+        static let awakeTimePottyNeutral = String(localized: "They're awake — time for potty!", table: table)
+
+        /// Returns the appropriate awake/potty message for the given gender
+        static func awakeTimePotty(isMale: Bool?, isFemale: Bool?) -> String {
+            if isMale == true {
+                return awakeTimePottyMale
+            } else if isFemale == true {
+                return awakeTimePottyFemale
+            } else {
+                return awakeTimePottyNeutral
+            }
+        }
         static func pottyWasOverdue(minutes: Int) -> String {
             String(localized: "Potty was \(minutes) min overdue", table: table)
         }

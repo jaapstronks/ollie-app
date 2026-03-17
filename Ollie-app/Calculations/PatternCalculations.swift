@@ -3,6 +3,7 @@
 //  Otis-app
 //
 //  Pattern analysis calculations for trigger success rates
+//  Optimized: Uses single-pass categorization to avoid repeated filtering
 
 import Foundation
 import OtisShared
@@ -63,41 +64,39 @@ struct PatternCalculations {
     // MARK: - Public Methods
 
     /// Analyze patterns in potty events to find trigger success rates
+    /// Optimized: categorizes events in single pass, then analyzes each trigger type
     /// - Parameters:
     ///   - events: Array of puppy events (ideally 7+ days)
     ///   - periodDays: Number of days included in analysis
     /// - Returns: Pattern analysis with trigger success rates
     static func analyzePatterns(events: [PuppyEvent], periodDays: Int = 7) -> PatternAnalysis {
-        let sortedEvents = events.sorted { $0.time < $1.time }
+        // Single-pass categorization - O(n) instead of O(6n) with repeated filters
+        let categories = events.categorized()
 
-        // Analyze each trigger type
+        // Analyze each trigger type using pre-categorized refs
         let triggers = [
-            analyzeSleepTrigger(events: sortedEvents),
-            analyzeMealTrigger(events: sortedEvents),
-            analyzeWalkTrigger(events: sortedEvents),
-            analyzeWaterTrigger(events: sortedEvents),
-            analyzePlayTrigger(events: sortedEvents)
+            analyzeSleepTrigger(categories: categories),
+            analyzeMealTrigger(categories: categories),
+            analyzeWalkTrigger(categories: categories),
+            analyzeWaterTrigger(categories: categories),
+            analyzePlayTrigger(categories: categories)
         ]
 
         return PatternAnalysis(triggers: triggers, periodDays: periodDays)
     }
 
-    // MARK: - Individual Trigger Analysis
+    // MARK: - Individual Trigger Analysis (Optimized)
 
     /// Analyze post-sleep potty patterns
-    private static func analyzeSleepTrigger(events: [PuppyEvent]) -> PatternTrigger {
+    private static func analyzeSleepTrigger(categories: EventCategories) -> PatternTrigger {
         var outdoorCount = 0
         var indoorCount = 0
 
-        // Find all wake events
-        let wakeEvents = events.wakes()
-
-        for wakeEvent in wakeEvents {
-            // Look for the first potty event within the trigger window
-            if let pottyResult = findFirstPottyAfter(time: wakeEvent.time, events: events) {
-                if pottyResult.location == .buiten {
+        for wakeRef in categories.wakes {
+            if let pottyRef = categories.firstPottyAfter(time: wakeRef.time) {
+                if pottyRef.location == .buiten {
                     outdoorCount += 1
-                } else if pottyResult.location == .binnen {
+                } else if pottyRef.location == .binnen {
                     indoorCount += 1
                 }
             }
@@ -114,17 +113,15 @@ struct PatternCalculations {
     }
 
     /// Analyze post-meal potty patterns
-    private static func analyzeMealTrigger(events: [PuppyEvent]) -> PatternTrigger {
+    private static func analyzeMealTrigger(categories: EventCategories) -> PatternTrigger {
         var outdoorCount = 0
         var indoorCount = 0
 
-        let mealEvents = events.meals()
-
-        for mealEvent in mealEvents {
-            if let pottyResult = findFirstPottyAfter(time: mealEvent.time, events: events) {
-                if pottyResult.location == .buiten {
+        for mealRef in categories.meals {
+            if let pottyRef = categories.firstPottyAfter(time: mealRef.time) {
+                if pottyRef.location == .buiten {
                     outdoorCount += 1
-                } else if pottyResult.location == .binnen {
+                } else if pottyRef.location == .binnen {
                     indoorCount += 1
                 }
             }
@@ -141,19 +138,16 @@ struct PatternCalculations {
     }
 
     /// Analyze post-walk potty patterns (during or right after walk)
-    private static func analyzeWalkTrigger(events: [PuppyEvent]) -> PatternTrigger {
+    private static func analyzeWalkTrigger(categories: EventCategories) -> PatternTrigger {
         var outdoorCount = 0
         var indoorCount = 0
 
-        let walkEvents = events.walks()
-
-        for walkEvent in walkEvents {
-            // For walks, we look for potty events during or shortly after the walk
-            // Use a wider window since walks can be longer
-            if let pottyResult = findFirstPottyAfter(time: walkEvent.time, events: events, windowMinutes: 60) {
-                if pottyResult.location == .buiten {
+        for walkRef in categories.walks {
+            // Use wider window (60 min) since walks can be longer
+            if let pottyRef = categories.firstPottyAfter(time: walkRef.time, windowMinutes: 60) {
+                if pottyRef.location == .buiten {
                     outdoorCount += 1
-                } else if pottyResult.location == .binnen {
+                } else if pottyRef.location == .binnen {
                     indoorCount += 1
                 }
             }
@@ -170,18 +164,15 @@ struct PatternCalculations {
     }
 
     /// Analyze post-water potty patterns
-    private static func analyzeWaterTrigger(events: [PuppyEvent]) -> PatternTrigger {
+    private static func analyzeWaterTrigger(categories: EventCategories) -> PatternTrigger {
         var outdoorCount = 0
         var indoorCount = 0
 
-        let waterEvents = events.drinks()
-
-        for waterEvent in waterEvents {
-            // Water typically leads to potty within 15-30 minutes
-            if let pottyResult = findFirstPottyAfter(time: waterEvent.time, events: events) {
-                if pottyResult.location == .buiten {
+        for drinkRef in categories.drinks {
+            if let pottyRef = categories.firstPottyAfter(time: drinkRef.time) {
+                if pottyRef.location == .buiten {
                     outdoorCount += 1
-                } else if pottyResult.location == .binnen {
+                } else if pottyRef.location == .binnen {
                     indoorCount += 1
                 }
             }
@@ -198,18 +189,18 @@ struct PatternCalculations {
     }
 
     /// Analyze post-play potty patterns (training/social as proxies for play)
-    private static func analyzePlayTrigger(events: [PuppyEvent]) -> PatternTrigger {
+    private static func analyzePlayTrigger(categories: EventCategories) -> PatternTrigger {
         var outdoorCount = 0
         var indoorCount = 0
 
-        // Training and social events are often high-energy activities
-        let playEvents = events.ofTypes([.training, .sociaal])
+        // Combine training and social refs (already categorized)
+        let playRefs = categories.trainingSessions + categories.socialEvents
 
-        for playEvent in playEvents {
-            if let pottyResult = findFirstPottyAfter(time: playEvent.time, events: events) {
-                if pottyResult.location == .buiten {
+        for playRef in playRefs {
+            if let pottyRef = categories.firstPottyAfter(time: playRef.time) {
+                if pottyRef.location == .buiten {
                     outdoorCount += 1
-                } else if pottyResult.location == .binnen {
+                } else if pottyRef.location == .binnen {
                     indoorCount += 1
                 }
             }
@@ -223,28 +214,5 @@ struct PatternCalculations {
             outdoorCount: outdoorCount,
             indoorCount: indoorCount
         )
-    }
-
-    // MARK: - Helpers
-
-    /// Find the first potty event within the trigger window after a given time
-    /// - Parameters:
-    ///   - time: The trigger event time
-    ///   - events: Sorted array of events
-    ///   - windowMinutes: Time window to search within
-    /// - Returns: The first potty event within the window, or nil
-    private static func findFirstPottyAfter(
-        time: Date,
-        events: [PuppyEvent],
-        windowMinutes: Int = triggerWindowMinutes
-    ) -> PuppyEvent? {
-        let windowEnd = time.addingTimeInterval(Double(windowMinutes * 60))
-
-        // Find first potty event after the trigger time and within the window
-        return events.first { event in
-            guard event.type == .plassen else { return false }
-            guard event.time > time && event.time <= windowEnd else { return false }
-            return event.location != nil // Must have location data
-        }
     }
 }

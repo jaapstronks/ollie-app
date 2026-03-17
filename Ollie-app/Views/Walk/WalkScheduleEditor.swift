@@ -90,13 +90,13 @@ struct WalkScheduleEditor: View {
                 } label: {
                     HStack {
                         Text(walk.label)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                         Spacer()
                         Text(walk.targetTime)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Image(systemName: "chevron.right")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -113,7 +113,7 @@ struct WalkScheduleEditor: View {
                 Text(Strings.WalkScheduleEditor.walksSection)
                 Spacer()
                 Text(Strings.WalkScheduleEditor.walksCount(schedule.walks.count))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .font(.caption)
             }
         } footer: {
@@ -134,7 +134,7 @@ struct WalkScheduleEditor: View {
                     Text(Strings.WalkScheduleEditor.intervalBetweenWalks)
                     Spacer()
                     Text(Strings.WalkScheduleEditor.intervalMinutes(schedule.intervalMinutes))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
         } header: {
@@ -156,7 +156,7 @@ struct WalkScheduleEditor: View {
                     Text(Strings.WalkScheduleEditor.firstWalkAfter)
                     Spacer()
                     Text(String(format: "%02d:00", schedule.dayStartHour))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -168,7 +168,7 @@ struct WalkScheduleEditor: View {
                     Text(Strings.WalkScheduleEditor.lastWalkBefore)
                     Spacer()
                     Text(schedule.dayEndHour == 24 ? "00:00" : String(format: "%02d:00", schedule.dayEndHour))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
         } header: {
@@ -186,7 +186,7 @@ struct WalkScheduleEditor: View {
 
                 Text(Strings.WalkScheduleEditor.fiveMinuteRule)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 switch schedule.maxDurationRule {
                 case .minutesPerMonth(let minutes):
@@ -199,7 +199,7 @@ struct WalkScheduleEditor: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Text(Strings.WalkScheduleEditor.minutesPerMonthValue(minutes))
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 case .fixedMinutes(let minutes):
@@ -212,7 +212,7 @@ struct WalkScheduleEditor: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Text(Strings.Common.minutes)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -280,10 +280,6 @@ struct AddWalkSheet: View {
                 }
             }
             .onAppear {
-                // Default label based on position
-                let count = schedule.walks.count + 1
-                label = Strings.Notifications.walkNumber(count)
-
                 // Default time: 2 hours after last walk, or 8am
                 if let lastWalk = schedule.walks.last,
                    let lastTime = DateFormatters.timeOnly.date(from: lastWalk.targetTime) {
@@ -293,6 +289,16 @@ struct AddWalkSheet: View {
                     components.hour = 8
                     components.minute = 0
                     targetTime = Calendar.current.date(from: components) ?? Date()
+                }
+                // Default label based on the time
+                label = WalkSchedule.labelForTime(targetTime.timeString)
+            }
+            .onChange(of: targetTime) { _, newTime in
+                // Update label when time changes (only if using a standard time-based label)
+                let currentSuggested = WalkSchedule.labelForTime(targetTime.timeString)
+                let newSuggested = WalkSchedule.labelForTime(newTime.timeString)
+                if label == currentSuggested || label.isEmpty {
+                    label = newSuggested
                 }
             }
         }
@@ -363,6 +369,14 @@ struct EditScheduledWalkSheet: View {
             .onAppear {
                 label = walk.label
                 targetTime = DateFormatters.timeOnly.date(from: walk.targetTime) ?? Date()
+            }
+            .onChange(of: targetTime) { oldTime, newTime in
+                // Update label when time changes (only if using a standard time-based label)
+                let oldSuggested = WalkSchedule.labelForTime(oldTime.timeString)
+                let newSuggested = WalkSchedule.labelForTime(newTime.timeString)
+                if label == oldSuggested {
+                    label = newSuggested
+                }
             }
         }
     }

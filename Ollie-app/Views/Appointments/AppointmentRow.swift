@@ -16,7 +16,7 @@ struct AppointmentRow: View {
             // Icon
             Image(systemName: appointment.appointmentType.icon)
                 .font(.system(size: 20))
-                .foregroundColor(.otisAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 40, height: 40)
                 .background(Color.otisAccent.opacity(0.1))
                 .clipShape(Circle())
@@ -31,7 +31,7 @@ struct AppointmentRow: View {
 
                     if appointment.isCompleted {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
+                            .foregroundStyle(.green)
                             .font(.caption)
                     }
                 }
@@ -40,15 +40,15 @@ struct AppointmentRow: View {
                 HStack(spacing: 8) {
                     Text(appointment.dateString)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     if !appointment.isAllDay {
                         Text("•")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(appointment.timeRangeString)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
@@ -57,10 +57,10 @@ struct AppointmentRow: View {
                     HStack(spacing: 4) {
                         Image(systemName: "mappin")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(location)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }
                 }
@@ -72,7 +72,7 @@ struct AppointmentRow: View {
             if appointment.isRecurring {
                 Image(systemName: "repeat")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 4)

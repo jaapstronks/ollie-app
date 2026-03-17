@@ -11,7 +11,7 @@ import MapKit
 
 /// Spots section showing map and favorite locations
 struct InsightsSpotsSection: View {
-    @ObservedObject var spotStore: SpotStore
+    var spotStore: SpotStore
     @Binding var showAllSpots: Bool
 
     var body: some View {

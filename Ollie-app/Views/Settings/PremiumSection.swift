@@ -11,7 +11,7 @@ import OtisShared
 /// Otis+ subscription status and management section
 struct PremiumSection: View {
     let profile: PuppyProfile
-    @ObservedObject var subscriptionManager = SubscriptionManager.shared
+    var subscriptionManager = SubscriptionManager.shared
     @Binding var showingOtisPlusSheet: Bool
     @Binding var showingSubscriptionSuccess: Bool
 
@@ -22,7 +22,7 @@ struct PremiumSection: View {
                 Text(Strings.OtisPlus.settingsStatus)
                 Spacer()
                 Text(subscriptionManager.effectiveStatus.displayLabel)
-                    .foregroundColor(statusColor)
+                    .foregroundStyle(statusColor)
             }
 
             // Action buttons based on status

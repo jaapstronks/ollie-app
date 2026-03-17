@@ -3,36 +3,51 @@
 //  Otis-app
 //
 
+import StoreKit
 import SwiftUI
 import OtisShared
 
 /// Root view with tab navigation or onboarding
 struct ContentView: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var dataImporter: DataImporter
-    @EnvironmentObject var weatherService: WeatherService
-    @EnvironmentObject var notificationService: NotificationService
-    @EnvironmentObject var spotStore: SpotStore
-    @EnvironmentObject var medicationStore: MedicationStore
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
-    @EnvironmentObject var documentStore: DocumentStore
-    @EnvironmentObject var contactStore: ContactStore
-    @EnvironmentObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var cloudKit: CloudKitService
-    @EnvironmentObject var foodRecallService: FoodRecallService
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(DataImporter.self) var dataImporter
+    @Environment(WeatherService.self) var weatherService
+    @Environment(NotificationService.self) var notificationService
+    @Environment(SpotStore.self) var spotStore
+    @Environment(MedicationStore.self) var medicationStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(MilestoneStore.self) var milestoneStore
+    @Environment(DocumentStore.self) var documentStore
+    @Environment(ContactStore.self) var contactStore
+    @Environment(AppointmentStore.self) var appointmentStore
+    @Environment(RoutineStore.self) var routineStore
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
+    @Environment(CloudKitService.self) var cloudKit
+    @Environment(FoodRecallService.self) var foodRecallService
+    @Environment(SubscriptionManager.self) var subscriptionManager
+    @Environment(LocationManager.self) var locationManager
+    @Environment(MomentsViewModel.self) var momentsViewModel: MomentsViewModel?
+    @Environment(PlacesMapViewModel.self) var placesMapViewModel: PlacesMapViewModel?
 
     @State private var showOnboarding = false
     @State private var showAddProfileOnboarding = false
     @State private var sharedProfileWelcomeName: String?
     @State private var showSharedProfileWelcome = false
+    @State private var showExpiredTrialSheet = false
+    @State private var showOtisPlusSheet = false
+    @State private var showPhaseTransitionSheet = false
+    @State private var showUserProfileSetupSheet = false
+    @State private var showRoleSelectionSheet = false
+    @State private var roleSelectionProfileId: UUID?
+    @State private var roleSelectionDogName: String = ""
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
     @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
-    @StateObject private var navigationState = AppNavigationState()
+    @State private var navigationState = AppNavigationState()
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
+    @Environment(\.scenePhase) private var scenePhase
 
     private var colorScheme: ColorScheme? {
         AppearanceMode(rawValue: appearanceMode)?.colorScheme
@@ -72,6 +87,8 @@ struct ContentView: View {
                         hasCompletedOnboarding = true
                         needsFirstSessionHandoff = true
                         showOnboarding = false
+                        // Start first-week experience tracking
+                        FirstWeekExperienceService.shared.markOnboardingCompleted()
                     }
                 } else {
                     // Main app with tabs
@@ -89,10 +106,21 @@ struct ContentView: View {
                         documentStore: documentStore,
                         contactStore: contactStore,
                         appointmentStore: appointmentStore,
+                        routineStore: routineStore,
+                        trainingMasteryStore: trainingMasteryStore,
+                        momentsViewModel: momentsViewModel,
+                        placesMapViewModel: placesMapViewModel,
                         onAddDog: {
                             showAddProfileOnboarding = true
                         }
                     )
+                    .task {
+                        // Proactively request notification permissions if not determined
+                        // This handles cases where onboarding was skipped (e.g., reinstall with seed data)
+                        if notificationService.authorizationStatus == .notDetermined {
+                            _ = await notificationService.requestAuthorization()
+                        }
+                    }
                 }
             }
 
@@ -108,7 +136,8 @@ struct ContentView: View {
             navigationState.selectedTab = MainTab(rawValue: selectedTabRawValue) ?? .today
 
             // Dismiss launch screen after brief delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.8))
                 withAnimation(.easeOut(duration: 0.3)) {
                     showLaunchScreen = false
                 }
@@ -117,10 +146,25 @@ struct ContentView: View {
         .onChange(of: navigationState.selectedTab) { _, newTab in
             selectedTabRawValue = newTab.rawValue
         }
+        // Refresh data when app returns to foreground to catch CloudKit syncs
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                eventStore.refreshOnForeground()
+            }
+        }
         // Listen for share acceptance to skip onboarding and reload profile
         .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareAccepted)) { _ in
             // Force dismiss onboarding if it was showing
             showOnboarding = false
+
+            // Check if user profile needs setup after a short delay
+            // (to let the share acceptance alert dismiss first)
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(1.5))
+                if UserIdentityStore.shared.needsProfileSetup {
+                    showUserProfileSetupSheet = true
+                }
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .sharedProfileAutoActivated)) { notification in
             if let name = notification.userInfo?["profileName"] as? String, !name.isEmpty {
@@ -128,10 +172,43 @@ struct ContentView: View {
                 showSharedProfileWelcome = true
             }
         }
+        // Role selection after share acceptance
+        .onReceive(NotificationCenter.default.publisher(for: .showRoleSelectionForSharedProfile)) { notification in
+            if let profileId = notification.userInfo?["profileId"] as? UUID,
+               let dogName = notification.userInfo?["dogName"] as? String {
+                roleSelectionProfileId = profileId
+                roleSelectionDogName = dogName
+                // Small delay for share acceptance alert to dismiss
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.5))
+                    showRoleSelectionSheet = true
+                }
+            }
+        }
         .alert(Strings.CloudSharing.sharedDogReadyTitle, isPresented: $showSharedProfileWelcome) {
             Button(Strings.Common.ok, role: .cancel) {}
         } message: {
             Text(Strings.CloudSharing.sharedDogReadyMessage(name: sharedProfileWelcomeName ?? Strings.CloudSharing.sharedData))
+        }
+        // Role selection sheet for shared profiles
+        .sheet(isPresented: $showRoleSelectionSheet) {
+            if let profileId = roleSelectionProfileId {
+                RoleSelectionSheet(
+                    dogName: roleSelectionDogName,
+                    profileId: profileId,
+                    onComplete: {
+                        showRoleSelectionSheet = false
+                        // Check if user profile needs setup
+                        if UserIdentityStore.shared.needsProfileSetup {
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.3))
+                                showUserProfileSetupSheet = true
+                            }
+                        }
+                    }
+                )
+                .interactiveDismissDisabled()
+            }
         }
         // Sheet for adding a new profile (multi-puppy)
         .fullScreenCover(isPresented: $showAddProfileOnboarding) {
@@ -139,367 +216,202 @@ struct ContentView: View {
                 showAddProfileOnboarding = false
             }
         }
-        .preferredColorScheme(colorScheme)
-    }
-}
-
-/// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 5 tabs (Today, Train, Places, Schedule, Health) + FAB for logging
-struct MainTabView: View {
-    @Binding var selectedTab: MainTab
-    let eventStore: EventStore
-    let profileStore: ProfileStore
-    let dataImporter: DataImporter
-    @ObservedObject var weatherService: WeatherService
-    @ObservedObject var notificationService: NotificationService
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var medicationStore: MedicationStore
-    @ObservedObject var socializationStore: SocializationStore
-    @ObservedObject var milestoneStore: MilestoneStore
-    @ObservedObject var documentStore: DocumentStore
-    @ObservedObject var contactStore: ContactStore
-    @ObservedObject var appointmentStore: AppointmentStore
-    var onAddDog: (() -> Void)?
-    @EnvironmentObject var locationManager: LocationManager
-    @EnvironmentObject var foodRecallService: FoodRecallService
-
-    @StateObject private var viewModel: TimelineViewModel
-    @StateObject private var momentsViewModel: MomentsViewModel
-    @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
-    @StateObject private var memoriesViewModel: MemoriesViewModel
-    @State private var showingSettings = false
-    @State private var showingFirstSessionHandoff = false
-    @State private var selectedPhotoEvent: PuppyEvent?
-    @State private var showingArrivalPhotoPrompt = false
-    @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
-    @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
-    @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    init(
-        selectedTab: Binding<MainTab>,
-        eventStore: EventStore,
-        profileStore: ProfileStore,
-        dataImporter: DataImporter,
-        weatherService: WeatherService,
-        notificationService: NotificationService,
-        spotStore: SpotStore,
-        medicationStore: MedicationStore,
-        socializationStore: SocializationStore,
-        milestoneStore: MilestoneStore,
-        documentStore: DocumentStore,
-        contactStore: ContactStore,
-        appointmentStore: AppointmentStore,
-        onAddDog: (() -> Void)? = nil
-    ) {
-        self._selectedTab = selectedTab
-        self.eventStore = eventStore
-        self.profileStore = profileStore
-        self.dataImporter = dataImporter
-        self.weatherService = weatherService
-        self.notificationService = notificationService
-        self.spotStore = spotStore
-        self.medicationStore = medicationStore
-        self.socializationStore = socializationStore
-        self.milestoneStore = milestoneStore
-        self.documentStore = documentStore
-        self.contactStore = contactStore
-        self.appointmentStore = appointmentStore
-        self.onAddDog = onAddDog
-        // StateObject init with autoclosure ensures single creation
-        self._viewModel = StateObject(wrappedValue: TimelineViewModel(
-            eventStore: eventStore,
-            profileStore: profileStore,
-            notificationService: notificationService,
-            medicationStore: medicationStore,
-            appointmentStore: appointmentStore
-        ))
-        self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
-            eventStore: eventStore
-        ))
-        self._memoriesViewModel = StateObject(wrappedValue: MemoriesViewModel(
-            eventStore: eventStore
-        ))
-    }
-
-    var body: some View {
-        VStack(spacing: 0) {
-            // Activity banner (visible across all tabs when activity in progress)
-            if let activity = viewModel.currentActivity {
-                CompactActivityBanner(
-                    activity: activity,
-                    onTap: {
-                        selectedTab = .today
-                        viewModel.sheetCoordinator.presentSheet(.endActivity)
+        // Expired trial sheet
+        .fullScreenCover(isPresented: $showExpiredTrialSheet) {
+            ExpiredTrialSheet(
+                puppyName: profileStore.profile?.name ?? "",
+                eventCount: eventStore.events.count,
+                trainingSessionCount: eventStore.events.filter { $0.type == .training }.count,
+                daysTracking: calculateDaysTracking(),
+                monthlyPrice: subscriptionManager.monthlyProduct?.displayPrice,
+                onSubscribe: {
+                    showExpiredTrialSheet = false
+                    // Show paywall sheet after a brief delay for sheet transition
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
+                        showOtisPlusSheet = true
                     }
-                )
-            }
-
-            GeometryReader { proxy in
-                let safeAreaBottom = proxy.safeAreaInsets.bottom
-
-                ZStack(alignment: .bottom) {
-                    // Main tab content
-                TabView(selection: $selectedTab) {
-                // Tab 0: Today
-                TodayView(
-                    viewModel: viewModel,
-                    memoriesViewModel: memoriesViewModel,
-                    appointmentStore: appointmentStore,
-                    weatherService: weatherService,
-                    onSettingsTap: { showingSettings = true },
-                    onNavigateToAppointments: { selectedTab = .schedule },
-                    onNavigateToTrain: { selectedTab = .train },
-                    onAddDog: onAddDog
-                )
-                .tabItem {
-                    Label(Strings.Tabs.today, systemImage: "pawprint.fill")
-                }
-                .tag(MainTab.today)
-
-                // Tab 1: Train (expanded with Potty + Socialization + Skills)
-                TrainTabView(
-                    viewModel: viewModel,
-                    onSettingsTap: { showingSettings = true }
-                )
-                .tabItem {
-                    Label(Strings.Tabs.train, systemImage: "graduationcap.fill")
-                }
-                .tag(MainTab.train)
-
-                // Tab 2: Explore (spots + photo moments on map)
-                PlacesTabView(
-                    spotStore: spotStore,
-                    contactStore: contactStore,
-                    momentsViewModel: momentsViewModel,
-                    locationManager: locationManager,
-                    onSettingsTap: { showingSettings = true },
-                    onAddMoment: {
-                        viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
-                    }
-                )
-                .tabItem {
-                    Label(Strings.Tabs.explore, systemImage: "map.fill")
-                }
-                .tag(MainTab.explore)
-
-                // Tab 3: Schedule (appointments, contacts, calendar)
-                CalendarTabView(
-                    milestoneStore: milestoneStore,
-                    appointmentStore: appointmentStore,
-                    socializationStore: socializationStore,
-                    contactStore: contactStore,
-                    onSettingsTap: { showingSettings = true },
-                    onNavigateToSocialization: { selectedTab = .train }
-                )
-                .tabItem {
-                    Label(Strings.Tabs.schedule, systemImage: "calendar.badge.clock")
-                }
-                .tag(MainTab.schedule)
-
-                // Tab 4: Health (stats, weight, patterns, walks)
-                HealthTabView(
-                    viewModel: viewModel,
-                    momentsViewModel: momentsViewModel,
-                    onSettingsTap: { showingSettings = true }
-                )
-                .tabItem {
-                    Label(Strings.Tabs.health, systemImage: "heart.text.square.fill")
-                }
-                .tag(MainTab.health)
-            }
-
-                    // Floating Action Button (only on Today tab)
-                    if selectedTab == .today {
-                        HStack {
-                            Spacer()
-
-                            FABButton(
-                                sleepState: viewModel.currentSleepState,
-                                currentActivity: viewModel.currentActivity,
-                                onTap: {
-                                    // Open full log sheet
-                                    viewModel.showAllEvents()
-                                },
-                                onQuickAction: { eventType, location in
-                                    // Quick log with default values
-                                    if let location = location {
-                                        viewModel.quickLogWithLocation(type: eventType, location: location)
-                                    } else {
-                                        viewModel.quickLog(type: eventType)
-                                    }
-                                },
-                                onEndActivity: {
-                                    viewModel.sheetCoordinator.presentSheet(.endActivity)
-                                }
-                            )
-                            .padding(.trailing, 16)
-                            .padding(.bottom, 60 + safeAreaBottom) // Above tab bar and safe area
-                        }
-                    }
-
-                    // Floating Clicker Button (enabled via settings)
-                    if showFloatingClicker {
-                        VStack {
-                            Spacer()
-                            HStack {
-                                FloatingClickerButton()
-                                    .padding(.leading, 16)
-                                    .padding(.bottom, 100 + safeAreaBottom) // Above tab bar and safe area
-                                Spacer()
-                            }
-                        }
-                    }
-
-                    // Keep celebration rendering at the top-most layer of the main tab stack.
-                    CelebrationView(style: viewModel.celebrationStyle, isActive: $viewModel.showCelebration)
-                        .ignoresSafeArea()
-                        .zIndex(10_000)
-                }  // Close ZStack
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-        }  // Close VStack
-        // Settings sheet (accessed via gear icon in Today view)
-        .sheet(isPresented: $showingSettings) {
-            NavigationStack {
-                SettingsView(
-                    profileStore: profileStore,
-                    dataImporter: dataImporter,
-                    eventStore: eventStore,
-                    notificationService: notificationService,
-                    documentStore: documentStore,
-                    contactStore: contactStore,
-                    foodRecallService: foodRecallService,
-                    onAddDog: {
-                        showingSettings = false
-                        onAddDog?()
-                    }
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(Strings.Common.done) {
-                            showingSettings = false
-                        }
-                    }
-                }
-            }
-        }
-        .sheet(isPresented: $showingFirstSessionHandoff) {
-            FirstSessionHandoffSheet(
-                onLogFirstEvent: {
-                    showingFirstSessionHandoff = false
-                    needsFirstSessionHandoff = false
-                    selectedTab = .today
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        viewModel.showAllEvents()
-                    }
-                },
-                onViewTimeline: {
-                    showingFirstSessionHandoff = false
-                    needsFirstSessionHandoff = false
-                    selectedTab = .today
+                    Analytics.track(.trialExpiredSubscribeTapped)
                 },
                 onDismiss: {
-                    showingFirstSessionHandoff = false
-                    needsFirstSessionHandoff = false
+                    showExpiredTrialSheet = false
+                    Analytics.track(.trialExpiredDismissed)
                 }
             )
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.visible)
         }
-        // All sheets from shared modifier - at MainTabView level for global access
-        .timelineSheetHandling(
-            viewModel: viewModel,
-            mediaCaptureViewModel: mediaCaptureViewModel,
-            selectedPhotoEvent: $selectedPhotoEvent,
-            reduceMotion: reduceMotion,
-            spotStore: spotStore,
-            locationManager: locationManager
-        )
-        // Arrival photo prompt - shown when expected puppy arrives without a photo
-        .sheet(isPresented: $showingArrivalPhotoPrompt) {
+        // Otis+ paywall sheet (opened from expired trial or other upsells)
+        .sheet(isPresented: $showOtisPlusSheet) {
+            OtisPlusSheet(
+                onDismiss: {
+                    showOtisPlusSheet = false
+                },
+                onSubscribed: {
+                    showOtisPlusSheet = false
+                }
+            )
+        }
+        // Phase transition celebration sheet
+        .fullScreenCover(isPresented: $showPhaseTransitionSheet) {
             if let profile = profileStore.profile {
-                ArrivalPhotoPromptSheet(
-                    puppyName: profile.name,
-                    onTakePhoto: {
-                        showingArrivalPhotoPrompt = false
-                        hasShownArrivalPhotoPrompt = true
-                        // Navigate to settings to add a photo
-                        showingSettings = true
+                PhaseTransitionSheet(profile: profile) { applyDefaults in
+                    acknowledgePhaseTransition(applyNotificationDefaults: applyDefaults)
+                }
+            }
+        }
+        // User profile setup sheet (shown after share acceptance if needed)
+        .sheet(isPresented: $showUserProfileSetupSheet) {
+            NavigationStack {
+                UserProfileSetupSheet(
+                    userIdentityStore: UserIdentityStore.shared,
+                    onComplete: {
+                        showUserProfileSetupSheet = false
                     },
-                    onDismiss: {
-                        showingArrivalPhotoPrompt = false
-                        hasShownArrivalPhotoPrompt = true
+                    onSkip: {
+                        showUserProfileSetupSheet = false
                     }
                 )
-                .presentationDetents([.medium])
+                .navigationTitle(Strings.UserProfile.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(Strings.Common.cancel) {
+                            showUserProfileSetupSheet = false
+                        }
+                    }
+                }
             }
         }
-        .onAppear {
-            checkForArrivalPhotoPrompt()
-            if needsFirstSessionHandoff {
-                showingFirstSessionHandoff = true
+        .task {
+            // Check for expired local trial on app launch
+            if subscriptionManager.isLocalTrialExpired && hasCompletedOnboarding {
+                showExpiredTrialSheet = true
             }
-        }
-        .onChange(of: selectedTab) { _, newTab in
-            Analytics.track(.tabSelected, properties: [
-                "tab_index": newTab.rawValue,
-                "tab_name": newTab.analyticsName
-            ])
-        }
-        .onChange(of: viewModel.sheetCoordinator.activeSheet) { _, newSheet in
-            if newSheet == nil {
-                viewModel.flushPendingCelebrationIfNeeded()
+            // Check for migration trial for existing users
+            if !hasCompletedOnboarding {
+                // Will be handled after onboarding
+            } else if TrialManager.shared.hasNeverStartedTrial && !TrialManager.shared.hasDeclinedTrial {
+                TrialManager.shared.grantMigrationTrialIfEligible(eventCount: eventStore.events.count)
             }
+
+            // Check for lifecycle phase transition
+            checkForPhaseTransition()
         }
-        .onChange(of: showingSettings) { _, isShowing in
-            if isShowing {
-                Analytics.track(.settingsOpened)
-            }
+        .onChange(of: profileStore.profile?.lifecyclePhase) { _, _ in
+            // Also check when profile changes (e.g., after sync)
+            checkForPhaseTransition()
         }
+        .preferredColorScheme(colorScheme)
     }
 
-    /// Check if we should show the arrival photo prompt
-    /// Conditions: no profile photo, home date has passed, hasn't been shown before
-    private func checkForArrivalPhotoPrompt() {
-        // Skip in UI testing mode (for screenshots)
-        guard !SeedData.isUITesting else { return }
+    /// Calculate how many unique days the user has been tracking events
+    private func calculateDaysTracking() -> Int {
+        let calendar = Calendar.current
+        let uniqueDays = Set(eventStore.events.map { calendar.startOfDay(for: $0.time) })
+        return uniqueDays.count
+    }
 
-        guard !hasShownArrivalPhotoPrompt,
+    // MARK: - Phase Transition
+
+    /// Check if dog has entered a new lifecycle phase that hasn't been acknowledged
+    private func checkForPhaseTransition() {
+        guard hasCompletedOnboarding,
               let profile = profileStore.profile,
-              profile.profilePhotoFilename == nil else {
+              !profile.isDeceased else {
             return
         }
 
-        // Check if home date has arrived (today or earlier)
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let homeDate = calendar.startOfDay(for: profile.homeDate)
+        let currentPhase = profile.lifecyclePhase
+        let acknowledgedPhase = profile.lastAcknowledgedPhase
 
-        if homeDate <= today {
-            // Slight delay to let the UI settle
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                showingArrivalPhotoPrompt = true
-            }
+        // Don't show sheet for puppy phase (initial state)
+        guard currentPhase != .puppy else { return }
+
+        // Show sheet if current phase differs from last acknowledged phase
+        if acknowledgedPhase != currentPhase {
+            showPhaseTransitionSheet = true
         }
+    }
+
+    /// Acknowledge the phase transition and optionally apply notification defaults
+    private func acknowledgePhaseTransition(applyNotificationDefaults: Bool) {
+        guard var profile = profileStore.profile else { return }
+
+        // Update the acknowledged phase
+        profile.lastAcknowledgedPhase = profile.lifecyclePhase
+
+        // Optionally apply phase-specific notification defaults
+        if applyNotificationDefaults {
+            applyPhaseNotificationDefaults(for: &profile)
+        }
+
+        // Save the updated profile
+        profileStore.saveProfile(profile)
+
+        // Dismiss the sheet
+        showPhaseTransitionSheet = false
+
+        // Track the event
+        Analytics.track(.phaseTransitionAcknowledged, properties: [
+            "phase": profile.lifecyclePhase.rawValue,
+            "applied_defaults": applyNotificationDefaults
+        ])
+    }
+
+    /// Apply recommended notification settings for the current lifecycle phase
+    private func applyPhaseNotificationDefaults(for profile: inout PuppyProfile) {
+        var settings = profile.notificationSettings
+
+        switch profile.lifecyclePhase {
+        case .puppy:
+            // Intensive care settings (shouldn't reach here, but for completeness)
+            settings.pottyReminders.isEnabled = true
+            settings.napReminders.isEnabled = true
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+
+        case .teenage:
+            // Less potty focus, more walk/training
+            settings.pottyReminders.isEnabled = false
+            settings.napReminders.isEnabled = false
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+
+        case .adult:
+            // Maintenance mode - scheduled reminders only
+            settings.pottyReminders.isEnabled = false
+            settings.napReminders.isEnabled = false
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+
+        case .senior:
+            // Health-focused - medication and wellness
+            settings.pottyReminders.isEnabled = false
+            settings.napReminders.isEnabled = false
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+            settings.appointmentReminders.isEnabled = true
+        }
+
+        profile.notificationSettings = settings
     }
 }
 
 #Preview {
     ContentView()
-        .environmentObject(ProfileStore())
-        .environmentObject(EventStore())
-        .environmentObject(DataImporter())
-        .environmentObject(WeatherService())
-        .environmentObject(NotificationService())
-        .environmentObject(SpotStore())
-        .environmentObject(LocationManager())
-        .environmentObject(MedicationStore())
-        .environmentObject(SocializationStore())
-        .environmentObject(MilestoneStore())
-        .environmentObject(DocumentStore())
-        .environmentObject(ContactStore())
-        .environmentObject(AppointmentStore())
-        .environmentObject(CloudKitService.shared)
+        .environment(ProfileStore())
+        .environment(EventStore())
+        .environment(DataImporter())
+        .environment(WeatherService())
+        .environment(NotificationService())
+        .environment(SpotStore())
+        .environment(LocationManager())
+        .environment(MedicationStore())
+        .environment(SocializationStore())
+        .environment(MilestoneStore())
+        .environment(DocumentStore())
+        .environment(ContactStore())
+        .environment(AppointmentStore())
+        .environment(RoutineStore())
+        .environment(SubscriptionManager.shared)
+        .environment(CloudKitService.shared)
 }

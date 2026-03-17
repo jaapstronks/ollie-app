@@ -19,7 +19,7 @@ struct OnboardingBreedStep: View {
     let onNext: () -> Void
     let onBack: () -> Void
 
-    @StateObject private var breedService = BreedService.shared
+    @State private var breedService = BreedService.shared
     @State private var searchQuery = ""
     @State private var hasAppeared = false
     @FocusState private var isSearchFocused: Bool

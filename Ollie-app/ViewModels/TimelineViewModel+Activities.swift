@@ -6,6 +6,7 @@
 //  Extracted from TimelineViewModel to improve code organization
 //
 
+import ActivityKit
 import Foundation
 import OtisShared
 import SwiftUI
@@ -35,6 +36,34 @@ extension TimelineViewModel {
     }
 }
 
+// MARK: - Live Activity Helpers
+
+extension TimelineViewModel {
+
+    /// Check for and handle pending wake-ups from the Live Activity "Wake Up" button
+    /// Call this when the app becomes active or enters foreground
+    func checkForPendingLiveActivityActions() {
+        guard #available(iOS 16.1, *) else { return }
+
+        // Check for pending wake-up from nap Live Activity
+        LiveActivityManager.shared.handlePendingWakeUp { [weak self] _ in
+            // Log the wake-up at current time
+            self?.logWakeUp(time: Date())
+        }
+    }
+
+    /// Clean up orphaned Live Activities that don't match the current app state
+    /// Call this on app launch
+    func cleanupOrphanedLiveActivities() {
+        guard #available(iOS 16.1, *) else { return }
+
+        let currentActivityId = activityManager.currentActivity?.sleepSessionId
+        LiveActivityManager.shared.cleanupOrphanedActivities(
+            currentInProgressActivityId: currentActivityId
+        )
+    }
+}
+
 // MARK: - Walk Activity Helpers
 
 extension TimelineViewModel {
@@ -43,6 +72,38 @@ extension TimelineViewModel {
     func startWalk() {
         activityManager.startActivity(type: .walk)
         HapticFeedback.medium()
+    }
+
+    /// Start a walk activity with a specific start time (used for pending walks from Siri/Widget)
+    func startWalk(at startTime: Date) {
+        activityManager.startActivity(type: .walk, startTime: startTime)
+        HapticFeedback.medium()
+    }
+
+    /// Check for and handle pending walk starts from Siri/Shortcuts/Widget
+    /// Call this when the app becomes active or enters foreground
+    func checkForPendingWalkStart() {
+        // Don't start a new walk if one is already in progress
+        guard !activityManager.isWalkInProgress else { return }
+
+        // Check for pending walk start
+        if let startTime = IntentDataStore.shared.consumePendingWalkStart() {
+            startWalk(at: startTime)
+            // Show the walk map view
+            showWalkMap()
+        }
+    }
+
+    /// Show the full-screen walk map view
+    func showWalkMap() {
+        sheetCoordinator.presentSheet(.walkMap)
+    }
+
+    /// Log a potty event during an active walk (pee or poop with current timestamp)
+    func logPottyDuringWalk(type: EventType) {
+        guard activityManager.isWalkInProgress else { return }
+        // Log immediately with current time, always outside during a walk
+        logEvent(type: type, time: Date(), location: .buiten)
     }
 
     /// End current walk with potty events

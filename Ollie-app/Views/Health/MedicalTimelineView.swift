@@ -31,12 +31,13 @@ private struct MedicalTimelineItem: Identifiable {
 
 /// Medical timeline view showing all health milestones and appointments chronologically
 struct MedicalTimelineView: View {
-    @ObservedObject var milestoneStore: MilestoneStore
-    @ObservedObject var appointmentStore: AppointmentStore
+    var milestoneStore: MilestoneStore
+    var appointmentStore: AppointmentStore
     let birthDate: Date
     let puppyName: String
 
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(ContactStore.self) var contactStore
     @State private var selectedMilestone: Milestone?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -142,17 +143,18 @@ struct MedicalTimelineView: View {
             MilestoneCompletionSheet(
                 milestone: milestone,
                 onDismiss: { selectedMilestone = nil },
-                onComplete: { notes, photoID, vetClinic, completionDate in
+                onComplete: { notes, photoID, linkedContactID, completionDate in
                     milestoneStore.completeMilestone(
                         milestone,
                         notes: notes,
                         photoID: photoID,
-                        vetClinicName: vetClinic,
+                        linkedContactID: linkedContactID,
                         completionDate: completionDate
                     )
                     selectedMilestone = nil
                 }
             )
+            .environment(contactStore)
         }
     }
 
@@ -409,5 +411,5 @@ struct MedicalTimelineView: View {
             puppyName: "Luna"
         )
     }
-    .environmentObject(ProfileStore())
+    .environment(ProfileStore())
 }

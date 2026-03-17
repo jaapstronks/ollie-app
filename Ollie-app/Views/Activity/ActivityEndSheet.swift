@@ -68,7 +68,7 @@ struct ActivityEndSheet: View {
                             .textFieldStyle(.plain)
                             .padding()
                             .background(Color(.secondarySystemBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM, style: .continuous))
                             .lineLimit(2...4)
                     }
                     .padding(.horizontal)
@@ -76,7 +76,7 @@ struct ActivityEndSheet: View {
                     // Main action button
                     Button {
                         HapticFeedback.success()
-                        onEnd(selectedMinutesAgo, note.isEmpty ? nil : note)
+                        onEnd(selectedMinutesAgo, note.nilIfBlank)
                     } label: {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")

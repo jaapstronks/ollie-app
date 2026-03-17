@@ -11,8 +11,8 @@ import OtisShared
 
 /// Sheet for adding a new walk spot
 struct AddSpotSheet: View {
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var locationManager: LocationManager
+    var spotStore: SpotStore
+    var locationManager: LocationManager
 
     @Environment(\.dismiss) private var dismiss
 
@@ -227,14 +227,15 @@ struct AddSpotSheet: View {
             name: trimmedName,
             latitude: location.latitude,
             longitude: location.longitude,
-            notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
+            notes: trimmedNotes.nilIfBlank,
             photoFilename: photoFilename
         )
 
         HapticFeedback.success()
 
         // Small delay to ensure state updates are processed
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.1))
             dismiss()
         }
     }

@@ -22,11 +22,11 @@ struct MealSection: View {
                     Spacer()
                     VStack(alignment: .trailing) {
                         Text(portion.amount)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         if let time = portion.targetTime {
                             Text(time)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }

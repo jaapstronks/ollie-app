@@ -23,7 +23,9 @@ extension AI {
     ///     AI.setup(
     ///         skillProgressStore: skillProgressStore,
     ///         regressionLogStore: regressionLogStore,
-    ///         socializationStore: socializationStore
+    ///         socializationStore: socializationStore,
+    ///         sentimentStore: SentimentStore.shared,
+    ///         profileStore: profileStore
     ///     )
     /// }
     /// ```
@@ -31,7 +33,9 @@ extension AI {
     static func setup(
         skillProgressStore: SkillProgressStore?,
         regressionLogStore: RegressionLogStore? = nil,
-        socializationStore: SocializationStore?
+        socializationStore: SocializationStore?,
+        sentimentStore: SentimentStore? = nil,
+        profileStore: ProfileStore? = nil
     ) {
         // Register skill progress provider
         if let skillStore = skillProgressStore {
@@ -77,7 +81,7 @@ extension AI {
                 let overallProgress = totalItems > 0 ? Double(completedItems) / Double(totalItems) : 0
 
                 // Count exposures this week
-                let weekStart = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+                let weekStart = Date.daysAgo(7)
                 var exposuresThisWeek = 0
                 for category in socStore.categories {
                     for item in category.items {
@@ -100,6 +104,20 @@ extension AI {
                 )
             }
         }
+
+        // Register sentiment state provider
+        if let sentStore = sentimentStore {
+            orchestrator.registerSentimentStateProvider { [weak sentStore] in
+                sentStore?.state
+            }
+        }
+
+        // Register behavior intervention provider
+        if let profStore = profileStore {
+            orchestrator.registerBehaviorInterventionProvider { [weak profStore] in
+                profStore?.behaviorInterventions() ?? []
+            }
+        }
     }
 }
 
@@ -120,7 +138,7 @@ extension AI {
     static func useNewSystem(for surface: AISurface) -> Bool {
         switch surface {
         // New surfaces always use new system
-        case .trainingGuidance, .pottyAnalysis, .socializationGuidance, .healthInsights:
+        case .trainingGuidance, .pottyAnalysis, .socializationGuidance, .healthInsights, .morningBriefing:
             return true
 
         // Legacy surfaces can be migrated gradually

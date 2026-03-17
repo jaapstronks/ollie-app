@@ -31,6 +31,8 @@ enum AI {
     /// Check if AI features are available for a profile.
     @MainActor
     static func isAvailable(for profile: PuppyProfile) -> Bool {
+        // PERFORMANCE: Check debug toggle to disable AI cards
+        guard !PerformanceDebug.disableAICards else { return false }
         guard AINudgeRollout.isEnabled else { return false }
         guard SubscriptionManager.shared.hasAccess(to: .aiNudges) else { return false }
         let bucket = abs(profile.id.uuidString.hashValue) % 100
@@ -152,6 +154,28 @@ enum AI {
             recentEvents: events,
             responseType: HealthInsightsResponse.self
         )
+    }
+
+    /// Request morning briefing - synthesized daily guidance from all sources.
+    @MainActor
+    static func requestMorningBriefing(
+        profile: PuppyProfile,
+        events: [PuppyEvent]
+    ) async -> AIResult<MorningBriefingResponse> {
+        return await orchestrator.request(
+            surface: .morningBriefing,
+            profile: profile,
+            recentEvents: events,
+            responseType: MorningBriefingResponse.self
+        )
+    }
+
+    // MARK: - Cache Access
+
+    /// Get cached morning briefing if available.
+    @MainActor
+    static func cachedMorningBriefing(profileId: UUID) -> MorningBriefingResponse? {
+        orchestrator.cachedResponse(surface: .morningBriefing, profileId: profileId)
     }
 }
 

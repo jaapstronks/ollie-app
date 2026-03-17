@@ -136,6 +136,8 @@ extension Strings {
         static let notesPlaceholder = String(localized: "Optional notes about this milestone...", table: milestonesTable)
         static let vetClinic = String(localized: "Vet clinic", table: milestonesTable)
         static let vetClinicPlaceholder = String(localized: "Clinic name (optional)", table: milestonesTable)
+        static let selectVet = String(localized: "Select vet", table: milestonesTable)
+        static let noVetContactsHint = String(localized: "Add a vet contact first in the Contacts section", table: milestonesTable)
         static let addToCalendar = String(localized: "Add to Calendar", table: milestonesTable)
         static let removeFromCalendar = String(localized: "Remove from Calendar", table: milestonesTable)
         static let addPhoto = String(localized: "Add Photo", table: milestonesTable)
@@ -218,5 +220,128 @@ extension Strings {
         static let exposures = String(localized: "exposures", table: table)
         static let categories = String(localized: "categories", table: table)
         static let focusOn = String(localized: "Focus on:", table: table)
+    }
+
+    // MARK: - Senior Wellness
+    enum SeniorWellness {
+        static let title = String(localized: "Senior Wellness", table: table)
+        static let dailyCheckIns = String(localized: "Daily Check-ins", table: table)
+        static let recent = String(localized: "Recent", table: table)
+        static let fullHealthHistory = String(localized: "Full Health History", table: table)
+
+        // Cards
+        static let mobilityCard = String(localized: "Mobility", table: table)
+        static let rrrCard = String(localized: "Respiratory Rate", table: table)
+        static let rrrTitle = String(localized: "Resting Respiratory Rate", table: table)
+
+        // Assessments
+        static let mobilityAssessment = String(localized: "Mobility Assessment", table: table)
+        static let cognitiveAssessment = String(localized: "Cognitive Assessment", table: table)
+        static let qualityOfLife = String(localized: "Quality of Life", table: table)
+        static let qolTitle = String(localized: "Quality of Life", table: table)
+
+        // Mobility
+        static func howIsMobility(name: String) -> String {
+            String(localized: "How is \(name)'s mobility today?", table: table)
+        }
+        static func rateMobilityFor(name: String) -> String {
+            String(localized: "Rate \(name)'s mobility", table: table)
+        }
+        static func mobilityImproved(name: String) -> String {
+            String(localized: "\(name)'s mobility has improved", table: table)
+        }
+        static func stiffMorningsCount(_ count: Int) -> String {
+            String(localized: "\(count) stiff mornings this week", table: table)
+        }
+        static let observations = String(localized: "Observations", table: table)
+        static let observationsHint = String(localized: "Select any that apply", table: table)
+        static let thisWeek = String(localized: "This week", table: table)
+        static let viewHistory = String(localized: "View History", table: table)
+
+        // Cognitive
+        static func cognitivePrompt(name: String) -> String {
+            String(localized: "Check \(name)'s cognitive function", table: table)
+        }
+        static func ccdScore(_ score: Int, maxScore: Int) -> String {
+            String(localized: "Score: \(score)/\(maxScore)", table: table)
+        }
+
+        // Quality of Life
+        static let rateEachArea = String(localized: "Rate each area from 1-10", table: table)
+        static func qolScore(_ score: Int, maxScore: Int) -> String {
+            String(localized: "\(score)/\(maxScore)", table: table)
+        }
+
+        // Respiratory Rate
+        static let respiratoryRate = String(localized: "Respiratory Rate", table: table)
+        static func countBreathsFor(name: String) -> String {
+            String(localized: "Count \(name)'s breaths for 30 seconds", table: table)
+        }
+        static let startTimer = String(localized: "Start Timer", table: table)
+        static let stopTimer = String(localized: "Stop Timer", table: table)
+        static let recentReadings = String(localized: "Recent Readings", table: table)
+        static let rrrEmergencyAlert = String(localized: "A rate over 30 bpm at rest may indicate distress. Contact your vet.", table: table)
+
+        // Common
+        static let save = String(localized: "Save", table: table)
+        static let saveAssessment = String(localized: "Save Assessment", table: table)
+        static let saveAndGetGuidance = String(localized: "Save & Get Guidance", table: table)
+        static let addNote = String(localized: "Add Note", table: table)
+        static let optionalNotes = String(localized: "Optional notes...", table: table)
+    }
+
+    // MARK: - Health Logging (Check-ins)
+    enum HealthLogging {
+        static let healthCheckIn = String(localized: "Health Check-in", table: table)
+        static let howIs = String(localized: "How is", table: table)
+        static let today = String(localized: "today?", table: table)
+        static let submit = String(localized: "Submit", table: table)
+
+        // Rating labels
+        static let ratingPoor = String(localized: "Poor", table: table)
+        static let ratingNotGreat = String(localized: "Not great", table: table)
+        static let ratingOkay = String(localized: "Okay", table: table)
+        static let ratingGood = String(localized: "Good", table: table)
+        static let ratingGreat = String(localized: "Great!", table: table)
+
+        // Question text
+        static func questionText(category: String) -> String {
+            String(localized: "How is \(category) today?", table: table)
+        }
+
+        // Symptom logging
+        static let symptomTrends = String(localized: "Symptom Trends", table: table)
+        static let logSymptom = String(localized: "Log Symptom", table: table)
+        static let noRecentSymptoms = String(localized: "No recent symptoms", table: table)
+        static func episodes(_ count: Int) -> String {
+            String(localized: "\(count) episodes", table: table)
+        }
+        static let quickLog = String(localized: "Quick Log", table: table)
+        static let goodDay = String(localized: "Good day", table: table)
+
+        // Symptom form sections
+        static let whatDidYouNotice = String(localized: "What did you notice?", table: table)
+        static let severity = String(localized: "Severity", table: table)
+        static let severityMild = String(localized: "Mild", table: table)
+        static let severityModerate = String(localized: "Moderate", table: table)
+        static let severitySevere = String(localized: "Severe", table: table)
+        static let bodyLocation = String(localized: "Body Location", table: table)
+        static let bodyUnspecified = String(localized: "Unspecified", table: table)
+        static let whenDidItStart = String(localized: "When did it start?", table: table)
+        static let duration = String(localized: "Duration", table: table)
+        static let relatedTo = String(localized: "Related to", table: table)
+        static let notes = String(localized: "Notes", table: table)
+        static let notesPlaceholder = String(localized: "Add any additional notes...", table: table)
+
+        // Symptom trends card
+        static let thisWeek = String(localized: "This week", table: table)
+        static let lastWeek = String(localized: "Last week", table: table)
+        static let commonTriggers = String(localized: "Common Triggers", table: table)
+        static let viewDetails = String(localized: "View Details", table: table)
+    }
+
+    // MARK: - Symptoms
+    enum Symptoms {
+        static let urgencyEmergency = String(localized: "Emergency - see a vet immediately", table: table)
     }
 }

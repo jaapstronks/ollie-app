@@ -57,14 +57,21 @@ struct MemoryItem: Identifiable {
 // MARK: - Event Type Filtering
 
 extension EventType {
+    /// Whether this event type is a moment (photo/video memory)
+    /// These are shown for all time frames (week, month, year)
+    var isMomentEvent: Bool {
+        self == .moment
+    }
+
+    /// Whether this event type is a mastered skill/milestone
+    /// These are only shown for year-ago memories
+    var isMasteryEvent: Bool {
+        self == .milestone
+    }
+
     /// Whether this event type is memorable (should be shown in memories)
+    /// Only moments and milestones qualify - no routine events like walks
     var isMemorableEvent: Bool {
-        switch self {
-        case .sociaal, .milestone, .training, .uitlaten, .moment, .gewicht:
-            return true
-        case .plassen, .poepen, .eten, .drinken, .slapen, .ontwaken,
-             .medicatie, .bench, .tuin, .gedrag, .coverageGap:
-            return false
-        }
+        isMomentEvent || isMasteryEvent
     }
 }

@@ -197,9 +197,10 @@ function getSchemaForSurface(surface: Surface): z.ZodObject<z.ZodRawShape> {
   }
 }
 
-// Check if surface uses modern format
-function isModernSurface(surface: Surface): boolean {
-  return ["training_guidance", "potty_analysis", "socialization_guidance", "health_insights"].includes(surface);
+// All surfaces now use the modern format with client-provided instructions
+function usesModernFormat(payload: BrokerRequest): boolean {
+  // If systemInstruction and outputFormat are provided, use modern format
+  return Boolean(payload.systemInstruction && payload.outputFormat);
 }
 
 const app = Fastify({ logger: true });
@@ -245,36 +246,62 @@ app.post("/ai/nudges/decide", async (req, reply) => {
 
   const payload = parsed.data;
   const surface = payload.surface as Surface;
+  const isModern = usesModernFormat(payload);
 
-  // Validate payload requirements based on surface type
-  if (isModernSurface(surface)) {
-    // Modern surfaces require systemInstruction and outputFormat
-    if (!payload.systemInstruction || !payload.outputFormat) {
+  // Validate payload requirements
+  // Modern format: requires systemInstruction and outputFormat (already checked by usesModernFormat)
+  // Legacy format: requires surface-specific payload (for backwards compatibility during migration)
+  if (!isModern) {
+    // New surfaces require modern format
+    const newSurfaces: Surface[] = ["training_guidance", "potty_analysis", "socialization_guidance", "health_insights"];
+    if (newSurfaces.includes(surface)) {
       return reply.code(400).send({
-        error: "systemInstruction and outputFormat are required for this surface"
+        error: `Surface '${surface}' requires systemInstruction and outputFormat in request`
       });
     }
-  } else {
+
     // Legacy surfaces require their specific payload
     if (surface === "insight_bundle" && !payload.payload?.insightBundle) {
-      return reply.code(400).send({ error: "payload.insightBundle is required" });
+      return reply.code(400).send({ error: "payload.insightBundle is required (or provide systemInstruction/outputFormat)" });
     }
     if (surface === "notification_policy" && !payload.payload?.notificationPolicy) {
-      return reply.code(400).send({ error: "payload.notificationPolicy is required" });
+      return reply.code(400).send({ error: "payload.notificationPolicy is required (or provide systemInstruction/outputFormat)" });
     }
   }
 
-  const prompt = buildPrompt(payload);
+  const { userPrompt, systemInstruction } = buildPrompt(payload);
   const order = normalizeProviderOrder(payload.providerPolicy.preferredOrder);
+
+  // Debug logging for troubleshooting
+  const debugLogPath = process.env.AI_BROKER_DEBUG_LOG_PATH ?? "/var/log/ollie-ai-broker/debug.jsonl";
+  const debugEntry: Record<string, unknown> = {
+    timestamp: new Date().toISOString(),
+    requestId,
+    surface,
+    isModern,
+    hasSystemInstruction: Boolean(payload.systemInstruction),
+    hasOutputFormat: Boolean(payload.outputFormat),
+    systemInstructionPreview: payload.systemInstruction?.substring(0, 200),
+    outputFormatPreview: payload.outputFormat?.substring(0, 500),
+    userPromptPreview: userPrompt.substring(0, 500)
+  };
 
   let lastError: string | null = null;
 
   for (let i = 0; i < order.length; i++) {
     const provider = order[i];
     try {
-      const attempt = await callProvider(provider, prompt);
+      const attempt = await callProvider(provider, userPrompt, systemInstruction);
+
+      // Add LLM response to debug log
+      debugEntry.llmResponseRaw = attempt.responseText;
+
       // Parse and normalize LLM output with tolerance for common malformations
       const { output: modelOutput, wasNormalized } = parseAndNormalizeLLMOutput(attempt.responseText, surface);
+
+      // Add parsed output to debug log
+      debugEntry.parsedOutput = modelOutput;
+      debugEntry.wasNormalized = wasNormalized;
 
       // Strict validation after normalization using surface-specific schema
       const schema = getSchemaForSurface(surface);
@@ -284,9 +311,9 @@ app.post("/ai/nudges/decide", async (req, reply) => {
       const reasoningTags = buildReasoningTags(payload);
       if (wasNormalized) reasoningTags.push("output_normalized");
 
-      // Build response based on surface type
+      // Build response based on request format
       let response: Record<string, unknown>;
-      if (isModernSurface(surface)) {
+      if (isModern) {
         // Modern format: unified response structure
         response = {
           providerUsed: provider,
@@ -297,7 +324,7 @@ app.post("/ai/nudges/decide", async (req, reply) => {
           error: null
         };
       } else {
-        // Legacy format: surface-specific decision keys
+        // Legacy format: surface-specific decision keys (for backwards compatibility)
         response = {
           providerUsed: provider,
           modelUsed: attempt.model,
@@ -323,6 +350,16 @@ app.post("/ai/nudges/decide", async (req, reply) => {
         wasNormalized,
         latencyMs: Date.now() - startedAt
       });
+
+      // Write debug log with final response
+      debugEntry.finalResponse = response;
+      debugEntry.status = "ok";
+      try {
+        await mkdir(dirname(debugLogPath), { recursive: true });
+        await appendFile(debugLogPath, JSON.stringify(debugEntry) + "\n");
+      } catch (e) {
+        console.error("Failed to write debug log:", e);
+      }
 
       return reply.code(200).send(response);
     } catch (error) {
@@ -367,17 +404,21 @@ function normalizeProviderOrder(preferred: Vendor[]): Vendor[] {
   return order;
 }
 
-function buildPrompt(payload: BrokerRequest): string {
+interface PromptParts {
+  userPrompt: string;
+  systemInstruction?: string;
+}
+
+function buildPrompt(payload: BrokerRequest): PromptParts {
   const surface = payload.surface as Surface;
 
-  // Modern surfaces use client-provided instructions
-  if (isModernSurface(surface) && payload.systemInstruction && payload.outputFormat) {
+  // Modern format: use client-provided instructions
+  if (usesModernFormat(payload)) {
     const contextJson = JSON.stringify(payload.context, null, 2);
     const payloadJson = payload.surfacePayload ? JSON.stringify(payload.surfacePayload, null, 2) : "null";
 
-    return `${payload.systemInstruction}
-
-OUTPUT FORMAT:
+    // Separate system instruction from user prompt for proper API usage
+    const userPrompt = `OUTPUT FORMAT:
 ${payload.outputFormat}
 
 CONTEXT:
@@ -387,12 +428,19 @@ SURFACE_PAYLOAD:
 ${payloadJson}
 
 Respond with valid JSON only. No markdown wrapping.`;
+
+    return {
+      userPrompt,
+      systemInstruction: payload.systemInstruction
+    };
   }
 
-  // Legacy surfaces use hardcoded instructions
+  // Legacy format: use hardcoded instructions (for backwards compatibility)
   const instruction =
     surface === "insight_bundle" ? insightInstructions() : notificationInstructions();
-  return `${instruction}\n\nINPUT_JSON:\n${JSON.stringify(payload)}`;
+  return {
+    userPrompt: `${instruction}\n\nINPUT_JSON:\n${JSON.stringify(payload)}`
+  };
 }
 
 function insightInstructions(): string {
@@ -418,17 +466,32 @@ function notificationInstructions(): string {
 
 async function callProvider(
   provider: Vendor,
-  prompt: string
+  prompt: string,
+  systemInstruction?: string
 ): Promise<{ responseText: string; model: string; inputTokens: number; outputTokens: number }> {
   if (provider === "anthropic") {
     if (!anthropicKey) throw new Error("ANTHROPIC_API_KEY missing");
-    return callAnthropic(prompt);
+    return callAnthropic(prompt, systemInstruction);
   }
   if (!mistralKey) throw new Error("MISTRAL_API_KEY missing");
-  return callMistral(prompt);
+  // Mistral doesn't have a separate system parameter in the same way, so we include it in the prompt
+  const fullPrompt = systemInstruction ? `${systemInstruction}\n\n${prompt}` : prompt;
+  return callMistral(fullPrompt);
 }
 
-async function callAnthropic(prompt: string) {
+async function callAnthropic(prompt: string, systemInstruction?: string) {
+  const body: Record<string, unknown> = {
+    model: anthropicModel,
+    max_tokens: 800,
+    temperature: 0.2,
+    messages: [{ role: "user", content: prompt }]
+  };
+
+  // Use proper system parameter when a system instruction is provided
+  if (systemInstruction) {
+    body.system = systemInstruction;
+  }
+
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -436,12 +499,7 @@ async function callAnthropic(prompt: string) {
       "x-api-key": anthropicKey!,
       "anthropic-version": "2023-06-01"
     },
-    body: JSON.stringify({
-      model: anthropicModel,
-      max_tokens: 500,
-      temperature: 0.2,
-      messages: [{ role: "user", content: prompt }]
-    })
+    body: JSON.stringify(body)
   });
   if (!response.ok) {
     throw new Error(`Anthropic HTTP ${response.status}: ${await response.text()}`);
@@ -731,12 +789,16 @@ function parseAndNormalizeLLMOutput(
 
   // Step 5: Normalize field types based on surface
   let output: unknown;
-  if (isModernSurface(surface)) {
-    output = normalizeModernSurfaceResponse(parsed, surface);
-  } else if (surface === "insight_bundle") {
-    output = normalizeInsightDecision(parsed);
-  } else {
-    output = normalizeNotificationDecision(parsed);
+  switch (surface) {
+    case "insight_bundle":
+      output = normalizeInsightDecision(parsed);
+      break;
+    case "notification_policy":
+      output = normalizeNotificationDecision(parsed);
+      break;
+    default:
+      // All other surfaces use the modern normalization
+      output = normalizeModernSurfaceResponse(parsed, surface);
   }
 
   const fieldsWereNormalized = JSON.stringify(output) !== beforeNormalization;
@@ -760,9 +822,11 @@ function buildReasoningTags(payload: BrokerRequest): string[] {
     }
   }
 
-  // Tag modern surfaces
-  if (isModernSurface(payload.surface as Surface)) {
+  // Tag based on request format
+  if (usesModernFormat(payload)) {
     tags.push("modern_format");
+  } else {
+    tags.push("legacy_format");
   }
 
   return tags;

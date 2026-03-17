@@ -10,12 +10,14 @@ import OtisShared
 
 /// Main training view with preparation gate and linear skill progression
 struct TrainingView: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
 
-    @StateObject private var trainingStore = TrainingPlanStore()
-    @StateObject private var progressStore = TrainingProgressStore()
-    @EnvironmentObject var skillProgressStore: SkillProgressStore
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @State private var trainingStore = TrainingPlanStore()
+    @State private var progressStore = TrainingProgressStore()
+    @State private var foundationsStore = FoundationsProgressStore()
+    @Environment(SkillProgressStore.self) var skillProgressStore
+    @Environment(TrainingTheoryStore.self) var trainingTheoryStore
+    @Environment(SubscriptionManager.self) var subscriptionManager
 
     @State private var selectedSkill: Skill?
     @State private var activeTrainingSkill: Skill?
@@ -27,6 +29,9 @@ struct TrainingView: View {
     @State private var ruleToAcknowledge: TrainingRule?
     @State private var skillPendingRuleAcknowledgement: Skill?
     @State private var showOtisPlusSheet = false
+    @State private var skillForRefresher: Skill?
+    @State private var skillWithPrerequisiteWarning: SkillProgressInfo?
+    @State private var activeFoundationsModule: FoundationsModule?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -34,6 +39,34 @@ struct TrainingView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTrainingSkillsTip") private var hasSeenTrainingSkillsTip = false
 
+    /// Check if foundations module 1 is complete (gates skills training)
+    private var isFoundationsComplete: Bool {
+        foundationsStore.isGettingStartedComplete
+    }
+
+    /// Count of mastered skills for suggesting module 2
+    private var masteredSkillCount: Int {
+        enhancedSkillsWithStatus.filter { $0.status == .mastered }.count
+    }
+
+    /// Check if any skill has reached proofing phase (for suggesting module 3)
+    private var hasReachedProofingPhase: Bool {
+        // Check if any skill has phase 3+ mastered inside
+        skillProgressStore.allProgress.contains { progress in
+            let matrix = progress.phaseLocationMatrix
+            // If any phase index >= 2 (0-indexed, so phase 3+) has inside mastered
+            return matrix.contains { cell in
+                if case .mastered = cell.state {
+                    // Check if this is phase 3 or later
+                    let phaseIndex = matrix.firstIndex { $0.id == cell.id }.map { $0 / 2 } ?? 0
+                    return phaseIndex >= 2 && cell.location == .inside
+                }
+                return false
+            }
+        }
+    }
+
+    // Legacy: Keep for backwards compatibility during migration
     private var isPreparationComplete: Bool {
         guard let plan = trainingStore.trainingPlan else { return false }
         return progressStore.isPreparationComplete(requiredItems: plan.preparationItems)
@@ -65,7 +98,11 @@ struct TrainingView: View {
                 learningPhase: progress.phase == .notStarted ? nil : progress.phase,
                 confidenceScore: progress.confidenceScore > 0 ? progress.confidenceScore : nil,
                 isDueForReview: isDue,
-                daysUntilReview: daysUntilReview
+                daysUntilReview: daysUntilReview,
+                proofingLevels: progress.proofingLevels,
+                practicedContexts: progress.practicedContexts,
+                maintenanceTier: progress.maintenanceTier > 0 ? progress.maintenanceTier : nil,
+                nextReviewDate: progress.nextReviewDate
             )
         }
     }
@@ -85,19 +122,22 @@ struct TrainingView: View {
                     )
                 }
 
-                // 1. Preparation Section (gated)
-                if !isPreparationComplete {
-                    if let plan = trainingStore.trainingPlan {
-                        PreparationSection(
-                            progressStore: progressStore,
-                            preparationItems: plan.preparationItems
-                        )
+                // 1. Foundations Section (always visible, module 1 gates skills)
+                FoundationsSection(
+                    foundationsStore: foundationsStore,
+                    masteredSkillCount: masteredSkillCount,
+                    hasReachedProofingPhase: hasReachedProofingPhase,
+                    onModuleTap: { module in
+                        activeFoundationsModule = module
                     }
+                )
 
+                // 2. Skills content (gated by foundations module 1)
+                if !isFoundationsComplete {
                     // Show locked message for training content
-                    preparationLockedMessage
+                    foundationsLockedMessage
                 } else {
-                    // 2. Training content (only if preparation complete)
+                    // Training content (only if foundations complete)
                     trainingContent
                 }
             }
@@ -107,9 +147,13 @@ struct TrainingView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             trainingStore.setEventStore(eventStore)
+            trainingStore.setSkillProgressStore(skillProgressStore)
         }
         .task {
             await trainingStore.initialSync()
+
+            // Migrate from old preparation checklist if needed
+            foundationsStore.migrateFromPreparation(progressStore: progressStore)
         }
         // Full-screen training session (clicker or simple based on skill type)
         .fullScreenCover(item: $activeTrainingSkill) { skill in
@@ -121,7 +165,8 @@ struct TrainingView: View {
                         activeTrainingSkill = nil
                         activeTrainingPhase = nil
                         completedSessionData = data
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             selectedSkill = skill
                         }
                     },
@@ -138,7 +183,8 @@ struct TrainingView: View {
                         activeTrainingSkill = nil
                         activeTrainingPhase = nil
                         completedSessionData = data
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             selectedSkill = skill
                         }
                     },
@@ -173,7 +219,9 @@ struct TrainingView: View {
                 onDismiss: {
                     skillForDetailSheet = nil
                 },
-                progressStore: progressStore
+                progressStore: progressStore,
+                skillProgressStore: skillProgressStore,
+                theoryStore: trainingTheoryStore
             )
             .presentationDetents([.large])
         }
@@ -245,7 +293,8 @@ struct TrainingView: View {
                     if let skill = skillPendingRuleAcknowledgement {
                         skillPendingRuleAcknowledgement = nil
                         // Small delay to allow sheet dismissal animation
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             activeTrainingSkill = skill
                         }
                     }
@@ -260,21 +309,85 @@ struct TrainingView: View {
                 onSubscribed: { showOtisPlusSheet = false }
             )
         }
+        // Skill refresher sheet (for maintenance mode)
+        .sheet(item: $skillForRefresher) { skill in
+            SkillRefresherSheet(
+                skill: skill,
+                onStartPractice: {
+                    // Start a training session for this skill
+                    activeTrainingSkill = skill
+                    // Record the maintenance refresh
+                    skillProgressStore.recordMaintenanceRefresh(for: skill.id)
+                },
+                onDismiss: {
+                    skillForRefresher = nil
+                }
+            )
+            .presentationDetents([.medium, .large])
+        }
+        // Foundations module sheet
+        .sheet(item: $activeFoundationsModule) { module in
+            FoundationsFlowSheet(
+                module: module,
+                foundationsStore: foundationsStore,
+                onComplete: {
+                    foundationsStore.markComplete(moduleId: module.id)
+                    activeFoundationsModule = nil
+                },
+                onSkip: {
+                    foundationsStore.markSkipped(moduleId: module.id)
+                    activeFoundationsModule = nil
+                },
+                onDismiss: {
+                    activeFoundationsModule = nil
+                }
+            )
+        }
+        // Prerequisite warning alert (soft-lock instead of hard-lock)
+        .alert(
+            Strings.Training.Progression.skipPrerequisitesTitle,
+            isPresented: Binding(
+                get: { skillWithPrerequisiteWarning != nil },
+                set: { if !$0 { skillWithPrerequisiteWarning = nil } }
+            ),
+            presenting: skillWithPrerequisiteWarning
+        ) { info in
+            Button(Strings.Training.Progression.startAnyway) {
+                // Allow user to proceed anyway
+                skillForDetailSheet = info.skill
+                skillWithPrerequisiteWarning = nil
+            }
+            Button(Strings.Training.Progression.learnPrerequisitesFirst, role: .cancel) {
+                skillWithPrerequisiteWarning = nil
+            }
+        } message: { info in
+            let prereqNames = info.missingRequirements.map { $0.name }.joined(separator: ", ")
+            Text(Strings.Training.Progression.skipPrerequisitesMessage(prereqNames))
+        }
     }
 
-    // MARK: - Preparation Locked Message
+    // MARK: - Foundations Locked Message
 
-    private var preparationLockedMessage: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "lock.fill")
-                .font(.title3)
-                .foregroundStyle(.tertiary)
+    private var foundationsLockedMessage: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                Image(systemName: "lock.fill")
+                    .font(.title3)
+                    .foregroundStyle(.tertiary)
 
-            Text(Strings.Training.Progression.preparationRequired)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(Strings.Training.Foundations.skillsLocked)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
 
-            Spacer()
+                    Text(Strings.Training.Foundations.completeGettingStarted)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
         }
         .padding()
         .background(
@@ -285,8 +398,62 @@ struct TrainingView: View {
 
     // MARK: - Training Content
 
+    /// Check if there are skills needing attention
+    private var hasSkillsNeedingAttention: Bool {
+        !skillProgressStore.skillsNeedingWork.isEmpty ||
+        !skillProgressStore.skillsDueForReview.isEmpty
+    }
+
+    /// Get SkillProgressInfo for regression skills
+    private var regressionSkillInfos: [SkillProgressInfo] {
+        skillProgressStore.skillsNeedingWork.compactMap { progress in
+            guard let skillInfo = enhancedSkillsWithStatus.first(where: { $0.skill.id == progress.skillId }) else {
+                return nil
+            }
+            return skillInfo
+        }
+    }
+
+    /// Get SkillProgressInfo for due for review skills
+    private var dueForReviewInfos: [SkillProgressInfo] {
+        skillProgressStore.skillsDueForReview.compactMap { progress in
+            // Skip if already in regression list
+            guard !skillProgressStore.skillsNeedingWork.contains(where: { $0.skillId == progress.skillId }) else {
+                return nil
+            }
+            guard let skillInfo = enhancedSkillsWithStatus.first(where: { $0.skill.id == progress.skillId }) else {
+                return nil
+            }
+            return skillInfo
+        }
+    }
+
     @ViewBuilder
     private var trainingContent: some View {
+        // Skills needing attention (NEW - at top)
+        if hasSkillsNeedingAttention {
+            needsAttentionSection
+        }
+
+        // Maintenance mode section (shows skills needing refresh)
+        if !skillProgressStore.skillsInMaintenanceMode.isEmpty {
+            MaintenanceSkillsSection(
+                skillProgressStore: skillProgressStore,
+                trainingStore: trainingStore,
+                onSkillTap: { skill in
+                    skillForDetailSheet = skill
+                },
+                onRefresh: { skill, _ in
+                    // Record the refresh and give haptic feedback
+                    skillProgressStore.recordMaintenanceRefresh(for: skill.id)
+                    HapticFeedback.success()
+                },
+                onShowRefresher: { skill in
+                    skillForRefresher = skill
+                }
+            )
+        }
+
         // All skills mastered celebration (if applicable)
         if trainingStore.masteryProgress.mastered == trainingStore.masteryProgress.total {
             allMasteredCard
@@ -340,7 +507,11 @@ struct TrainingView: View {
                     SkillProgressRow(
                         info: info,
                         onTap: {
-                            if info.isLocked { return }
+                            // Show prerequisite warning for skills with unmet prerequisites
+                            if info.hasUnmetPrerequisites && !info.missingRequirements.isEmpty {
+                                skillWithPrerequisiteWarning = info
+                                return
+                            }
 
                             // Skills with phases should show the learning flow first
                             if info.skill.phases != nil && !info.skill.phases!.isEmpty {
@@ -357,13 +528,59 @@ struct TrainingView: View {
                             quickLogSession(for: info.skill)
                         },
                         onToggleMastered: {
-                            trainingStore.markAsMastered(info.skill.id)
+                            trainingStore.toggleMastered(info.skill.id)
                             HapticFeedback.success()
                         }
                     )
                 }
             }
         }
+    }
+
+    // MARK: - Needs Attention Section
+
+    @ViewBuilder
+    private var needsAttentionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+                Text(Strings.Training.needsAttention)
+                    .font(.headline)
+                Spacer()
+            }
+
+            // Regression skills first
+            ForEach(regressionSkillInfos, id: \.skill.id) { info in
+                SkillProgressRow(
+                    info: info,
+                    onTap: {
+                        skillForDetailSheet = info.skill
+                    },
+                    onQuickDone: {
+                        quickLogSession(for: info.skill)
+                    }
+                )
+            }
+
+            // Then due for review
+            ForEach(dueForReviewInfos, id: \.skill.id) { info in
+                SkillProgressRow(
+                    info: info,
+                    onTap: {
+                        skillForDetailSheet = info.skill
+                    },
+                    onQuickDone: {
+                        quickLogSession(for: info.skill)
+                    }
+                )
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(colorScheme == .dark ? Color.orange.opacity(0.08) : Color.orange.opacity(0.05))
+        )
     }
 
     // MARK: - All Mastered Card
@@ -430,6 +647,8 @@ struct TrainingView: View {
 #Preview {
     NavigationStack {
         TrainingView(eventStore: EventStore())
-            .environmentObject(SubscriptionManager.shared)
+            .environment(SubscriptionManager.shared)
+            .environment(SkillProgressStore())
+            .environment(TrainingTheoryStore())
     }
 }

@@ -198,9 +198,35 @@ enum UserPreferences {
         // Training settings
         case showFloatingClicker = "showFloatingClicker"
 
+        // Training guide mastery
+        case crateTrainingMastered = "crateTrainingMastered"
+        case crateTrainingMasteredDate = "crateTrainingMasteredDate"
+        case pottyTrainingMastered = "pottyTrainingMastered"
+        case pottyTrainingMasteredDate = "pottyTrainingMasteredDate"
+        case pottyMasteryPromptDismissedDate = "pottyMasteryPromptDismissedDate"
+        case pottyMasteryPromptDismissCount = "pottyMasteryPromptDismissCount"
+
+        // Potty mastery incident tracking
+        case pottyReactivationPromptDismissedDate = "pottyReactivationPromptDismissedDate"
+        case pottyLastIncidentAcknowledgedDate = "pottyLastIncidentAcknowledgedDate"
+
+        // Leash training mastery
+        case leashTrainingMastered = "leashTrainingMastered"
+        case leashTrainingMasteredDate = "leashTrainingMasteredDate"
+        case leashMasteryPromptDismissedDate = "leashMasteryPromptDismissedDate"
+        case leashMasteryPromptDismissCount = "leashMasteryPromptDismissCount"
+        case leashReactivationPromptDismissedDate = "leashReactivationPromptDismissedDate"
+        case leashLastSentimentAcknowledgedDate = "leashLastSentimentAcknowledgedDate"
+
         // First week card
         case firstWeekCardCollapsedDate = "firstWeekCardCollapsedDate"
         case needsFirstSessionHandoff = "needsFirstSessionHandoff"
+
+        // Guided tour
+        case hasCompletedGuidedTour = "hasCompletedGuidedTour"
+        case guidedTourStep = "guidedTourStep"
+        case isAwaitingInvite = "isAwaitingInvite"
+        case shouldStartGuidedTour = "shouldStartGuidedTour"
     }
 
     // MARK: - Defaults
@@ -225,9 +251,20 @@ enum UserPreferences {
 
         // Training defaults
         Key.showFloatingClicker.rawValue: false,
+        Key.crateTrainingMastered.rawValue: false,
+        Key.pottyTrainingMastered.rawValue: false,
+        Key.pottyMasteryPromptDismissCount.rawValue: 0,
+        Key.leashTrainingMastered.rawValue: false,
+        Key.leashMasteryPromptDismissCount.rawValue: 0,
 
         // Onboarding follow-up defaults
-        Key.needsFirstSessionHandoff.rawValue: false
+        Key.needsFirstSessionHandoff.rawValue: false,
+
+        // Guided tour defaults
+        Key.hasCompletedGuidedTour.rawValue: false,
+        Key.guidedTourStep.rawValue: 0,
+        Key.isAwaitingInvite.rawValue: false,
+        Key.shouldStartGuidedTour.rawValue: false
     ]
 
     /// Register default values on app launch

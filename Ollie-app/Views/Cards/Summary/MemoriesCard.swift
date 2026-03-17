@@ -1,0 +1,459 @@
+//
+//  MemoriesCard.swift
+//  Otis-app
+//
+//  "On This Day" memories card for Today view
+
+import SwiftUI
+import OtisShared
+
+/// Photo-forward card showing memories from 1 week / 1 month / 1 year ago
+struct MemoriesCard: View {
+    var viewModel: MemoriesViewModel
+
+    /// Callback when a memory event is tapped - navigates to that date
+    var onMemoryTap: ((PuppyEvent) -> Void)?
+
+    /// Key for storing dismissal state per day
+    @AppStorage("memoriesCardDismissedDate") private var dismissedDateString: String = ""
+
+    @State private var selectedEvent: PuppyEvent?
+    @State private var isVisible: Bool = true
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(ProfileStore.self) private var profileStore
+
+    /// The dog's name for display in mastery memories
+    private var dogName: String {
+        profileStore.profile?.name ?? ""
+    }
+
+    /// Whether the current memory is a mastery/milestone event
+    private var isMasteryMemory: Bool {
+        viewModel.memoryItem?.event.type.isMasteryEvent == true
+    }
+
+    /// The appropriate time frame label (special for mastery events)
+    private var timeFrameLabel: String {
+        if isMasteryMemory && viewModel.timeFrame == .year {
+            return Strings.Memories.justOneYearAgo
+        }
+        return viewModel.timeFrame.label
+    }
+
+    /// Whether the card was dismissed today
+    private var isDismissedToday: Bool {
+        guard !dismissedDateString.isEmpty else { return false }
+        let today = Calendar.current.startOfDay(for: Date())
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        guard let dismissedDate = formatter.date(from: dismissedDateString) else { return false }
+        return Calendar.current.isDate(dismissedDate, inSameDayAs: today)
+    }
+
+    /// Whether the primary memory has a photo
+    private var hasPhoto: Bool {
+        viewModel.memoryItem?.event.photo != nil
+    }
+
+    var body: some View {
+        if viewModel.shouldShowCard && !isDismissedToday && isVisible {
+            Group {
+                if hasPhoto {
+                    photoForwardLayout
+                } else {
+                    compactLayout
+                }
+            }
+            .transition(.asymmetric(
+                insertion: .opacity,
+                removal: .opacity.combined(with: .scale(scale: 0.95))
+            ))
+            .fullScreenCover(item: $selectedEvent) { event in
+                MediaPreviewView(
+                    event: event,
+                    onDelete: {
+                        // Don't allow deletion from memory card
+                        selectedEvent = nil
+                    }
+                )
+            }
+            .onAppear {
+                Analytics.track(.memoriesCardViewed)
+            }
+        }
+    }
+
+    // MARK: - Photo-Forward Layout
+
+    @ViewBuilder
+    private var photoForwardLayout: some View {
+        if let memory = viewModel.memoryItem {
+            VStack(alignment: .leading, spacing: 0) {
+                // Photo with overlay
+                ZStack(alignment: .topLeading) {
+                    // Photo with fallback placeholder
+                    MemoryPhotoView(event: memory.event)
+                        .frame(height: 140)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
+
+                    // Gradient overlay for text readability
+                    LinearGradient(
+                        colors: [.black.opacity(0.5), .clear, .clear, .black.opacity(0.3)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+
+                    // Top bar with time label and dismiss
+                    HStack {
+                        // Time frame badge
+                        HStack(spacing: 4) {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .font(.caption2)
+                            Text(timeFrameLabel)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.ultraThinMaterial.opacity(0.8))
+                        .clipShape(Capsule())
+
+                        Spacer()
+
+                        // Dismiss button (custom styling for photo overlay)
+                        Button {
+                            dismissCard()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .frame(width: 24, height: 24)
+                                .background(.ultraThinMaterial.opacity(0.8))
+                                .clipShape(Circle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Strings.Common.close)
+                    }
+                    .padding(10)
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    HapticFeedback.selection()
+                    selectedEvent = memory.event
+                }
+
+                // Caption bar
+                HStack(spacing: 8) {
+                    // Event type icon
+                    Image(systemName: memory.event.type.icon)
+                        .font(.caption)
+                        .foregroundStyle(Color.otisAccent)
+
+                    // Caption text
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(eventSummary(for: memory.event))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .lineLimit(1)
+
+                        if let note = memory.event.note, !note.isEmpty {
+                            Text(note)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+
+                    Spacer()
+
+                    // More indicator if there are additional events
+                    if viewModel.additionalEventCount > 0 {
+                        Text(Strings.Memories.moreEvents(viewModel.additionalEventCount))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Color(.secondarySystemBackground).opacity(0.6))
+            }
+            .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM))
+            .overlay(
+                RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM)
+                    .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            )
+        }
+    }
+
+    // MARK: - Compact Layout (no photo)
+
+    @ViewBuilder
+    private var compactLayout: some View {
+        if let memory = viewModel.memoryItem {
+            HStack(spacing: 12) {
+                // Event icon
+                Image(systemName: memory.event.type.icon)
+                    .font(.system(size: 16))
+                    .foregroundStyle(Color.otisAccent)
+                    .frame(width: 36, height: 36)
+                    .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                    .clipShape(Circle())
+
+                // Content
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 4) {
+                        Text(timeFrameLabel)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Text(eventSummary(for: memory.event))
+                        .font(.subheadline)
+                        .lineLimit(1)
+
+                    if let note = memory.event.note, !note.isEmpty {
+                        Text(note)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                }
+
+                Spacer()
+
+                // Dismiss button
+                Button {
+                    dismissCard()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 24, height: 24)
+                        .background(Color(.tertiarySystemFill))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Strings.Common.close)
+            }
+            .padding(12)
+            .background(Color(.secondarySystemBackground).opacity(0.6))
+            .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM))
+            .overlay(
+                RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM)
+                    .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            )
+            .contentShape(Rectangle())
+            .onTapGesture {
+                HapticFeedback.selection()
+                onMemoryTap?(memory.event)
+            }
+        }
+    }
+
+    // MARK: - Actions
+
+    private func dismissCard() {
+        HapticFeedback.light()
+
+        // Animate out first
+        withAnimation(.easeOut(duration: 0.2)) {
+            isVisible = false
+        }
+
+        // Then persist to storage (so it stays hidden on scroll/rerender)
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.25))
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withFullDate]
+            dismissedDateString = formatter.string(from: Date())
+        }
+    }
+
+    // MARK: - Helpers
+
+    /// Generate a summary text for the event
+    private func eventSummary(for event: PuppyEvent) -> String {
+        switch event.type {
+        case .sociaal:
+            if let who = event.who, !who.isEmpty {
+                return Strings.Socialization.metName(who)
+            }
+            return event.type.label
+
+        case .training:
+            if let exercise = event.exercise, !exercise.isEmpty {
+                return "\(event.type.label): \(exercise)"
+            }
+            return event.type.label
+
+        case .uitlaten:
+            if let duration = event.durationMin, duration > 0 {
+                return "\(event.type.label) (\(duration) min)"
+            }
+            if let spotName = event.spotName, !spotName.isEmpty {
+                return "\(event.type.label) - \(spotName)"
+            }
+            return event.type.label
+
+        case .gewicht:
+            if let weight = event.weightKg, weight > 0 {
+                return String(format: "%.1f kg", weight)
+            }
+            return event.type.label
+
+        case .milestone:
+            // For mastery milestones, use special copy: "Max mastered sit!"
+            if let skill = event.note, !skill.isEmpty, !dogName.isEmpty {
+                return Strings.Memories.masteredSkill(name: dogName, skill: skill)
+            } else if let skill = event.note, !skill.isEmpty {
+                // Fallback without dog name
+                return skill
+            }
+            return event.type.label
+
+        case .moment:
+            return event.type.label
+
+        default:
+            return event.type.label
+        }
+    }
+}
+
+// MARK: - Memory Photo View
+
+/// Photo view with proper loading states and fallback for cloud-synced photos
+private struct MemoryPhotoView: View {
+    let event: PuppyEvent
+
+    @State private var image: UIImage?
+    @State private var loadState: LoadState = .loading
+
+    private enum LoadState {
+        case loading
+        case loaded
+        case failed
+    }
+
+    private var documentsURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+
+    var body: some View {
+        Group {
+            switch loadState {
+            case .loading:
+                Rectangle()
+                    .fill(Color.otisAccent.opacity(0.15))
+                    .overlay {
+                        ProgressView()
+                            .tint(.white)
+                    }
+
+            case .loaded:
+                if let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                }
+
+            case .failed:
+                // Show a styled placeholder with the event type icon
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.otisAccent.opacity(0.3), Color.otisAccent.opacity(0.15)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .overlay {
+                        VStack(spacing: 8) {
+                            Image(systemName: event.type.icon)
+                                .font(.system(size: 32))
+                                .foregroundStyle(.white.opacity(0.6))
+                            if event.cloudPhotoSynced == true {
+                                // Photo is in cloud but not downloaded locally
+                                Label(Strings.Memories.photoInCloud, systemImage: "icloud.and.arrow.down")
+                                    .font(.caption2)
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
+                        }
+                    }
+            }
+        }
+        .task(id: event.id) {
+            await loadPhoto()
+        }
+    }
+
+    private func loadPhoto() async {
+        loadState = .loading
+
+        // Try thumbnail first
+        if let thumbnailPath = event.thumbnailPath {
+            let url = documentsURL.appendingPathComponent(thumbnailPath)
+            if let data = try? Data(contentsOf: url),
+               let loaded = UIImage(data: data) {
+                image = loaded
+                loadState = .loaded
+                return
+            }
+        }
+
+        // Fall back to full photo
+        if let photoPath = event.photo {
+            let url = documentsURL.appendingPathComponent(photoPath)
+            if let data = try? Data(contentsOf: url),
+               let loaded = UIImage(data: data) {
+                image = loaded
+                loadState = .loaded
+                return
+            }
+        }
+
+        // If local load failed but photo is synced to cloud, try downloading
+        if event.cloudPhotoSynced == true && event.photo != nil {
+            let success = await PhotoSyncService.shared.downloadPhoto(for: event)
+            if success {
+                // Retry loading after download
+                if let thumbnailPath = event.thumbnailPath {
+                    let url = documentsURL.appendingPathComponent(thumbnailPath)
+                    if let data = try? Data(contentsOf: url),
+                       let loaded = UIImage(data: data) {
+                        image = loaded
+                        loadState = .loaded
+                        return
+                    }
+                }
+                if let photoPath = event.photo {
+                    let url = documentsURL.appendingPathComponent(photoPath)
+                    if let data = try? Data(contentsOf: url),
+                       let loaded = UIImage(data: data) {
+                        image = loaded
+                        loadState = .loaded
+                        return
+                    }
+                }
+            }
+        }
+
+        loadState = .failed
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    let eventStore = EventStore()
+    let profileStore = ProfileStore()
+
+    return VStack {
+        MemoriesCard(viewModel: MemoriesViewModel(eventStore: eventStore))
+    }
+    .padding()
+    .environment(profileStore)
+}

@@ -9,8 +9,8 @@ import OtisShared
 
 /// iCloud sync status and controls section
 struct SyncSection: View {
-    @ObservedObject var eventStore: EventStore
-    @ObservedObject var cloudKit: CloudKitService
+    var eventStore: EventStore
+    var cloudKit: CloudKitService
 
     var body: some View {
         Section {

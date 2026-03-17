@@ -10,9 +10,10 @@ import OtisShared
 
 /// Main calendar grid view with month/week navigation and day detail
 struct CalendarGridView: View {
-    @ObservedObject var appointmentStore: AppointmentStore
-    @ObservedObject var milestoneStore: MilestoneStore
-    @ObservedObject var socializationStore: SocializationStore
+    var appointmentStore: AppointmentStore
+    var milestoneStore: MilestoneStore
+    var socializationStore: SocializationStore
+    var contactStore: ContactStore
     let profile: PuppyProfile?
     let onAppointmentTap: (DogAppointment) -> Void
     let onMilestoneTap: (Milestone) -> Void
@@ -32,6 +33,12 @@ struct CalendarGridView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var birthDate: Date? { profile?.birthDate }
+
+    // MARK: - Contact Helpers
+
+    private var vetContact: DogContact? {
+        contactStore.vetContactWithPhone
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -210,7 +217,10 @@ struct CalendarGridView: View {
             // Today section
             CalendarTodaySection(
                 appointments: appointmentStore.appointments(for: Date()),
-                onAppointmentTap: onAppointmentTap
+                contactStore: contactStore,
+                onAppointmentTap: onAppointmentTap,
+                onCallContact: ContactUtilities.callPhoneNumber,
+                onOpenAddress: ContactUtilities.openInMaps
             )
 
             // This Week section
@@ -219,8 +229,13 @@ struct CalendarGridView: View {
                     appointments: appointmentStore.appointmentsThisWeek.filter { !calendar.isDateInToday($0.startDate) },
                     milestones: milestoneStore.milestonesThisWeek(birthDate: birthDate),
                     birthDate: birthDate,
+                    contactStore: contactStore,
+                    vetContact: vetContact,
                     onAppointmentTap: onAppointmentTap,
-                    onMilestoneTap: onMilestoneTap
+                    onMilestoneTap: onMilestoneTap,
+                    onCallVet: ContactUtilities.callPhoneNumber,
+                    onCallContact: ContactUtilities.callPhoneNumber,
+                    onOpenAddress: ContactUtilities.openInMaps
                 )
             }
 
@@ -230,8 +245,12 @@ struct CalendarGridView: View {
                     appointments: appointmentStore.appointmentsComingUp,
                     milestones: milestoneStore.milestonesComingUp(birthDate: birthDate),
                     birthDate: birthDate,
+                    contactStore: contactStore,
+                    vetContact: vetContact,
                     onAppointmentTap: onAppointmentTap,
-                    onMilestoneTap: onMilestoneTap
+                    onMilestoneTap: onMilestoneTap,
+                    onCallVet: ContactUtilities.callPhoneNumber,
+                    onCallContact: ContactUtilities.callPhoneNumber
                 )
             }
 
@@ -258,7 +277,7 @@ struct CalendarGridView: View {
         if calendar.isDateInToday(date) {
             return Strings.Calendar.today
         } else if calendar.isDateInTomorrow(date) {
-            return String(localized: "Tomorrow")
+            return Strings.Common.tomorrow
         } else {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE, MMM d"
@@ -332,17 +351,20 @@ private struct ListAppointmentRow: View {
     let milestoneStore = MilestoneStore()
     let appointmentStore = AppointmentStore()
     let socializationStore = SocializationStore()
+    let contactStore = ContactStore()
     let profileStore = ProfileStore()
 
     CalendarGridView(
         appointmentStore: appointmentStore,
         milestoneStore: milestoneStore,
         socializationStore: socializationStore,
+        contactStore: contactStore,
         profile: profileStore.profile,
         onAppointmentTap: { _ in },
         onMilestoneTap: { _ in },
         onSocializationTap: { }
     )
-    .environmentObject(profileStore)
-    .environmentObject(milestoneStore)
+    .environment(profileStore)
+    .environment(milestoneStore)
+    .environment(contactStore)
 }

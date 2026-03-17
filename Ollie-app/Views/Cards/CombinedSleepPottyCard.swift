@@ -16,6 +16,8 @@ struct CombinedSleepPottyCard: View {
     let pottyUrgency: PottyUrgency
     let minutesOverdue: Int?
     let pendingActionable: ActionableItem?
+    /// Gender of the dog for localized pronoun strings
+    let gender: PuppyProfile.Gender
     let onWakeUp: () -> Void
 
     init(
@@ -24,6 +26,7 @@ struct CombinedSleepPottyCard: View {
         pottyUrgency: PottyUrgency,
         minutesOverdue: Int?,
         pendingActionable: ActionableItem? = nil,
+        gender: PuppyProfile.Gender = .unspecified,
         onWakeUp: @escaping () -> Void
     ) {
         self.sleepingSince = sleepingSince
@@ -31,6 +34,7 @@ struct CombinedSleepPottyCard: View {
         self.pottyUrgency = pottyUrgency
         self.minutesOverdue = minutesOverdue
         self.pendingActionable = pendingActionable
+        self.gender = gender
         self.onWakeUp = onWakeUp
     }
 
@@ -97,7 +101,7 @@ struct CombinedSleepPottyCard: View {
                     .foregroundStyle(.orange)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.CombinedStatus.whenWakesTakeOutside)
+                    Text(Strings.CombinedStatus.whenWakesTakeOutside(isMale: gender == .male, isFemale: gender == .female))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
@@ -208,11 +212,11 @@ struct CombinedSleepPottyCard: View {
         }
     }
 
-    /// Subtitle showing specific meal/walk name and time
+    /// Subtitle showing specific meal/walk name (no time when sleeping)
+    /// When sleeping, we don't show specific times since the dog will wake when they wake
     private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
-        let label = actionable.item.localizedLabel
-        let time = actionable.item.timeString
-        return "\(label) \(Strings.Common.atTime) \(time)"
+        // Just show the label, no specific time - walks aren't planned to the minute
+        actionable.item.localizedLabel
     }
 }
 

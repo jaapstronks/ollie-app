@@ -395,9 +395,9 @@ struct TrainingLogSheet: View {
         let event = PuppyEvent(
             time: selectedTime,
             type: .training,
-            note: fullNote.isEmpty ? nil : fullNote,
+            note: fullNote.nilIfBlank,
             exercise: skill.id,
-            result: result.isEmpty ? nil : result,
+            result: result.nilIfBlank,
             durationMin: duration,
             successReps: successReps > 0 ? successReps : nil,
             failedReps: failedReps > 0 ? failedReps : nil,

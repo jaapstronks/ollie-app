@@ -12,8 +12,8 @@ struct AddMilestoneSheet: View {
     @Binding var isPresented: Bool
     let onAdd: (Milestone) -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SubscriptionManager.self) var subscriptionManager
+    @Environment(ProfileStore.self) var profileStore
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var title: String = ""
@@ -138,7 +138,7 @@ struct AddMilestoneSheet: View {
         let milestone = Milestone(
             category: selectedCategory,
             labelKey: title.trimmingCharacters(in: .whitespaces),
-            detailKey: notes.isEmpty ? nil : notes,
+            detailKey: notes.nilIfBlank,
             fixedDate: selectedDate,
             reminderDaysBefore: enableReminder ? reminderDays : 0,
             icon: selectedCategory.icon,
@@ -200,6 +200,6 @@ struct AddMilestoneSheet: View {
     return AddMilestoneSheet(isPresented: $isPresented) { milestone in
         print("Added milestone: \(milestone.localizedLabel)")
     }
-    .environmentObject(SubscriptionManager.shared)
-    .environmentObject(ProfileStore())
+    .environment(SubscriptionManager.shared)
+    .environment(ProfileStore())
 }

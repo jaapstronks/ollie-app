@@ -6,7 +6,7 @@
 //  Provides conversion to/from RegressionLogEntry model.
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDRegressionLog {
@@ -72,12 +72,15 @@ extension CDRegressionLog {
         let request = NSFetchRequest<CDRegressionLog>(entityName: "CDRegressionLog")
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        do {
-            return try context.fetch(request)
-        } catch {
-            print("Error fetching regression logs: \(error)")
-            return []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
+        context.performAndWait {
+            do {
+                results = try context.fetch(request)
+            } catch {
+                print("Error fetching regression logs: \(error)")
+            }
         }
+        return results
     }
 
     /// Fetch regression logs for a specific skill
@@ -86,12 +89,15 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        do {
-            return try context.fetch(request)
-        } catch {
-            print("Error fetching regression logs for skill \(skillId): \(error)")
-            return []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
+        context.performAndWait {
+            do {
+                results = try context.fetch(request)
+            } catch {
+                print("Error fetching regression logs for skill \(skillId): \(error)")
+            }
         }
+        return results
     }
 
     /// Fetch regression log by ID
@@ -100,27 +106,33 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
 
-        do {
-            return try context.fetch(request).first
-        } catch {
-            print("Error fetching regression log by ID: \(error)")
-            return nil
+        nonisolated(unsafe) var result: CDRegressionLog?
+        context.performAndWait {
+            do {
+                result = try context.fetch(request).first
+            } catch {
+                print("Error fetching regression log by ID: \(error)")
+            }
         }
+        return result
     }
 
     /// Fetch recent regressions (within the specified number of days)
     static func fetchRecent(days: Int, in context: NSManagedObjectContext) -> [CDRegressionLog] {
         let request = NSFetchRequest<CDRegressionLog>(entityName: "CDRegressionLog")
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        let cutoffDate = Date.daysAgo(days)
         request.predicate = NSPredicate(format: "occurredAt >= %@", cutoffDate as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        do {
-            return try context.fetch(request)
-        } catch {
-            print("Error fetching recent regression logs: \(error)")
-            return []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
+        context.performAndWait {
+            do {
+                results = try context.fetch(request)
+            } catch {
+                print("Error fetching recent regression logs: \(error)")
+            }
         }
+        return results
     }
 
     /// Fetch unrecovered regressions
@@ -129,12 +141,15 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "recoveredAt == nil")
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        do {
-            return try context.fetch(request)
-        } catch {
-            print("Error fetching unrecovered regression logs: \(error)")
-            return []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
+        context.performAndWait {
+            do {
+                results = try context.fetch(request)
+            } catch {
+                print("Error fetching unrecovered regression logs: \(error)")
+            }
         }
+        return results
     }
 
     /// Check if a regression log exists for a given ID
@@ -143,11 +158,15 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
 
-        do {
-            let count = try context.count(for: request)
-            return count > 0
-        } catch {
-            return false
+        nonisolated(unsafe) var exists = false
+        context.performAndWait {
+            do {
+                let count = try context.count(for: request)
+                exists = count > 0
+            } catch {
+                exists = false
+            }
         }
+        return exists
     }
 }

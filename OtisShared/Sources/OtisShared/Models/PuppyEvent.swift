@@ -2,225 +2,14 @@
 //  PuppyEvent.swift
 //  OtisShared
 //
+//  Core event model for tracking puppy activities.
+//  Supporting types are in separate files:
+//  - EventType.swift - Event type enum
+//  - EventEnums.swift - CoverageGapType, EventLocation, NapLocation
+//  - EventAttachments.swift - MediaInfo, EventLike, LocationInfo
+//
 
 import Foundation
-
-// MARK: - Coverage Gap Type
-
-/// Types of coverage gaps when the puppy is cared for by someone else
-public enum CoverageGapType: String, Codable, CaseIterable, Sendable {
-    case daycare
-    case family
-    case sitter
-    case vacation
-    case other
-
-    public var label: String {
-        switch self {
-        case .daycare: return Strings.CoverageGap.typeDaycare
-        case .family: return Strings.CoverageGap.typeFamily
-        case .sitter: return Strings.CoverageGap.typeSitter
-        case .vacation: return Strings.CoverageGap.typeVacation
-        case .other: return Strings.CoverageGap.typeOther
-        }
-    }
-
-    public var icon: String {
-        switch self {
-        case .daycare: return "building.2.fill"
-        case .family: return "person.2.fill"
-        case .sitter: return "person.fill.checkmark"
-        case .vacation: return "airplane"
-        case .other: return "ellipsis.circle.fill"
-        }
-    }
-}
-
-// MARK: - Event Type
-
-/// Event types for tracking puppy activities
-public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
-    case eten
-    case drinken
-    case plassen
-    case poepen
-    case slapen
-    case ontwaken
-    case uitlaten
-    case tuin
-    case training
-    case bench
-    case sociaal
-    case milestone
-    case gedrag
-    case gewicht
-    case moment
-    case medicatie
-    case coverageGap
-
-    public var id: String { rawValue }
-
-    /// SF Symbol name for this event type
-    public var icon: String {
-        switch self {
-        case .eten: return "fork.knife"
-        case .drinken: return "drop.fill"
-        case .plassen: return "drop.fill"
-        case .poepen: return "circle.inset.filled"
-        case .slapen: return "moon.zzz.fill"
-        case .ontwaken: return "sun.max.fill"
-        case .uitlaten: return "figure.walk"
-        case .tuin: return "leaf.fill"
-        case .training: return "graduationcap.fill"
-        case .bench: return "house.fill"
-        case .sociaal: return "dog.fill"
-        case .milestone: return "star.fill"
-        case .gedrag: return "note.text"
-        case .gewicht: return "scalemass.fill"
-        case .moment: return "camera.fill"
-        case .medicatie: return "pills.fill"
-        case .coverageGap: return "person.badge.clock.fill"
-        }
-    }
-
-    public var label: String {
-        switch self {
-        case .eten: return Strings.EventType.eat
-        case .drinken: return Strings.EventType.drink
-        case .plassen: return Strings.EventType.pee
-        case .poepen: return Strings.EventType.poop
-        case .slapen: return Strings.EventType.sleep
-        case .ontwaken: return Strings.EventType.wakeUp
-        case .uitlaten: return Strings.EventType.walk
-        case .tuin: return Strings.EventType.garden
-        case .training: return Strings.EventType.training
-        case .bench: return Strings.EventType.crate
-        case .sociaal: return Strings.EventType.social
-        case .milestone: return Strings.EventType.milestone
-        case .gedrag: return Strings.EventType.behavior
-        case .gewicht: return Strings.EventType.weight
-        case .moment: return Strings.EventType.moment
-        case .medicatie: return Strings.EventType.medication
-        case .coverageGap: return Strings.CoverageGap.eventLabel
-        }
-    }
-
-    /// Whether this event type requires a location (inside/outside)
-    public var requiresLocation: Bool {
-        self == .plassen || self == .poepen
-    }
-
-    /// Whether this event type is a potty event
-    public var isPottyEvent: Bool {
-        self == .plassen || self == .poepen
-    }
-
-    /// Whether this event type is a sleep-related event
-    public var isSleepEvent: Bool {
-        self == .slapen || self == .ontwaken
-    }
-
-    /// Whether this event type is a coverage gap
-    public var isCoverageGap: Bool {
-        self == .coverageGap
-    }
-}
-
-// MARK: - Event Location
-
-/// Location for potty events (inside vs outside)
-public enum EventLocation: String, Codable, Sendable {
-    case buiten  // outside
-    case binnen  // inside
-
-    public var label: String {
-        switch self {
-        case .buiten: return Strings.EventLocation.outside
-        case .binnen: return Strings.EventLocation.inside
-        }
-    }
-}
-
-// MARK: - Nap Location
-
-/// Location where a nap took place
-public enum NapLocation: String, Codable, CaseIterable, Sendable {
-    case crate
-    case dogBed
-    case other
-
-    public var label: String {
-        switch self {
-        case .crate: return Strings.NapLocation.crate
-        case .dogBed: return Strings.NapLocation.dogBed
-        case .other: return Strings.NapLocation.other
-        }
-    }
-
-    public var icon: String {
-        switch self {
-        case .crate: return "house.fill"
-        case .dogBed: return "bed.double.fill"
-        case .other: return "ellipsis.circle.fill"
-        }
-    }
-}
-
-// MARK: - Media Info
-
-/// Encapsulates media attachments for an event
-public struct MediaInfo: Codable, Equatable, Sendable {
-    public var photoPath: String?
-    public var videoPath: String?
-    public var thumbnailPath: String?
-
-    public init(photoPath: String? = nil, videoPath: String? = nil, thumbnailPath: String? = nil) {
-        self.photoPath = photoPath
-        self.videoPath = videoPath
-        self.thumbnailPath = thumbnailPath
-    }
-
-    /// Whether this media info has any content
-    public var hasMedia: Bool {
-        photoPath != nil || videoPath != nil
-    }
-
-    /// Whether this has a photo (with or without thumbnail)
-    public var hasPhoto: Bool {
-        photoPath != nil
-    }
-
-    public static let empty = MediaInfo()
-}
-
-// MARK: - Location Info
-
-/// Encapsulates GPS location data for walk events
-public struct LocationInfo: Codable, Equatable, Sendable {
-    public var latitude: Double?
-    public var longitude: Double?
-    public var spotId: UUID?
-    public var spotName: String?
-
-    public init(latitude: Double? = nil, longitude: Double? = nil, spotId: UUID? = nil, spotName: String? = nil) {
-        self.latitude = latitude
-        self.longitude = longitude
-        self.spotId = spotId
-        self.spotName = spotName
-    }
-
-    /// Whether this has any location data
-    public var hasLocation: Bool {
-        hasCoordinates || spotId != nil
-    }
-
-    /// Whether this has GPS coordinates
-    public var hasCoordinates: Bool {
-        latitude != nil && longitude != nil
-    }
-
-    public static let empty = LocationInfo()
-}
 
 // MARK: - Puppy Event
 
@@ -277,8 +66,41 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
 
     // MARK: - Attribution Fields
 
-    /// ID of the household member who logged this event (nil for legacy events)
-    public var loggedBy: UUID?
+    /// CloudKit user record ID of who logged this event
+    /// Changed from UUID (HouseholdMember.id) to String (CloudKit record ID)
+    /// For migration: nil for legacy events, existing UUID values are ignored
+    public var loggedBy: String?
+
+    // MARK: - Social Fields
+
+    /// Likes on this event from other users
+    public var likes: [EventLike]?
+
+    // MARK: - Contact Linking Fields
+
+    /// Linked contact ID (e.g., trainer for training events)
+    public var linkedContactID: UUID?
+
+    // MARK: - Behavior Incident Fields
+
+    /// Category of behavior incident (reactivity, anxiety, etc.)
+    /// Maps to BehaviorCategory.rawValue
+    public var behaviorCategory: String?
+
+    /// What triggered the behavior
+    public var behaviorTrigger: String?
+
+    /// Intensity of the incident (1-5)
+    /// Maps to BehaviorIntensity.rawValue
+    public var behaviorIntensity: Int?
+
+    /// What happened after the incident
+    /// Maps to BehaviorOutcome.rawValue
+    public var behaviorOutcome: String?
+
+    /// Context where the behavior occurred
+    /// Maps to BehaviorContext.rawValue
+    public var behaviorContext: String?
 
     // MARK: - Media Fields
 
@@ -286,6 +108,8 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var video: String?
     public var thumbnailPath: String?
     public var cloudPhotoSynced: Bool?
+    /// CloudKit zone owner name who uploaded the photo (needed for cross-user downloads)
+    public var cloudPhotoOwner: String?
 
     // MARK: - Location Fields
 
@@ -349,6 +173,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         longitude: Double? = nil,
         thumbnailPath: String? = nil,
         cloudPhotoSynced: Bool? = nil,
+        cloudPhotoOwner: String? = nil,
         weightKg: Double? = nil,
         spotId: UUID? = nil,
         spotName: String? = nil,
@@ -358,11 +183,18 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         gapType: CoverageGapType? = nil,
         endTime: Date? = nil,
         gapLocation: String? = nil,
-        loggedBy: UUID? = nil,
+        loggedBy: String? = nil,
         successReps: Int? = nil,
         failedReps: Int? = nil,
         trainingContext: String? = nil,
-        skillPhase: String? = nil
+        skillPhase: String? = nil,
+        behaviorCategory: String? = nil,
+        behaviorTrigger: String? = nil,
+        behaviorIntensity: Int? = nil,
+        behaviorOutcome: String? = nil,
+        behaviorContext: String? = nil,
+        likes: [EventLike]? = nil,
+        linkedContactID: UUID? = nil
     ) {
         self.id = id
         self.time = time
@@ -384,6 +216,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.longitude = longitude
         self.thumbnailPath = thumbnailPath
         self.cloudPhotoSynced = cloudPhotoSynced
+        self.cloudPhotoOwner = cloudPhotoOwner
         self.weightKg = weightKg
         self.spotId = spotId
         self.spotName = spotName
@@ -397,6 +230,13 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.failedReps = failedReps
         self.trainingContext = trainingContext
         self.skillPhase = skillPhase
+        self.behaviorCategory = behaviorCategory
+        self.behaviorTrigger = behaviorTrigger
+        self.behaviorIntensity = behaviorIntensity
+        self.behaviorOutcome = behaviorOutcome
+        self.behaviorContext = behaviorContext
+        self.likes = likes
+        self.linkedContactID = linkedContactID
 
         if type == .slapen {
             self.sleepSessionId = sleepSessionId ?? UUID()
@@ -431,6 +271,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case longitude
         case thumbnailPath = "thumbnail_path"
         case cloudPhotoSynced = "cloud_photo_synced"
+        case cloudPhotoOwner = "cloud_photo_owner"
         case weightKg = "weight_kg"
         case spotId = "spot_id"
         case spotName = "spot_name"
@@ -445,6 +286,13 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case failedReps = "failed_reps"
         case trainingContext = "training_context"
         case skillPhase = "skill_phase"
+        case behaviorCategory = "behavior_category"
+        case behaviorTrigger = "behavior_trigger"
+        case behaviorIntensity = "behavior_intensity"
+        case behaviorOutcome = "behavior_outcome"
+        case behaviorContext = "behavior_context"
+        case likes
+        case linkedContactID = "linked_contact_id"
     }
 
     // MARK: - Custom Decoding
@@ -471,6 +319,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
         thumbnailPath = try container.decodeIfPresent(String.self, forKey: .thumbnailPath)
         cloudPhotoSynced = try container.decodeIfPresent(Bool.self, forKey: .cloudPhotoSynced)
+        cloudPhotoOwner = try container.decodeIfPresent(String.self, forKey: .cloudPhotoOwner)
         weightKg = try container.decodeIfPresent(Double.self, forKey: .weightKg)
         spotId = try container.decodeIfPresent(UUID.self, forKey: .spotId)
         spotName = try container.decodeIfPresent(String.self, forKey: .spotName)
@@ -489,14 +338,34 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         endTime = try container.decodeIfPresent(Date.self, forKey: .endTime)
         gapLocation = try container.decodeIfPresent(String.self, forKey: .gapLocation)
 
-        // Attribution fields
-        loggedBy = try container.decodeIfPresent(UUID.self, forKey: .loggedBy)
+        // Attribution fields - try String first, fall back to UUID (legacy) and convert
+        if let stringValue = try container.decodeIfPresent(String.self, forKey: .loggedBy) {
+            loggedBy = stringValue
+        } else if let uuidValue = try? container.decodeIfPresent(UUID.self, forKey: .loggedBy) {
+            // Legacy UUID value - convert to string (will show as "Unknown" until migrated)
+            loggedBy = uuidValue.uuidString
+        } else {
+            loggedBy = nil
+        }
 
         // Training session outcome fields
         successReps = try container.decodeIfPresent(Int.self, forKey: .successReps)
         failedReps = try container.decodeIfPresent(Int.self, forKey: .failedReps)
         trainingContext = try container.decodeIfPresent(String.self, forKey: .trainingContext)
         skillPhase = try container.decodeIfPresent(String.self, forKey: .skillPhase)
+
+        // Behavior incident fields
+        behaviorCategory = try container.decodeIfPresent(String.self, forKey: .behaviorCategory)
+        behaviorTrigger = try container.decodeIfPresent(String.self, forKey: .behaviorTrigger)
+        behaviorIntensity = try container.decodeIfPresent(Int.self, forKey: .behaviorIntensity)
+        behaviorOutcome = try container.decodeIfPresent(String.self, forKey: .behaviorOutcome)
+        behaviorContext = try container.decodeIfPresent(String.self, forKey: .behaviorContext)
+
+        // Social fields
+        likes = try container.decodeIfPresent([EventLike].self, forKey: .likes)
+
+        // Contact linking
+        linkedContactID = try container.decodeIfPresent(UUID.self, forKey: .linkedContactID)
     }
 }
 
@@ -546,6 +415,56 @@ extension PuppyEvent {
         return Int(endTime.timeIntervalSince(time) / 60)
     }
 
+    // MARK: - Likes Helpers
+
+    /// Number of likes on this event
+    public var likeCount: Int {
+        likes?.count ?? 0
+    }
+
+    /// Whether this event has any likes
+    public var hasLikes: Bool {
+        likeCount > 0
+    }
+
+    /// Check if a specific user has liked this event
+    public func isLikedBy(_ userRecordID: String) -> Bool {
+        likes?.contains { $0.likedBy == userRecordID } ?? false
+    }
+
+    /// Add a like from a user
+    public func withLike(from userRecordID: String) -> PuppyEvent {
+        var copy = self
+        // Don't add duplicate likes
+        guard !isLikedBy(userRecordID) else { return copy }
+
+        var newLikes = copy.likes ?? []
+        newLikes.append(EventLike(likedBy: userRecordID))
+        copy.likes = newLikes
+        copy.modifiedAt = Date()
+        return copy
+    }
+
+    /// Remove a like from a user
+    public func withoutLike(from userRecordID: String) -> PuppyEvent {
+        var copy = self
+        copy.likes = copy.likes?.filter { $0.likedBy != userRecordID }
+        if copy.likes?.isEmpty == true {
+            copy.likes = nil
+        }
+        copy.modifiedAt = Date()
+        return copy
+    }
+
+    /// Toggle like state for a user
+    public func withLikeToggled(by userRecordID: String) -> PuppyEvent {
+        if isLikedBy(userRecordID) {
+            return withoutLike(from: userRecordID)
+        } else {
+            return withLike(from: userRecordID)
+        }
+    }
+
     // MARK: - Training Session Helpers
 
     /// Total reps in this training session
@@ -576,7 +495,7 @@ extension PuppyEvent {
         phase: String? = nil,
         durationMin: Int? = nil,
         note: String? = nil,
-        loggedBy: UUID? = nil
+        loggedBy: String? = nil
     ) -> PuppyEvent {
         PuppyEvent(
             id: id,
@@ -589,5 +508,66 @@ extension PuppyEvent {
             trainingContext: context,
             skillPhase: phase
         )
+    }
+
+    /// Create a behavior incident event
+    public static func behaviorIncident(
+        id: UUID = UUID(),
+        time: Date = Date(),
+        category: BehaviorCategory,
+        trigger: String? = nil,
+        intensity: BehaviorIntensity? = nil,
+        outcome: BehaviorOutcome? = nil,
+        context: BehaviorContext? = nil,
+        durationMin: Int? = nil,
+        note: String? = nil,
+        loggedBy: String? = nil
+    ) -> PuppyEvent {
+        PuppyEvent(
+            id: id,
+            time: time,
+            type: .gedrag,
+            note: note,
+            durationMin: durationMin,
+            loggedBy: loggedBy,
+            behaviorCategory: category.rawValue,
+            behaviorTrigger: trigger,
+            behaviorIntensity: intensity?.rawValue,
+            behaviorOutcome: outcome?.rawValue,
+            behaviorContext: context?.rawValue
+        )
+    }
+}
+
+// MARK: - Behavior Incident Helpers
+
+extension PuppyEvent {
+    /// Whether this is a behavior incident event
+    public var isBehaviorIncident: Bool {
+        type == .gedrag && behaviorCategory != nil
+    }
+
+    /// Get the behavior category as the enum type
+    public var behaviorCategoryEnum: BehaviorCategory? {
+        guard let categoryStr = behaviorCategory else { return nil }
+        return BehaviorCategory(rawValue: categoryStr)
+    }
+
+    /// Get the behavior intensity as the enum type
+    public var behaviorIntensityEnum: BehaviorIntensity? {
+        guard let intensity = behaviorIntensity else { return nil }
+        return BehaviorIntensity(rawValue: intensity)
+    }
+
+    /// Get the behavior outcome as the enum type
+    public var behaviorOutcomeEnum: BehaviorOutcome? {
+        guard let outcome = behaviorOutcome else { return nil }
+        return BehaviorOutcome(rawValue: outcome)
+    }
+
+    /// Get the behavior context as the enum type
+    public var behaviorContextEnum: BehaviorContext? {
+        guard let context = behaviorContext else { return nil }
+        return BehaviorContext(rawValue: context)
     }
 }

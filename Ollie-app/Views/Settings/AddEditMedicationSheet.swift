@@ -300,7 +300,7 @@ struct AddEditMedicationSheet: View {
         let newMedication = Medication(
             id: medication?.id ?? UUID(),
             name: name.trimmingCharacters(in: .whitespaces),
-            instructions: instructions.isEmpty ? nil : instructions,
+            instructions: instructions.nilIfBlank,
             icon: icon,
             recurrence: recurrence,
             daysOfWeek: recurrence == .weekly ? Array(selectedDays) : nil,

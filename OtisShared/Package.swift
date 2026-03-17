@@ -6,7 +6,7 @@ let package = Package(
     platforms: [
         .iOS(.v17),
         .watchOS(.v10),
-        .macOS(.v13)  // For command-line builds
+        .macOS(.v14)  // For CKSyncEngine support
     ],
     products: [
         .library(name: "OtisShared", targets: ["OtisShared"])

@@ -10,8 +10,8 @@ import OtisShared
 
 /// Feedback section visible in beta builds (debug and TestFlight)
 struct BetaFeedbackSection: View {
-    @ObservedObject private var subscriptionManager = SubscriptionManager.shared
-    @EnvironmentObject var profileStore: ProfileStore
+    private var subscriptionManager = SubscriptionManager.shared
+    @Environment(ProfileStore.self) var profileStore
     @State private var showingCopiedToast = false
 
     /// Available subscription states for testing
@@ -198,7 +198,8 @@ struct BetaFeedbackSection: View {
         withAnimation {
             showingCopiedToast = true
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(2))
             withAnimation {
                 showingCopiedToast = false
             }
@@ -210,5 +211,5 @@ struct BetaFeedbackSection: View {
     Form {
         BetaFeedbackSection()
     }
-    .environmentObject(ProfileStore())
+    .environment(ProfileStore())
 }

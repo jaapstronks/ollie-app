@@ -10,7 +10,7 @@ import MapKit
 
 /// Full detail view for viewing and editing a walk spot
 struct SpotDetailView: View {
-    @ObservedObject var spotStore: SpotStore
+    var spotStore: SpotStore
     var momentsViewModel: MomentsViewModel?
     let spot: WalkSpot
 

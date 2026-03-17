@@ -2,9 +2,11 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24D5034f" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="CDPuppyProfile" representedClassName="CDPuppyProfile" syncable="YES" codeGenerationType="class">
         <attribute name="birthDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="breed" optional="YES" attributeType="String"/>
         <attribute name="breedId" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="exerciseConfigData" optional="YES" attributeType="Binary"/>
+        <attribute name="gender" optional="YES" attributeType="String"/>
         <attribute name="homeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="legacyPremiumUnlocked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -19,6 +21,10 @@
         <attribute name="sizeCategory" attributeType="String" defaultValueString="medium"/>
         <attribute name="walkScheduleData" optional="YES" attributeType="Binary"/>
         <attribute name="householdMembersData" optional="YES" attributeType="Binary"/>
+        <attribute name="lastAcknowledgedPhase" optional="YES" attributeType="String"/>
+        <attribute name="coatType" optional="YES" attributeType="String"/>
+        <attribute name="preferredLocale" optional="YES" attributeType="String"/>
+        <attribute name="trainingPreparationData" optional="YES" attributeType="Binary"/>
         <relationship name="appointments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDocument" inverseName="profile" inverseEntity="CDDocument"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPuppyEvent" inverseName="profile" inverseEntity="CDPuppyEvent"/>
@@ -30,9 +36,19 @@
         <relationship name="comfortableItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDComfortableItem" inverseName="profile" inverseEntity="CDComfortableItem"/>
         <relationship name="earlyMilestones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEarlyMilestone" inverseName="profile" inverseEntity="CDEarlyMilestone"/>
         <relationship name="skillProgress" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDSkillProgress" inverseName="profile" inverseEntity="CDSkillProgress"/>
+        <relationship name="routineItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDRoutineItem" inverseName="profile" inverseEntity="CDRoutineItem"/>
+        <relationship name="weightGoals" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWeightGoal" inverseName="profile" inverseEntity="CDWeightGoal"/>
+        <relationship name="bodyConditionScores" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDBodyConditionScore" inverseName="profile" inverseEntity="CDBodyConditionScore"/>
+        <relationship name="groomingActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDGroomingActivity" inverseName="profile" inverseEntity="CDGroomingActivity"/>
+        <relationship name="enrichmentActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEnrichmentActivity" inverseName="profile" inverseEntity="CDEnrichmentActivity"/>
+        <relationship name="userIdentities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDUserIdentity" inverseName="profile" inverseEntity="CDUserIdentity"/>
+        <relationship name="aiCache" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDAICache" inverseName="profile" inverseEntity="CDAICache"/>
+        <relationship name="exploredTiles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDExploredTile" inverseName="profile" inverseEntity="CDExploredTile"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="cloudPhotoOwner" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="durationMin" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -47,6 +63,7 @@
         <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="parentWalkId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="photo" optional="YES" attributeType="String"/>
+        <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="result" optional="YES" attributeType="String"/>
         <attribute name="sleepSessionId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="spotId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -57,12 +74,14 @@
         <attribute name="video" optional="YES" attributeType="String"/>
         <attribute name="weightKg" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="who" optional="YES" attributeType="String"/>
-        <attribute name="loggedBy" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="loggedBy" optional="YES" attributeType="String"/>
         <attribute name="napLocation" optional="YES" attributeType="String"/>
         <attribute name="successReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="failedReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="trainingContext" optional="YES" attributeType="String"/>
         <attribute name="skillPhase" optional="YES" attributeType="String"/>
+        <attribute name="likesData" optional="YES" attributeType="Binary"/>
+        <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="events" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byTimeIndex">
             <fetchIndexElement property="time" type="Binary" order="descending"/>
@@ -79,6 +98,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDWalkSpot" representedClassName="CDWalkSpot" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -92,6 +112,7 @@
         <attribute name="visitCount" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
     </entity>
     <entity name="CDMasteredSkill" representedClassName="CDMasteredSkill" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="masteredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -99,6 +120,7 @@
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="masteredSkills" inverseEntity="CDPuppyProfile"/>
     </entity>
     <entity name="CDMedicationCompletion" representedClassName="CDMedicationCompletion" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -111,6 +133,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDExposure" representedClassName="CDExposure" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="distance" attributeType="String" defaultValueString=""/>
@@ -125,6 +148,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDMilestone" representedClassName="CDMilestone" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="calendarEventID" optional="YES" attributeType="String"/>
         <attribute name="category" attributeType="String" defaultValueString="health"/>
         <attribute name="completedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -149,12 +173,14 @@
         <attribute name="targetAgeMonths" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="targetAgeWeeks" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="vetClinicName" optional="YES" attributeType="String"/>
+        <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="milestones" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="bySortOrderIndex">
             <fetchIndexElement property="sortOrder" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="CDDocument" representedClassName="CDDocument" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="attachmentType" attributeType="String" defaultValueString="none"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="documentDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -174,6 +200,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDDogContact" representedClassName="CDDogContact" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="address" optional="YES" attributeType="String"/>
         <attribute name="contactType" attributeType="String" defaultValueString="other"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -190,6 +217,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDDogAppointment" representedClassName="CDDogAppointment" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="appointmentType" attributeType="String" defaultValueString="other"/>
         <attribute name="calendarEventID" optional="YES" attributeType="String"/>
         <attribute name="completionNotes" optional="YES" attributeType="String"/>
@@ -199,6 +227,7 @@
         <attribute name="isAllDay" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="linkedGroomingType" optional="YES" attributeType="String"/>
         <attribute name="linkedMilestoneID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -217,6 +246,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDWeightMeasurement" representedClassName="CDWeightMeasurement" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -229,6 +259,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDComfortableItem" representedClassName="CDComfortableItem" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="comfortableAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="itemId" attributeType="String" defaultValueString=""/>
@@ -240,6 +271,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDEarlyMilestone" representedClassName="CDEarlyMilestone" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="achievedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="milestoneId" attributeType="String" defaultValueString=""/>
@@ -250,6 +282,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDSkillProgress" representedClassName="CDSkillProgress" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="skillId" attributeType="String" defaultValueString=""/>
         <attribute name="phase" attributeType="String" defaultValueString="notStarted"/>
@@ -263,7 +296,9 @@
         <attribute name="maintenanceTier" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nextReviewDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastPracticedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isInMaintenanceMode" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="practicedContextsData" optional="YES" attributeType="Binary"/>
+        <attribute name="phaseLocationMatrixData" optional="YES" attributeType="Binary"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="skillProgress" inverseEntity="CDPuppyProfile"/>
@@ -275,6 +310,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDRegressionLog" representedClassName="CDRegressionLog" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="skillId" attributeType="String" defaultValueString=""/>
         <attribute name="occurredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -289,6 +325,166 @@
         </fetchIndex>
         <fetchIndex name="byOccurredAtIndex">
             <fetchIndexElement property="occurredAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDRoutineItem" representedClassName="CDRoutineItem" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="label" attributeType="String" defaultValueString=""/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="category" attributeType="String" defaultValueString="morning"/>
+        <attribute name="isEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="linkedEventType" optional="YES" attributeType="String"/>
+        <attribute name="sortOrder" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="routineItems" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="bySortOrderIndex">
+            <fetchIndexElement property="sortOrder" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDWeightGoal" representedClassName="CDWeightGoal" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="targetWeightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startWeightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="targetDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isActive" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="weightGoals" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byStartDateIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDBodyConditionScore" representedClassName="CDBodyConditionScore" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="score" attributeType="Integer 16" defaultValueString="5" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="bodyConditionScores" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byCreatedAtIndex">
+            <fetchIndexElement property="createdAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDGroomingActivity" representedClassName="CDGroomingActivity" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String" defaultValueString="brushing"/>
+        <attribute name="intervalDays" attributeType="Integer 32" defaultValueString="7" usesScalarValueType="YES"/>
+        <attribute name="lastCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="groomingActivities" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDEnrichmentActivity" representedClassName="CDEnrichmentActivity" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String" defaultValueString="puzzleToy"/>
+        <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="durationMinutes" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="enrichmentActivities" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byCompletedAtIndex">
+            <fetchIndexElement property="completedAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDUserIdentity" representedClassName="CDUserIdentity" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="avatarData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="colorHex" attributeType="String" defaultValueString="#4ECDC4"/>
+        <attribute name="cloudKitUserRecordID" attributeType="String" defaultValueString=""/>
+        <attribute name="responsibilityLevel" attributeType="String" defaultValueString="caregiver"/>
+        <attribute name="enabledNudgesData" optional="YES" attributeType="Binary"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="userIdentities" inverseEntity="CDPuppyProfile"/>
+        <relationship name="sentimentCheckIns" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDUserSentimentCheckIn" inverseName="userIdentity" inverseEntity="CDUserSentimentCheckIn"/>
+        <fetchIndex name="byCloudKitRecordIDIndex">
+            <fetchIndexElement property="cloudKitUserRecordID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDUserSentimentCheckIn" representedClassName="CDUserSentimentCheckIn" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="category" attributeType="String" defaultValueString=""/>
+        <attribute name="score" attributeType="Integer 16" defaultValueString="3" usesScalarValueType="YES"/>
+        <attribute name="contextSummary" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="userIdentity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUserIdentity" inverseName="sentimentCheckIns" inverseEntity="CDUserIdentity"/>
+        <fetchIndex name="byCategoryIndex">
+            <fetchIndexElement property="category" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDAICache" representedClassName="CDAICache" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="surface" attributeType="String" defaultValueString=""/>
+        <attribute name="timeWindow" attributeType="String" defaultValueString=""/>
+        <attribute name="locale" optional="YES" attributeType="String"/>
+        <attribute name="responseData" optional="YES" attributeType="Binary"/>
+        <attribute name="cachedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="providerUsed" optional="YES" attributeType="String"/>
+        <attribute name="modelUsed" optional="YES" attributeType="String"/>
+        <attribute name="callCount" optional="YES" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="aiCache" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="bySurfaceIndex">
+            <fetchIndexElement property="surface" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDExploredTile" representedClassName="CDExploredTile" syncable="YES" codeGenerationType="class">
+        <attribute name="ckRecordSystemFields" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="tileKey" attributeType="String" defaultValueString=""/>
+        <attribute name="walkCount" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="firstExploredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastExploredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="exploredTiles" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byTileKeyIndex">
+            <fetchIndexElement property="tileKey" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDDailyAggregate" representedClassName="CDDailyAggregate" syncable="NO" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="outdoorPotty" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="indoorPotty" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="meals" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="walks" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sleepMinutes" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trainingSessions" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sortedGapDurations" optional="YES" attributeType="Binary"/>
+        <attribute name="streakAtEndOfDay" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lastEventModifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="computedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="profileId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+        <fetchIndex name="byProfileAndDateIndex">
+            <fetchIndexElement property="profileId" type="Binary" order="ascending"/>
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
 </model>

@@ -28,6 +28,7 @@ extension Strings {
         static let weight = String(localized: "Weight", table: table)
         static let moment = String(localized: "Moment", table: table)
         static let medication = String(localized: "Medication", table: table)
+        static let grooming = String(localized: "Grooming", table: table)
     }
 
     // MARK: - Event Locations
@@ -90,6 +91,8 @@ extension Strings {
         static let title = String(localized: "Log event", table: table)
         static let moreEvents = String(localized: "More events", table: table)
         static let quickEvents = String(localized: "Quick events", table: table)
+        static let careGrooming = String(localized: "Care & Grooming", table: table)
+        static let grooming = String(localized: "Grooming", table: table)
     }
 
     // MARK: - Log Event Sheet
@@ -103,6 +106,8 @@ extension Strings {
         static let exercise = String(localized: "Exercise", table: table)
         static let result = String(localized: "Result", table: table)
         static let duration = String(localized: "Duration", table: table)
+        static let trainer = String(localized: "Trainer", table: table)
+        static let selectTrainer = String(localized: "Select trainer", table: table)
 
         // Accessibility
         static let noteAccessibilityHint = String(localized: "Enter an optional note", table: table)
@@ -175,6 +180,7 @@ extension Strings {
         // View modes
         static let galleryMode = String(localized: "Gallery", table: table)
         static let diaryMode = String(localized: "Diary", table: table)
+        static let viewMode = String(localized: "View Mode", table: table)
     }
 
     // MARK: - Media Attachment Button

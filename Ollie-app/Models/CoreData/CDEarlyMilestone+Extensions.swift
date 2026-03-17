@@ -5,7 +5,7 @@
 //  Extensions for converting between EarlyMilestoneRecord and CDEarlyMilestone
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDEarlyMilestone {
@@ -56,7 +56,11 @@ extension CDEarlyMilestone {
         let request = NSFetchRequest<CDEarlyMilestone>(entityName: "CDEarlyMilestone")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDEarlyMilestone.achievedAt, ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        nonisolated(unsafe) var results: [CDEarlyMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch by milestone ID
@@ -64,7 +68,11 @@ extension CDEarlyMilestone {
         let request = NSFetchRequest<CDEarlyMilestone>(entityName: "CDEarlyMilestone")
         request.predicate = NSPredicate(format: "milestoneId == %@", milestoneId)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        nonisolated(unsafe) var result: CDEarlyMilestone?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Check if a milestone is achieved
@@ -73,13 +81,19 @@ extension CDEarlyMilestone {
         request.predicate = NSPredicate(format: "milestoneId == %@", milestoneId)
         request.fetchLimit = 1
 
-        return ((try? context.count(for: request)) ?? 0) > 0
+        nonisolated(unsafe) var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count > 0
     }
 
     /// Delete milestone by milestoneId
     static func delete(byMilestoneId milestoneId: String, in context: NSManagedObjectContext) {
-        if let existing = fetch(byMilestoneId: milestoneId, in: context) {
-            context.delete(existing)
+        context.performAndWait {
+            if let existing = fetch(byMilestoneId: milestoneId, in: context) {
+                context.delete(existing)
+            }
         }
     }
 }

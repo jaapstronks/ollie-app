@@ -33,6 +33,24 @@ extension Strings {
         static let alreadyInSubtitle = String(localized: "Just start tracking. Patterns emerge fast.", table: table)
         static let getStarted = String(localized: "Get Started", table: table)
 
+        // Welcome choice buttons
+        static let addMyDog = String(localized: "Add my dog", table: table)
+        static let addMyDogSubtitle = String(localized: "Create a profile for your pup", table: table)
+        static let joinSharedDog = String(localized: "Join a shared dog", table: table)
+        static let joinSharedDogSubtitle = String(localized: "Someone invited you to co-manage their pup", table: table)
+
+        // Join existing profile (legacy, keeping for compatibility)
+        static let joiningTitle = String(localized: "Joining someone else's puppy?", table: table)
+        static let joiningSubtitle = String(localized: "Wait for the owner to share access with you.", table: table)
+        static let joinExisting = String(localized: "Join Existing Profile", table: table)
+
+        // Awaiting invite view
+        static let awaitingInviteTitle = String(localized: "Ready to join?", table: table)
+        static let awaitingInviteDescription = String(localized: "Open the invite link you received from the dog's owner.", table: table)
+        static let awaitingInviteHint = String(localized: "Don't have a link yet? Ask them to share from Settings → Family Sharing.", table: table)
+        static let createOwnProfile = String(localized: "Add my own dog instead", table: table)
+        static let waiting = String(localized: "Waiting for invite link...", table: table)
+
         static let nameQuestion = String(localized: "What's your puppy's name?", table: table)
         static let nameSubtitle = String(localized: "We'll use this in logs and reminders. You can edit it any time.", table: table)
         static let namePlaceholder = String(localized: "Name", table: table)
@@ -50,6 +68,12 @@ extension Strings {
             String(localized: "Search to find more breeds (\(count) total)", table: table)
         }
         static let skipForNow = String(localized: "Skip for now", table: table)
+
+        // Coat type step
+        static func coatTypeQuestion(name: String) -> String {
+            String(localized: "What type of coat does \(name) have?", table: table)
+        }
+        static let coatTypeSubtitle = String(localized: "This helps us recommend the right grooming schedule.", table: table)
 
         static func birthDateQuestion(name: String) -> String {
             String(localized: "When was \(name) born?", table: table)
@@ -92,6 +116,12 @@ extension Strings {
         static func sizeQuestion(name: String) -> String {
             String(localized: "How big will \(name) get?", table: table)
         }
+
+        // Gender step
+        static func genderQuestion(name: String) -> String {
+            String(localized: "Is \(name) a boy or a girl?", table: table)
+        }
+        static let genderSubtitle = String(localized: "This helps personalize messages. You can skip if you prefer.", table: table)
 
         static let readyToStart = String(localized: "Ready to begin!", table: table)
         static let confirmSubtitle = String(localized: "Great start. You can edit these details later in Settings.", table: table)

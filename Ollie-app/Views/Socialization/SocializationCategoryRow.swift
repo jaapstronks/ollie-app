@@ -10,7 +10,7 @@ import OtisShared
 /// Row showing a category with emoji, name, and progress indicator
 struct SocializationCategoryRow: View {
     let category: SocializationCategory
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -101,7 +101,7 @@ struct SocializationCategoryRow: View {
         ]
     )
 
-    return SocializationCategoryRow(category: category)
-        .environmentObject(store)
+    SocializationCategoryRow(category: category)
+        .environment(store)
         .padding()
 }

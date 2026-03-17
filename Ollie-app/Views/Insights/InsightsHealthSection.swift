@@ -12,14 +12,14 @@ import OtisShared
 struct InsightsHealthSection: View {
     let latestWeight: (weight: Double, date: Date)?
     let weightDelta: (delta: Double, previousDate: Date)?
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     @Binding var showWeightSheet: Bool
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
 
+    @Environment(UnitPreferences.self) var unitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     var body: some View {

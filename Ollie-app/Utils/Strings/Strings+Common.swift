@@ -33,10 +33,21 @@ extension Strings {
         static let remove = String(localized: "Remove", table: table)
         static let yes = String(localized: "Yes", table: table)
         static let no = String(localized: "No", table: table)
+        static let activate = String(localized: "Activate", table: table)
+        static let deactivate = String(localized: "Deactivate", table: table)
         static let share = String(localized: "Share", table: table)
         static let addPhoto = String(localized: "Add Photo", table: table)
         static let notSet = String(localized: "Not set", table: table)
         static let tryAgain = String(localized: "Try Again", table: table)
+        static let great = String(localized: "Great!", table: table)
+        static let gotIt = String(localized: "Got it", table: table)
+        static let skip = String(localized: "Skip", table: table)
+        static let continue_ = String(localized: "Continue", table: table)
+        static let archive = String(localized: "Archive", table: table)
+        static let note = String(localized: "Note", table: table)
+        static let selectAll = String(localized: "Select all", table: table)
+        static let deselectAll = String(localized: "Deselect all", table: table)
+        static let none = String(localized: "None", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
@@ -65,6 +76,10 @@ extension Strings {
         static let yesterday = String(localized: "Yesterday", table: table)
         static let tomorrow = String(localized: "Tomorrow", table: table)
 
+        // Misc
+        static let unknown = String(localized: "Unknown", table: table)
+        static let someone = String(localized: "Someone", table: table)
+
         // Navigation
         static let seeAll = String(localized: "See all", table: table)
         static let seeAlso = String(localized: "See also", table: table)
@@ -79,6 +94,7 @@ extension Strings {
         static let name = String(localized: "Otis", table: table)
         static let subtitle = String(localized: "Puppy Tracker", table: table)
         static let tagline = String(localized: "Puppyhood is chaos. Otis brings the calm.", table: table)
+        static let websiteUrl = String(localized: "ollie.pet", table: table)
     }
 
     // MARK: - Tabs

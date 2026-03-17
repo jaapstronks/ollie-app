@@ -72,7 +72,7 @@
       }
     },
     "%@ needs to pee now!": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -107,7 +107,7 @@
       }
     },
     "%@ needs to pee soon!": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -281,107 +281,37 @@
         }
       }
     },
-    "outdoor": {
+    "Potty Timer": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "draußen"
+            "value": "Pipi-Timer"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "exterior"
+            "value": "Temporizador de pis"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "dehors"
+            "value": "Minuteur pipi"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "fuori"
+            "value": "Timer Pipi"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "buiten"
-          }
-        }
-      }
-    },
-    "outdoor streak": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Draußen-Serie"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "racha exterior"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "série dehors"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "serie fuori"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "buitenreeks"
-          }
-        }
-      }
-    },
-    "potty": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pipi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "plas"
+            "value": "Plastimer"
           }
         }
       }
@@ -421,41 +351,6 @@
         }
       }
     },
-    "Potty Timer": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pipi-Timer"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temporizador de pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minuteur pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Timer Pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plastimer"
-          }
-        }
-      }
-    },
     "Potty timer and streak in one widget.": {
       "extractionState": "stale",
       "localizations": {
@@ -491,41 +386,6 @@
         }
       }
     },
-    "record": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rekord"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        }
-      }
-    },
     "See how long since the last potty break.": {
       "extractionState": "stale",
       "localizations": {
@@ -557,76 +417,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zie hoe lang geleden de laatste plasbreak was."
-          }
-        }
-      }
-    },
-    "since last potty": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "seit letztem Pipi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "desde el ultimo pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "depuis le dernier pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dall'ultima pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sinds laatste plas"
-          }
-        }
-      }
-    },
-    "since potty": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "seit Pipi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "desde el pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "depuis pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dalla pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sinds plas"
           }
         }
       }
@@ -907,6 +697,216 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volg je buitenplas-reeks."
+          }
+        }
+      }
+    },
+    "outdoor": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "draußen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "exterior"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dehors"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fuori"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "buiten"
+          }
+        }
+      }
+    },
+    "outdoor streak": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draußen-Serie"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "racha exterior"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "série dehors"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "serie fuori"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "buitenreeks"
+          }
+        }
+      }
+    },
+    "potty": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pipi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "plas"
+          }
+        }
+      }
+    },
+    "record": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rekord"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "record"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "record"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "record"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "record"
+          }
+        }
+      }
+    },
+    "since last potty": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "seit letztem Pipi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "desde el ultimo pis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "depuis le dernier pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dall'ultima pipi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sinds laatste plas"
+          }
+        }
+      }
+    },
+    "since potty": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "seit Pipi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "desde el pis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "depuis pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dalla pipi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sinds plas"
           }
         }
       }

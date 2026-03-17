@@ -9,7 +9,7 @@ import OtisShared
 
 /// Section showing upcoming appointments with inline list
 struct CalendarAppointmentsSection: View {
-    @ObservedObject var appointmentStore: AppointmentStore
+    var appointmentStore: AppointmentStore
     let onViewAll: () -> Void
 
     @State private var showingAddSheet = false
@@ -73,36 +73,10 @@ struct CalendarAppointmentsSection: View {
 
     @ViewBuilder
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "calendar")
-                .font(.system(size: 32))
-                .foregroundStyle(.secondary)
-
-            VStack(spacing: 4) {
-                Text(Strings.Calendar.noAppointments)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                Text(Strings.Calendar.noAppointmentsHint)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            Button {
-                showingAddSheet = true
-            } label: {
-                Text(Strings.Calendar.addAppointment)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.small)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        EmptyStateView.noAppointments(onAdd: { showingAddSheet = true })
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 

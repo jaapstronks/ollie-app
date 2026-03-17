@@ -11,15 +11,16 @@ import MapKit
 
 /// Explore tab - full-screen map with spots, contacts, and photo pins
 struct PlacesTabView: View {
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var contactStore: ContactStore
-    @ObservedObject var momentsViewModel: MomentsViewModel
-    @ObservedObject var locationManager: LocationManager
+    @Bindable var mapViewModel: PlacesMapViewModel
+    var spotStore: SpotStore
+    var contactStore: ContactStore
+    var momentsViewModel: MomentsViewModel
+    var locationManager: LocationManager
+    var appointmentStore: AppointmentStore?
     var onSettingsTap: (() -> Void)?
     var onAddMoment: (() -> Void)?
 
-    @EnvironmentObject var profileStore: ProfileStore
-    @StateObject private var mapViewModel: PlacesMapViewModel
+    @Environment(ProfileStore.self) var profileStore
 
     // View mode toggle (Map vs Gallery)
     @AppStorage("exploreViewMode") private var viewMode: ExploreViewMode = .map
@@ -40,27 +41,6 @@ struct PlacesTabView: View {
     @State private var hasDiscoveredNearbyPlaces = false
     @State private var discoveryRefreshTask: Task<Void, Never>?
     @Namespace private var heroNamespace
-
-    init(
-        spotStore: SpotStore,
-        contactStore: ContactStore,
-        momentsViewModel: MomentsViewModel,
-        locationManager: LocationManager,
-        onSettingsTap: (() -> Void)? = nil,
-        onAddMoment: (() -> Void)? = nil
-    ) {
-        self.spotStore = spotStore
-        self.contactStore = contactStore
-        self.momentsViewModel = momentsViewModel
-        self.locationManager = locationManager
-        self.onSettingsTap = onSettingsTap
-        self.onAddMoment = onAddMoment
-        self._mapViewModel = StateObject(wrappedValue: PlacesMapViewModel(
-            spotStore: spotStore,
-            contactStore: contactStore,
-            momentsViewModel: momentsViewModel
-        ))
-    }
 
     var body: some View {
         NavigationStack {
@@ -105,10 +85,8 @@ struct PlacesTabView: View {
                     momentsViewModel: momentsViewModel,
                     hideMapPreview: true  // Hide map when presented as sheet over map view
                 )
-                .adaptivePresentationDetents(
-                    compact: [.large],
-                    regular: [.medium, .large]
-                )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             }
             .sheet(item: $selectedDiscoveredSpot) { spot in
                 DiscoveredSpotDetailSheet(
@@ -116,17 +94,13 @@ struct PlacesTabView: View {
                     spotStore: spotStore,
                     hideMapPreview: true  // Hide map when presented over map view
                 )
-                .adaptivePresentationDetents(
-                    compact: [.large],
-                    regular: [.medium, .large]
-                )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             }
             .sheet(item: $selectedContact) { contact in
-                ContactDetailView(contact: contact, contactStore: contactStore)
-                    .adaptivePresentationDetents(
-                        compact: [.large],
-                        regular: [.medium, .large]
-                    )
+                ContactDetailView(contact: contact, contactStore: contactStore, appointmentStore: appointmentStore)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
             }
             .sheet(item: $selectedCluster) { cluster in
                 PhotoPinDetailCard(
@@ -134,7 +108,8 @@ struct PlacesTabView: View {
                     spots: spotStore.spots,
                     onSelectPhoto: { event in
                         selectedCluster = nil
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             selectedPhotoEvent = event
                         }
                     },
@@ -222,13 +197,12 @@ struct PlacesTabView: View {
         ZStack(alignment: .bottomTrailing) {
             Group {
                 if momentsViewModel.isLoading {
-                    // Skeleton loading grid
+                    // Skeleton loading grid - single shimmer on container only (no per-item animations)
                     ScrollView {
                         LazyVGrid(columns: galleryColumns, spacing: 2) {
-                            ForEach(0..<12, id: \.self) { index in
+                            ForEach(0..<12, id: \.self) { _ in
                                 SkeletonRect(height: 120, cornerRadius: 0)
                                     .aspectRatio(1, contentMode: .fill)
-                                    .animatedAppear(delay: StaggeredAnimation.delay(for: index))
                             }
                         }
                         .padding(.top)
@@ -469,11 +443,20 @@ struct PlacesTabView: View {
 // MARK: - Preview
 
 #Preview {
-    PlacesTabView(
-        spotStore: SpotStore(),
-        contactStore: ContactStore(),
-        momentsViewModel: MomentsViewModel(eventStore: EventStore()),
+    let spotStore = SpotStore()
+    let contactStore = ContactStore()
+    let momentsVM = MomentsViewModel(eventStore: EventStore())
+
+    return PlacesTabView(
+        mapViewModel: PlacesMapViewModel(
+            spotStore: spotStore,
+            contactStore: contactStore,
+            momentsViewModel: momentsVM
+        ),
+        spotStore: spotStore,
+        contactStore: contactStore,
+        momentsViewModel: momentsVM,
         locationManager: LocationManager()
     )
-    .environmentObject(ProfileStore())
+    .environment(ProfileStore())
 }

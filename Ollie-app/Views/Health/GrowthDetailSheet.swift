@@ -14,12 +14,12 @@ struct GrowthDetailSheet: View {
     let puppyName: String
     @Binding var showWeightSheet: Bool
 
-    @EnvironmentObject var weightStore: WeightStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(WeightStore.self) var weightStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @Environment(UnitPreferences.self) var unitPreferences
 
     @State private var measurementToDelete: WeightMeasurement?
     @State private var showDeleteConfirmation = false
@@ -27,7 +27,7 @@ struct GrowthDetailSheet: View {
     @State private var showEditSheet = false
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     // Computed from weightStore for live updates
@@ -154,7 +154,7 @@ struct GrowthDetailSheet: View {
                 .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
             }
 
-            Text(Strings.Growth.lastMeasured(formattedDate(date)))
+            Text(Strings.Growth.lastMeasured(date.formattedMedium()))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -292,7 +292,7 @@ struct GrowthDetailSheet: View {
     private func measurementRow(measurement: WeightMeasurement) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(formattedDate(measurement.date))
+                Text(measurement.date.formattedMedium())
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -327,14 +327,6 @@ struct GrowthDetailSheet: View {
         }
     }
 
-    // MARK: - Helpers
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
-    }
 }
 
 // MARK: - Preview
@@ -345,8 +337,8 @@ struct GrowthDetailSheet: View {
         puppyName: "Max",
         showWeightSheet: .constant(false)
     )
-    .environmentObject(WeightStore())
-    .environmentObject(ProfileStore())
+    .environment(WeightStore())
+    .environment(ProfileStore())
 }
 
 #Preview("Empty") {
@@ -355,6 +347,6 @@ struct GrowthDetailSheet: View {
         puppyName: "Max",
         showWeightSheet: .constant(false)
     )
-    .environmentObject(WeightStore())
-    .environmentObject(ProfileStore())
+    .environment(WeightStore())
+    .environment(ProfileStore())
 }

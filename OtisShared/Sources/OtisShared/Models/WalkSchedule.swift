@@ -173,39 +173,29 @@ public struct WalkSchedule: Codable, Sendable {
             let hour = startHour + minutesFromStart / 60
             let minute = minutesFromStart % 60
             let timeString = String(format: "%02d:%02d", hour, minute)
-            let label = labelForIndex(i, of: count)
+            let label = labelForTime(timeString)
             walks.append(ScheduledWalk(label: label, targetTime: timeString))
         }
         return walks
     }
 
-    /// Generate a default label for a walk at a given index
-    private static func labelForIndex(_ index: Int, of total: Int) -> String {
-        // Use descriptive labels for common positions
-        if total <= 4 {
-            switch index {
-            case 0: return Strings.Walks.morningWalk
-            case 1 where total == 2: return Strings.Walks.eveningWalk
-            case 1 where total >= 3: return Strings.Walks.afternoonWalk
-            case 2 where total == 3: return Strings.Walks.eveningWalk
-            case 2 where total == 4: return Strings.Walks.lateAfternoon
-            case 3: return Strings.Walks.eveningWalk
-            default: return Strings.WalkSchedule.walkNumber(index + 1)
-            }
-        } else {
-            // For many walks, use time-based labels
-            switch index {
-            case 0: return Strings.Walks.earlyMorning
-            case 1: return Strings.Walks.morningWalk
-            case 2: return Strings.Walks.midMorning
-            case 3: return Strings.Walks.lunchWalk
-            case 4: return Strings.Walks.earlyAfternoon
-            case 5: return Strings.Walks.afternoonWalk
-            case 6: return Strings.Walks.eveningWalk
-            case 7: return Strings.Walks.lateEvening
-            case 8: return Strings.Walks.nightWalk
-            default: return Strings.WalkSchedule.walkNumber(index + 1)
-            }
+    /// Generate a label based on the actual scheduled time
+    public static func labelForTime(_ timeString: String) -> String {
+        let parts = timeString.split(separator: ":")
+        guard parts.count >= 1, let hour = Int(parts[0]) else {
+            return Strings.Walks.morningWalk
+        }
+
+        switch hour {
+        case 5..<8:   return Strings.Walks.earlyMorning    // 05:00-07:59
+        case 8..<10:  return Strings.Walks.morningWalk     // 08:00-09:59
+        case 10..<12: return Strings.Walks.midMorning      // 10:00-11:59
+        case 12..<14: return Strings.Walks.lunchWalk       // 12:00-13:59
+        case 14..<16: return Strings.Walks.earlyAfternoon  // 14:00-15:59
+        case 16..<18: return Strings.Walks.afternoonWalk   // 16:00-17:59
+        case 18..<21: return Strings.Walks.eveningWalk     // 18:00-20:59
+        case 21..<23: return Strings.Walks.lateEvening     // 21:00-22:59
+        default:      return Strings.Walks.nightWalk       // 23:00-04:59
         }
     }
 

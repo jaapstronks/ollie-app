@@ -2,60 +2,132 @@
 //  HealthView.swift
 //  Otis-app
 //
-//  Health tracking view: weight chart and health milestones timeline
+//  Health tracking view: weight chart and health milestones timeline.
+//  Section views are in HealthView+WellnessSections.swift, HealthView+HealthSections.swift,
+//  and HealthView+CalendarSections.swift.
+//
 
 import SwiftUI
 import OtisShared
 
 /// Main health view showing weight tracking and health milestones
 struct HealthView: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var milestoneStore: MilestoneStore
+    @Bindable var viewModel: TimelineViewModel
+    var milestoneStore: MilestoneStore
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
-    @EnvironmentObject var weightStore: WeightStore
+    @Environment(SubscriptionManager.self) var subscriptionManager
+    @Environment(WeightStore.self) var weightStore
+    @Environment(RoutineStore.self) var routineStore
 
-    @State private var showWeightSheet = false
-    @State private var showAddMilestoneSheet = false
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @State var showWeightSheet = false
+    @State var showAddMilestoneSheet = false
+    @State var showSymptomLogSheet = false
 
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(UnitPreferences.self) var unitPreferences
 
-    private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+    @State var symptomStore = HealthSymptomStore.shared
+    @State var checkInStore = HealthCheckInStore.shared
+    @State var seniorWellnessStore = SeniorWellnessStore.shared
+
+    @State var showMobilitySheet = false
+    @State var showCognitiveSheet = false
+    @State var showQoLSheet = false
+    @State var showRRRSheet = false
+
+    @Environment(\.colorScheme) var colorScheme
+
+    var weightUnit: WeightUnit {
+        unitPreferences.weightUnit
     }
 
     // MARK: - Computed Properties
 
-    private var profile: PuppyProfile? {
+    var profile: PuppyProfile? {
         viewModel.profileStore.profile
     }
 
-    private var chartPoints: [WeightChartPoint] {
+    var chartPoints: [WeightChartPoint] {
         guard let birthDate = profile?.birthDate else { return [] }
         return weightStore.chartPoints(birthDate: birthDate)
     }
 
-    private var latestWeight: (weight: Double, date: Date)? {
+    var latestWeight: (weight: Double, date: Date)? {
         weightStore.latestWeight
     }
 
-    private var weightDelta: (delta: Double, previousDate: Date)? {
+    var weightDelta: (delta: Double, previousDate: Date)? {
         weightStore.weightDelta
     }
 
-    private var referenceCurve: [GrowthReference] {
+    var referenceCurve: [GrowthReference] {
         guard let size = profile?.sizeCategory else {
             return GrowthCurves.goldenRetrieverFemale
         }
         return GrowthCurves.curve(for: size)
     }
 
+    // Vet visit state
+    @State var showVetTipsSheet = false
+    @State var showVisitSummary = false
+    @State var showHealthCalendar = false
+    @State var showAppointmentForm = false
+    @State var appointmentPrefill: (conditionType: HealthConditionType, title: String)?
+
+    @Environment(AppointmentStore.self) var appointmentStore
+
+    // Vet tip generator
+    let tipGenerator = VetVisitTipGenerator()
+
+    // MARK: - Lifecycle Helpers
+
+    var hasActiveConditions: Bool {
+        guard let profile = profile else { return false }
+        return profile.healthConditions.contains { $0.status == .active } ||
+               profile.lifecyclePhase == .senior
+    }
+
+    var isSenior: Bool {
+        profile?.lifecyclePhase == .senior || seniorWellnessStore.shouldShowSeniorFeatures(for: profile)
+    }
+
+    var isAdult: Bool {
+        guard let phase = profile?.lifecyclePhase else { return false }
+        return phase == .adult
+    }
+
     // MARK: - Body
 
     var body: some View {
-        ScrollView {
+        ScrollView(.vertical) {
             VStack(spacing: 20) {
+                // Senior wellness section (for senior dogs)
+                if isSenior {
+                    seniorWellnessSection
+                }
+
+                // Adult wellness section (for adult dogs)
+                if isAdult && !isSenior {
+                    adultWellnessSection
+                }
+
+                // Symptoms section (for dogs with conditions)
+                if hasActiveConditions {
+                    symptomsSection
+                }
+
+                // Breed risk awareness section
+                if let profile = profile {
+                    breedRiskSection(for: profile)
+                }
+
+                // Follow-up reminders section
+                if hasActiveConditions, let profile = profile {
+                    followUpRemindersSection(for: profile)
+                }
+
+                // Health calendar navigation
+                healthCalendarSection
+
                 // Weight section
                 weightSection
 
@@ -64,6 +136,7 @@ struct HealthView: View {
             }
             .padding()
         }
+        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         .navigationTitle(Strings.Health.title)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -72,151 +145,62 @@ struct HealthView: View {
         .sheet(isPresented: $showWeightSheet) {
             WeightLogSheet(isPresented: $showWeightSheet)
         }
-    }
-
-    // MARK: - Weight Section
-
-    @ViewBuilder
-    private var weightSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "scalemass.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.otisAccent)
-
-                Text(Strings.Health.weight)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // Log weight button
-                Button {
-                    showWeightSheet = true
-                } label: {
-                    Label(Strings.Health.logWeight, systemImage: "plus.circle.fill")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                }
-            }
-            .padding(.horizontal, 4)
-
-            // Weight card
-            VStack(spacing: 16) {
-                // Current weight hero (if available)
-                if let latest = latestWeight {
-                    weightHeroCard(weight: latest.weight, date: latest.date)
-                }
-
-                // Growth curve chart
-                if chartPoints.isEmpty {
-                    WeightChartEmptyView(referenceCurve: referenceCurve)
-                } else {
-                    WeightChartView(
-                        measurements: chartPoints,
-                        referenceCurve: referenceCurve,
-                        puppyName: profile?.name ?? "Puppy"
-                    )
-                }
-            }
-            .padding()
-            .glassCard(tint: .accent)
-        }
-    }
-
-    @ViewBuilder
-    private func weightHeroCard(weight: Double, date: Date) -> some View {
-        VStack(spacing: 8) {
-            // Big weight number
-            Text(weightUnit.format(weight))
-                .font(.system(size: 42, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary)
-
-            // Date
-            Text(formattedDate(date))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            // Delta since last (if available)
-            if let delta = weightDelta {
-                HStack(spacing: 4) {
-                    Image(systemName: delta.delta >= 0 ? "arrow.up.right" : "arrow.down.right")
-                        .font(.caption)
-                    Text(Strings.Health.sinceLast(weightUnit.formatDelta(delta.delta)))
-                        .font(.caption)
-                }
-                .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(
-                    (delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
-                        .opacity(colorScheme == .dark ? 0.2 : 0.1)
-                )
-                .clipShape(Capsule())
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-    }
-
-    // MARK: - Milestones Section
-
-    @ViewBuilder
-    private var milestonesSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "heart.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.otisDanger)
-
-                Text(Strings.Health.milestones)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // Add button (premium)
-                if subscriptionManager.hasAccess(to: .customMilestones) {
-                    Button {
-                        showAddMilestoneSheet = true
-                    } label: {
-                        Label(Strings.Health.addMilestone, systemImage: "plus.circle.fill")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                    }
-                }
-            }
-            .padding(.horizontal, 4)
-
-            // Timeline
-            HealthTimelineView(
-                milestones: milestoneStore.milestones,
-                birthDate: profile?.birthDate ?? Date(),
-                onToggle: { milestone in
-                    milestoneStore.toggleMilestoneCompletion(milestone)
+        .sheet(isPresented: $showSymptomLogSheet) {
+            SymptomLogSheet(
+                onSave: { symptom in
+                    symptomStore.log(symptom)
+                    showSymptomLogSheet = false
+                },
+                onCancel: {
+                    showSymptomLogSheet = false
                 }
             )
-            .padding()
-            .glassCard(tint: .danger)
+            .environment(viewModel.profileStore)
         }
-        .sheet(isPresented: $showAddMilestoneSheet) {
-            AddMilestoneSheet(isPresented: $showAddMilestoneSheet) { milestone in
-                milestoneStore.toggleMilestoneCompletion(milestone)
-            }
+        .sheet(isPresented: $showMobilitySheet) {
+            MobilityAssessmentSheet(onSave: { assessment in
+                seniorWellnessStore.recordMobility(
+                    score: assessment.score,
+                    observations: assessment.observations,
+                    note: assessment.note
+                )
+            })
+            .environment(viewModel.profileStore)
         }
-    }
-
-    // MARK: - Helpers
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        .sheet(isPresented: $showCognitiveSheet) {
+            CognitiveAssessmentSheet(onSave: { assessment in
+                seniorWellnessStore.recordCognitive(
+                    symptoms: assessment.symptoms,
+                    note: assessment.note
+                )
+            })
+            .environment(viewModel.profileStore)
+        }
+        .sheet(isPresented: $showQoLSheet) {
+            QualityOfLifeSheet(onSave: { assessment in
+                seniorWellnessStore.recordQoL(
+                    hurt: assessment.hurt,
+                    hunger: assessment.hunger,
+                    hydration: assessment.hydration,
+                    hygiene: assessment.hygiene,
+                    happiness: assessment.happiness,
+                    mobility: assessment.mobility,
+                    moreDays: assessment.moreDays,
+                    note: assessment.note
+                )
+            })
+            .environment(viewModel.profileStore)
+        }
+        .sheet(isPresented: $showRRRSheet) {
+            RespiratoryRateSheet(onSave: { reading in
+                seniorWellnessStore.recordRRR(
+                    breathsPerMinute: reading.breathsPerMinute,
+                    wasResting: reading.wasResting,
+                    note: reading.note
+                )
+            })
+            .environment(viewModel.profileStore)
+        }
     }
 }
 
@@ -231,6 +215,7 @@ struct HealthView: View {
     NavigationStack {
         HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
     }
-    .environmentObject(SubscriptionManager.shared)
-    .environmentObject(WeightStore())
+    .environment(SubscriptionManager.shared)
+    .environment(WeightStore())
+    .environment(RoutineStore())
 }

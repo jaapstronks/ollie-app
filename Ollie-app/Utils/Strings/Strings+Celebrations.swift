@@ -30,6 +30,12 @@ extension Strings {
         static let amazing = String(localized: "Amazing!", table: table)
         static let keepItUp = String(localized: "Keep up the great work!", table: table)
 
+        // Celebration preset headlines
+        static let greatJob = String(localized: "Great job!", table: table)
+        static let onARoll = String(localized: "On a roll!", table: table)
+        static let greatWork = String(localized: "Great work!", table: table)
+        static let nice = String(localized: "Nice!", table: table)
+
         // Buttons
         static let maybeLater = String(localized: "Maybe Later", table: table)
         static let addFromLibrary = String(localized: "Add from Library", table: table)

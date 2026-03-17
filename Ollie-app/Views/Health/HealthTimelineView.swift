@@ -14,6 +14,7 @@ struct HealthTimelineView: View {
     let onToggle: (Milestone) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(ContactStore.self) var contactStore
 
     @State private var selectedMilestone: Milestone?
 
@@ -126,17 +127,18 @@ struct HealthTimelineView: View {
                 onDismiss: {
                     selectedMilestone = nil
                 },
-                onComplete: { notes, photoID, vetClinic, completionDate in
+                onComplete: { notes, photoID, linkedContactID, completionDate in
                     var updated = milestone
                     updated.isCompleted = true
                     updated.completedDate = completionDate
                     updated.completionNotes = notes
                     updated.completionPhotoID = photoID
-                    updated.vetClinicName = vetClinic
+                    updated.linkedContactID = linkedContactID
                     onToggle(updated)
                     selectedMilestone = nil
                 }
             )
+            .environment(contactStore)
         }
     }
 }
@@ -310,7 +312,7 @@ struct MilestoneRow: View {
     let milestones = DefaultMilestones.create()
     let birthDate = Calendar.current.date(byAdding: .weekOfYear, value: -10, to: Date())!
 
-    return NavigationStack {
+    NavigationStack {
         ScrollView {
             HealthTimelineView(
                 milestones: milestones,
@@ -323,5 +325,5 @@ struct MilestoneRow: View {
         }
         .navigationTitle("Health")
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
 }

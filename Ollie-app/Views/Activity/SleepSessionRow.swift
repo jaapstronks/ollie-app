@@ -22,17 +22,17 @@ struct SleepSessionRow: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(session.startTime.timeString)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 if let endTime = session.endTime {
                     Text(endTime.timeString)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 } else {
                     // Ongoing indicator
                     Text("...")
                         .font(.caption)
-                        .foregroundColor(.otisSleep)
+                        .foregroundStyle(Color.otisSleep)
                 }
             }
             .frame(width: 44, alignment: .trailing)
@@ -52,7 +52,7 @@ struct SleepSessionRow: View {
                 if let note = note, !note.isEmpty {
                     Text(note)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
             }
@@ -99,7 +99,7 @@ struct SleepSessionRow: View {
             if session.isShortNap {
                 Text("(\(Strings.SleepSession.shortNap))")
                     .font(.caption)
-                    .foregroundColor(.otisWarning)
+                    .foregroundStyle(Color.otisWarning)
             }
         }
     }
@@ -147,18 +147,27 @@ struct SleepSessionRow: View {
 
 private struct PulsingAnimation: ViewModifier {
     @State private var isPulsing = false
+    @State private var isAnimating = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         content
             .opacity(isPulsing ? 0.4 : 1.0)
             .animation(
-                reduceMotion ? nil : .easeInOut(duration: 1.0).repeatForever(autoreverses: true),
+                isAnimating
+                    ? .easeInOut(duration: 1.0).repeatForever(autoreverses: true)
+                    : .default,
                 value: isPulsing
             )
             .onAppear {
                 guard !reduceMotion else { return }
+                isAnimating = true
                 isPulsing = true
+            }
+            .onDisappear {
+                // Stop animation on disappear
+                isAnimating = false
+                isPulsing = false
             }
     }
 }

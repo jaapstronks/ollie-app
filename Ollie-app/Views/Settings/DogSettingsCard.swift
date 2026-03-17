@@ -14,6 +14,7 @@ struct DogSettingsCard: View {
     let isActive: Bool
     let onActivate: () -> Void
     let profileStore: ProfileStore
+    let medicationStore: MedicationStore
     let notificationService: NotificationService
     let documentStore: DocumentStore
     let foodRecallService: FoodRecallService
@@ -211,6 +212,7 @@ struct DogSettingsCard: View {
             NavigationLink {
                 HealthDocumentsView(
                     profileStore: profileStore,
+                    medicationStore: medicationStore,
                     documentStore: documentStore,
                     foodRecallService: foodRecallService,
                     profileId: profile.id
@@ -223,38 +225,33 @@ struct DogSettingsCard: View {
                 )
             }
 
-            // Household Members link (only for active profile)
+            Divider()
+                .padding(.leading, 52)
+
+            // Grooming & Care link
+            NavigationLink {
+                GroomingSettingsView(profileStore: profileStore, profileId: profile.id)
+            } label: {
+                settingsRow(
+                    icon: "comb.fill",
+                    iconColor: .cyan,
+                    title: Strings.Grooming.schedule
+                )
+            }
+
+            // Your Profile link (only for active profile)
             if isActive {
                 Divider()
                     .padding(.leading, 52)
 
                 NavigationLink {
-                    HouseholdSettingsView(profileStore: profileStore)
+                    UserProfileSettingsView(userIdentityStore: .shared)
                 } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: "person.2.fill")
-                            .font(.system(size: 18))
-                            .foregroundColor(.purple)
-                            .frame(width: 28)
-
-                        Text(Strings.Household.title)
-                            .font(.subheadline)
-
-                        Spacer()
-
-                        if let memberCount = profileStore.profile?.householdMembers.members.count, memberCount > 0 {
-                            Text("\(memberCount)")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(.tertiary)
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 12)
-                    .contentShape(Rectangle())
+                    settingsRow(
+                        icon: "person.fill",
+                        iconColor: .purple,
+                        title: Strings.UserProfile.title
+                    )
                 }
             }
 
@@ -280,7 +277,7 @@ struct DogSettingsCard: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 18))
-                .foregroundColor(iconColor)
+                .foregroundStyle(iconColor)
                 .frame(width: 28)
 
             Text(title)
@@ -288,9 +285,7 @@ struct DogSettingsCard: View {
 
             Spacer()
 
-            Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.tertiary)
+            ChevronIcon(style: .small)
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
@@ -304,7 +299,13 @@ struct DogSettingsCard: View {
             loadedImage = nil
             return
         }
-        loadedImage = await ProfilePhotoStore.shared.loadAsync(filename: filename)
+        // Use the version that can download from CloudKit if photo is missing locally
+        // For shared profiles, this will download from the owner's zone
+        loadedImage = await ProfilePhotoStore.shared.loadAsync(
+            filename: filename,
+            profileId: profile.id,
+            isSharedProfile: profile.ownership == .shared
+        )
     }
 }
 
@@ -388,6 +389,7 @@ struct AddDogButton: View {
                     isActive: true,
                     onActivate: {},
                     profileStore: ProfileStore(),
+                    medicationStore: MedicationStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
                     foodRecallService: FoodRecallService(),
@@ -400,7 +402,7 @@ struct AddDogButton: View {
         }
         .background(Color(.systemGroupedBackground))
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
 }
 
 #Preview("Multiple Dogs") {
@@ -417,6 +419,7 @@ struct AddDogButton: View {
                     isActive: true,
                     onActivate: {},
                     profileStore: ProfileStore(),
+                    medicationStore: MedicationStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
                     foodRecallService: FoodRecallService(),
@@ -437,6 +440,7 @@ struct AddDogButton: View {
                     isActive: false,
                     onActivate: {},
                     profileStore: ProfileStore(),
+                    medicationStore: MedicationStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
                     foodRecallService: FoodRecallService(),
@@ -449,5 +453,5 @@ struct AddDogButton: View {
         }
         .background(Color(.systemGroupedBackground))
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
 }

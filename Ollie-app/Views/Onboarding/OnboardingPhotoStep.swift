@@ -151,15 +151,19 @@ struct OnboardingPhotoStep: View {
             MediaPicker(
                 source: selectedSource,
                 onImageSelected: { image, _ in
-                    showingMediaPicker = false
-                    // Show crop view after selecting an image
                     imageToCrop = image
-                    showingCropView = true
+                    showingMediaPicker = false
                 },
                 onCancel: {
                     showingMediaPicker = false
                 }
             )
+        }
+        .onChange(of: imageToCrop) { _, newImage in
+            // Show crop view when image is ready (after async PHPicker load completes)
+            if newImage != nil && !showingMediaPicker {
+                showingCropView = true
+            }
         }
         .fullScreenCover(isPresented: $showingCropView) {
             if let image = imageToCrop {

@@ -2,20 +2,21 @@
 //  TrainTabView.swift
 //  Otis-app
 //
-//  Combined training tab with Potty Progress, Socialization, and Skills sections
+//  Combined training tab with Potty Progress, Socialization, and Skills sections.
+//  SkillsPreviewCard is extracted to SkillsPreviewCard.swift
 
 import OtisShared
 import SwiftUI
 
 /// Train tab - unified view with potty progress, socialization checklist, and skills tracker
 struct TrainTabView: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     let onSettingsTap: () -> Void
 
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var skillProgressStore: SkillProgressStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(SkillProgressStore.self) var skillProgressStore
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -23,9 +24,21 @@ struct TrainTabView: View {
     // Sheet state for training guides
     @State private var showPottyGuide = false
     @State private var showCrateGuide = false
+    @State private var showLeashGuide = false
 
     // First-visit tip tracking
     @AppStorage("hasSeenTrainTip") private var hasSeenTrainTip = false
+
+    // Training mastery state
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
+
+    @State private var showPottyMasteryConfirmation = false
+    @State private var showLeashMasteryConfirmation = false
+
+    // Convenience accessors for training mastery
+    private var crateTrainingMastered: Bool { trainingMasteryStore.crateTrainingMastered }
+    private var pottyTrainingMastered: Bool { trainingMasteryStore.pottyTrainingMastered }
+    private var leashTrainingMastered: Bool { trainingMasteryStore.leashTrainingMastered }
 
     /// Calculate crate nap percentage for guide entry card
     private var crateNapPercentage: Int {
@@ -57,9 +70,29 @@ struct TrainTabView: View {
                         )
                     }
 
-                    // Section 1: Training Guides (Potty + Crate)
-                    guidesSection
+                    // AI Training Guidance (shows suggestions from AI)
+                    AITrainingGuidanceCard()
                         .animatedAppear(delay: 0)
+
+                    // Regression alert (highest priority)
+                    if !skillProgressStore.skillsNeedingWork.isEmpty {
+                        regressionAlertSection
+                    }
+
+                    // Due for review card
+                    if !skillProgressStore.skillsDueForReview.isEmpty && skillProgressStore.skillsNeedingWork.isEmpty {
+                        dueForReviewSection
+                    }
+
+                    // Section 1: Training Guides (non-mastered only in normal position)
+                    if pottyTrainingMastered || crateTrainingMastered || leashTrainingMastered {
+                        // Only show non-mastered guides in normal position
+                        nonMasteredGuidesSection
+                            .animatedAppear(delay: 0)
+                    } else {
+                        guidesSection
+                            .animatedAppear(delay: 0)
+                    }
 
                     // Section 2: Skills
                     skillsSection
@@ -68,6 +101,16 @@ struct TrainTabView: View {
                     // Section 3: Socialization
                     socializationSection
                         .animatedAppear(delay: 0.10)
+
+                    // Section 4: Behavior Support (shows for teenage+ or when incidents logged)
+                    behaviorSupportSection
+                        .animatedAppear(delay: 0.15)
+
+                    // Section 5: Mastered guides (at bottom)
+                    if pottyTrainingMastered || crateTrainingMastered || leashTrainingMastered {
+                        masteredGuidesSection
+                            .animatedAppear(delay: 0.20)
+                    }
                 }
                 .padding()
                 .adaptiveContainer()
@@ -78,16 +121,85 @@ struct TrainTabView: View {
             // Training guide sheets
             .sheet(isPresented: $showPottyGuide) {
                 PottyTrainingGuideSheet(
-                    streakInfo: viewModel.streakInfo,
-                    patternAnalysis: viewModel.patternAnalysis,
-                    outdoorPercentage: viewModel.outdoorPercentage,
-                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12
+                    viewModel: PottyTrainingGuideViewModel(
+                        streakInfo: viewModel.streakInfo,
+                        patternAnalysis: viewModel.patternAnalysis,
+                        outdoorPercentage: viewModel.outdoorPercentage,
+                        ageInWeeks: profileStore.profile?.ageInWeeks ?? 12,
+                        shouldShowIncidentMessage: viewModel.shouldShowPottyIncidentMessage,
+                        shouldShowReactivationPrompt: viewModel.shouldShowPottyReactivationPrompt,
+                        incidentCount: viewModel.incidentsSincePottyMastery.count
+                    )
                 )
             }
             .sheet(isPresented: $showCrateGuide) {
                 CrateTrainingGuideSheet(eventStore: eventStore)
             }
+            .sheet(isPresented: $showLeashGuide) {
+                LeashTrainingGuideSheet(
+                    recentSentimentAverage: viewModel.leashRecentSentimentAverage,
+                    sentimentTrend: viewModel.leashSentimentTrend,
+                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12,
+                    shouldShowReactivationPrompt: viewModel.shouldShowLeashReactivationPrompt
+                )
+            }
+            .confirmationDialog(
+                Strings.Training.PottyTraining.markMastered,
+                isPresented: $showPottyMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Training.PottyTraining.markMastered) {
+                    markPottyAsMastered()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Training.PottyTraining.markMasteredDescription)
+            }
+            .confirmationDialog(
+                Strings.Leash.markMastered,
+                isPresented: $showLeashMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Leash.markMastered) {
+                    markLeashAsMastered()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Leash.markMasteredDescription)
+            }
         }
+    }
+
+    // MARK: - Potty Mastery Actions
+
+    private func markPottyAsMastered() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            trainingMasteryStore.markPottyMastered()
+        }
+        HapticFeedback.success()
+    }
+
+    private func dismissPottyMasteryPrompt() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            trainingMasteryStore.dismissPottyMasteryPrompt()
+        }
+        HapticFeedback.light()
+    }
+
+    // MARK: - Leash Mastery Actions
+
+    private func markLeashAsMastered() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            trainingMasteryStore.markLeashMastered()
+        }
+        HapticFeedback.success()
+    }
+
+    private func dismissLeashMasteryPrompt() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            trainingMasteryStore.dismissLeashMasteryPrompt()
+        }
+        HapticFeedback.light()
     }
 
     // MARK: - Training Guides Section
@@ -95,26 +207,186 @@ struct TrainTabView: View {
     @ViewBuilder
     private var guidesSection: some View {
         VStack(spacing: 10) {
-            // Potty Training Guide
-            TrainingGuideEntryCard(
-                icon: "target",
-                title: Strings.Training.Guides.pottyTitle,
-                subtitle: Strings.Training.Guides.pottySubtitle,
-                statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
-                tintColor: .otisSuccess
-            ) {
-                showPottyGuide = true
+            // Potty Training Guide - shown with mastered badge if mastered, hidden when at 100% for 4+ days (unless mastered)
+            if pottyTrainingMastered || viewModel.shouldShowPottyTrainingGuide {
+                TrainingGuideEntryCard(
+                    icon: "target",
+                    title: Strings.Training.Guides.pottyTitle,
+                    subtitle: pottyTrainingMastered
+                        ? Strings.Training.PottyTraining.masteredDescription
+                        : Strings.Training.Guides.pottySubtitle,
+                    statValue: pottyTrainingMastered ? nil : (viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil),
+                    tintColor: .otisSuccess,
+                    isMastered: pottyTrainingMastered
+                ) {
+                    showPottyGuide = true
+                }
+            }
+
+            // Potty Mastery Prompt - shows when at 100% for multiple days, dismissible
+            if viewModel.shouldShowPottyMasteryPrompt {
+                PottyMasteryPromptCard(
+                    consecutiveDays: viewModel.consecutivePerfectDays,
+                    onMarkMastered: {
+                        showPottyMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissPottyMasteryPrompt()
+                    }
+                )
             }
 
             // Crate Training Guide
             TrainingGuideEntryCard(
                 icon: "house.fill",
                 title: Strings.Training.Guides.crateTitle,
-                subtitle: Strings.Training.Guides.crateSubtitle,
-                statValue: crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil,
-                tintColor: .indigo
+                subtitle: crateTrainingMastered
+                    ? Strings.Training.CrateTraining.masteredDescription
+                    : Strings.Training.Guides.crateSubtitle,
+                statValue: crateTrainingMastered ? nil : (crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil),
+                tintColor: .indigo,
+                isMastered: crateTrainingMastered
             ) {
                 showCrateGuide = true
+            }
+
+            // Leash Training Guide (shown for puppies 10+ weeks)
+            if viewModel.shouldShowLeashTrainingGuide {
+                LeashProgressCard(
+                    recentAverage: viewModel.leashRecentSentimentAverage,
+                    trend: viewModel.leashSentimentTrend,
+                    isMastered: leashTrainingMastered,
+                    onTap: { showLeashGuide = true }
+                )
+            }
+
+            // Leash Mastery Prompt
+            if viewModel.shouldShowLeashMasteryPrompt {
+                LeashMasteryPromptCard(
+                    weeksAtHighRating: 2,
+                    onMarkMastered: {
+                        showLeashMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissLeashMasteryPrompt()
+                    }
+                )
+            }
+        }
+    }
+
+    // MARK: - Non-Mastered Guides Section (only shows guides that are not mastered)
+
+    @ViewBuilder
+    private var nonMasteredGuidesSection: some View {
+        VStack(spacing: 10) {
+            // Potty Mastery Prompt - shows when at 100% for multiple days, dismissible
+            if viewModel.shouldShowPottyMasteryPrompt {
+                PottyMasteryPromptCard(
+                    consecutiveDays: viewModel.consecutivePerfectDays,
+                    onMarkMastered: {
+                        showPottyMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissPottyMasteryPrompt()
+                    }
+                )
+            }
+
+            // Show potty guide in normal position only if not mastered
+            if !pottyTrainingMastered && viewModel.shouldShowPottyTrainingGuide {
+                TrainingGuideEntryCard(
+                    icon: "target",
+                    title: Strings.Training.Guides.pottyTitle,
+                    subtitle: Strings.Training.Guides.pottySubtitle,
+                    statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
+                    tintColor: .otisSuccess,
+                    isMastered: false
+                ) {
+                    showPottyGuide = true
+                }
+            }
+
+            // Show crate guide in normal position only if not mastered
+            if !crateTrainingMastered {
+                TrainingGuideEntryCard(
+                    icon: "house.fill",
+                    title: Strings.Training.Guides.crateTitle,
+                    subtitle: Strings.Training.Guides.crateSubtitle,
+                    statValue: crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil,
+                    tintColor: .indigo,
+                    isMastered: false
+                ) {
+                    showCrateGuide = true
+                }
+            }
+
+            // Leash Mastery Prompt (only in non-mastered section)
+            if viewModel.shouldShowLeashMasteryPrompt {
+                LeashMasteryPromptCard(
+                    weeksAtHighRating: 2,
+                    onMarkMastered: {
+                        showLeashMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissLeashMasteryPrompt()
+                    }
+                )
+            }
+
+            // Show leash guide in normal position only if not mastered and visible
+            if !leashTrainingMastered && viewModel.shouldShowLeashTrainingGuide {
+                LeashProgressCard(
+                    recentAverage: viewModel.leashRecentSentimentAverage,
+                    trend: viewModel.leashSentimentTrend,
+                    isMastered: false,
+                    onTap: { showLeashGuide = true }
+                )
+            }
+        }
+    }
+
+    // MARK: - Mastered Guides Section (below socialization)
+
+    @ViewBuilder
+    private var masteredGuidesSection: some View {
+        VStack(spacing: 10) {
+            // Show mastered potty guide at bottom
+            if pottyTrainingMastered {
+                TrainingGuideEntryCard(
+                    icon: "target",
+                    title: Strings.Training.Guides.pottyTitle,
+                    subtitle: Strings.Training.PottyTraining.masteredDescription,
+                    statValue: nil,
+                    tintColor: .otisSuccess,
+                    isMastered: true
+                ) {
+                    showPottyGuide = true
+                }
+            }
+
+            // Show mastered crate guide at bottom
+            if crateTrainingMastered {
+                TrainingGuideEntryCard(
+                    icon: "house.fill",
+                    title: Strings.Training.Guides.crateTitle,
+                    subtitle: Strings.Training.CrateTraining.masteredDescription,
+                    statValue: nil,
+                    tintColor: .indigo,
+                    isMastered: true
+                ) {
+                    showCrateGuide = true
+                }
+            }
+
+            // Show mastered leash guide at bottom
+            if leashTrainingMastered {
+                LeashProgressCard(
+                    recentAverage: nil,
+                    trend: nil,
+                    isMastered: true,
+                    onTap: { showLeashGuide = true }
+                )
             }
         }
     }
@@ -126,193 +398,104 @@ struct TrainTabView: View {
         SocializationJourneyCard()
     }
 
+    // MARK: - Behavior Support Section
+
+    /// Whether to show behavior support card
+    /// Shows for teenage+ dogs OR if any behavior incidents exist in last 30 days
+    private var shouldShowBehaviorSupport: Bool {
+        guard let profile = profileStore.profile else { return false }
+        let isTeenageOrOlder = profile.lifecyclePhase != .puppy
+        let hasRecentIncidents = eventStore.events
+            .filter { $0.isBehaviorIncident }
+            .thisMonth()
+            .isEmpty == false
+        return isTeenageOrOlder || hasRecentIncidents
+    }
+
+    @ViewBuilder
+    private var behaviorSupportSection: some View {
+        if shouldShowBehaviorSupport {
+            BehaviorSupportCard()
+        }
+    }
+
     // MARK: - Skills Section
 
     @ViewBuilder
     private var skillsSection: some View {
         SkillsPreviewCard(eventStore: eventStore, skillProgressStore: skillProgressStore)
     }
-}
 
-// MARK: - Skills Preview Card
+    // MARK: - Alert Sections
 
-/// Compact preview of current week's training focus
-private struct SkillsPreviewCard: View {
-    @ObservedObject var eventStore: EventStore
-    @ObservedObject var skillProgressStore: SkillProgressStore
-    @StateObject private var trainingStore = TrainingPlanStore()
-    @EnvironmentObject var profileStore: ProfileStore
-
-    @State private var showTodaysTraining = false
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    /// Determine if user has any training progress
-    private var hasStartedTraining: Bool {
-        trainingStore.masteryProgress.mastered > 0 ||
-        trainingStore.allSkillsWithStatus.contains { $0.sessionCount > 0 }
-    }
-
-    /// Check if there are skills to train today
-    private var hasSkillsToTrain: Bool {
-        !skillProgressStore.skillsNeedingWork.isEmpty ||
-        !skillProgressStore.skillsDueForReview.isEmpty ||
-        !skillProgressStore.skillsInActiveLearning.isEmpty
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header with description
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Image(systemName: "graduationcap.fill")
-                        .foregroundStyle(Color.otisAccent)
-                        .accessibilityHidden(true)
-                    Text(Strings.Train.skills)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .accessibilityAddTraits(.isHeader)
-                    Spacer()
-                }
-
-                Text(Strings.Train.skillsDescription)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+    /// Convert SkillProgress to SkillProgressInfo for RegressionAlertBanner
+    private var skillsNeedingWorkInfo: [SkillProgressInfo] {
+        let trainingStore = TrainingPlanStore()
+        return skillProgressStore.skillsNeedingWork.compactMap { progress in
+            guard let skill = trainingStore.trainingPlan?.skills.first(where: { $0.id == progress.skillId }) else {
+                return nil
             }
-
-            if trainingStore.trainingPlan != nil {
-                // Mastery progress
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        if let nextSkill = trainingStore.nextSkill {
-                            Text(Strings.Training.Progression.nextUp)
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.tertiary)
-                                .textCase(.uppercase)
-
-                            HStack(spacing: 6) {
-                                Image(systemName: nextSkill.icon)
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.otisAccent)
-                                Text(nextSkill.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                            }
-                        } else {
-                            Text(Strings.Training.Progression.allSkillsMastered)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                        }
-                    }
-
-                    Spacer()
-
-                    // Progress ring
-                    ProgressRing(
-                        completed: trainingStore.masteryProgress.mastered,
-                        total: trainingStore.masteryProgress.total,
-                        size: .compact
-                    )
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(Strings.Train.progressRingAccessibility)
-                    .accessibilityValue(Strings.Train.progressValue(started: trainingStore.masteryProgress.mastered, total: trainingStore.masteryProgress.total))
-                }
-
-                // Actionable links at the bottom
-                Divider()
-
-                // Today's Training button (primary action when skills available)
-                if hasStartedTraining && hasSkillsToTrain {
-                    Button {
-                        showTodaysTraining = true
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "sparkles")
-                                .font(.title3)
-                                .foregroundStyle(.white)
-                                .frame(width: 40, height: 40)
-                                .background(
-                                    Circle()
-                                        .fill(Color.otisAccent)
-                                )
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(Strings.Training.todaysTraining)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.primary)
-
-                                Text(Strings.Training.smartSessionPlan)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Spacer()
-
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.vertical, 6)
-                    }
-                    .buttonStyle(.plain)
-
-                    Divider()
-                }
-
-                NavigationLink {
-                    TrainingView(eventStore: eventStore)
-                } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: hasStartedTraining ? "list.bullet" : "play.circle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Color.otisAccent)
-                            .frame(width: 40, height: 40)
-                            .background(
-                                Circle()
-                                    .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                            )
-
-                        Text(hasStartedTraining ? Strings.Training.viewAllSkills : Strings.Train.startTraining)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color.otisAccent)
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.vertical, 4)
-                }
-                .buttonStyle(.plain)
-            } else {
-                // Loading or no plan
-                Text(Strings.Common.loading)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20)
-            }
-        }
-        .padding()
-        .glassCard(tint: .accent)
-        .onAppear {
-            trainingStore.setEventStore(eventStore)
-        }
-        .sheet(isPresented: $showTodaysTraining) {
-            TodaysTrainingView(
-                skillProgressStore: skillProgressStore,
-                eventStore: eventStore,
-                trainingStore: trainingStore,
-                puppyAgeWeeks: profileStore.profile?.ageInWeeks ?? 12,
-                onDismiss: { showTodaysTraining = false }
+            return SkillProgressInfo(
+                skill: skill,
+                status: .practicing,
+                sessionCount: 0,
+                isLocked: false,
+                isNextUp: false,
+                missingRequirements: [],
+                learningPhase: progress.phase,
+                confidenceScore: progress.confidenceScore,
+                isDueForReview: false,
+                daysUntilReview: nil
             )
         }
     }
 
+    @ViewBuilder
+    private var regressionAlertSection: some View {
+        RegressionAlertBanner(
+            skillsNeedingWork: skillsNeedingWorkInfo,
+            onTapSkill: { _ in
+                // Navigate handled by sheet presentation in skillsSection
+            },
+            onDismiss: nil // Don't allow dismiss - this is important
+        )
+    }
+
+    @ViewBuilder
+    private var dueForReviewSection: some View {
+        let count = skillProgressStore.skillsDueForReview.count
+        HStack(spacing: 12) {
+            Image(systemName: "calendar.badge.clock")
+                .font(.title3)
+                .foregroundStyle(.indigo)
+                .frame(width: 40, height: 40)
+                .background(
+                    Circle()
+                        .fill(Color.indigo.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                )
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Strings.Training.dueForReview)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                Text(Strings.Training.dueForReviewCount(count))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.indigo.opacity(colorScheme == .dark ? 0.08 : 0.05))
+        )
+    }
 }
 
 // MARK: - Preview
@@ -326,7 +509,7 @@ private struct SkillsPreviewCard: View {
         viewModel: viewModel,
         onSettingsTap: { print("Settings tapped") }
     )
-    .environmentObject(eventStore)
-    .environmentObject(SocializationStore())
-    .environmentObject(profileStore)
+    .environment(eventStore)
+    .environment(SocializationStore())
+    .environment(profileStore)
 }

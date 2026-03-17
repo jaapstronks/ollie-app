@@ -11,8 +11,8 @@ import OtisShared
 
 /// Comprehensive sheet showing socialization window status, progress, and guidance
 struct SocializationWindowSheet: View {
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     var onNavigateToDevelopment: (() -> Void)?
     var onLogExposure: (() -> Void)?
@@ -377,7 +377,8 @@ struct SocializationWindowSheet: View {
             if let onLog = onLogExposure {
                 Button(action: {
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         onLog()
                     }
                 }) {
@@ -491,7 +492,8 @@ struct SocializationWindowSheet: View {
 
                 Button {
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         onNavigate()
                     }
                 } label: {
@@ -554,6 +556,6 @@ struct SocializationWindowSheet: View {
         onNavigateToDevelopment: { print("Navigate to development") },
         onLogExposure: { print("Log exposure") }
     )
-    .environmentObject(SocializationStore())
-    .environmentObject(ProfileStore())
+    .environment(SocializationStore())
+    .environment(ProfileStore())
 }

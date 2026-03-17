@@ -11,7 +11,7 @@ import OtisShared
 /// View for configuring notification settings
 struct NotificationSettingsView: View {
     let profileStore: ProfileStore
-    @ObservedObject var notificationService: NotificationService
+    var notificationService: NotificationService
     var profileId: UUID? = nil
     @Environment(\.dismiss) private var dismiss
 
@@ -39,6 +39,7 @@ struct NotificationSettingsView: View {
                     napSection
                     walkSection
                     appointmentSection
+                    momentsSection
                 }
             }
             .navigationTitle(Strings.Notifications.title)
@@ -77,13 +78,13 @@ struct NotificationSettingsView: View {
             Section {
                 HStack {
                     Image(systemName: "bell.slash.fill")
-                        .foregroundColor(.otisWarning)
+                        .foregroundStyle(Color.otisWarning)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(Strings.Notifications.disabledTitle)
                             .font(.headline)
                         Text(Strings.Notifications.enableToReceive)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                     Spacer()
                     Button(Strings.Common.allow) {
@@ -104,7 +105,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.remindersLabel)
                 } icon: {
                     Image(systemName: "bell.fill")
-                        .foregroundColor(.otisAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
             .onChange(of: settings.isEnabled) { _, newValue in
@@ -127,7 +128,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.pottyReminders)
                 } icon: {
                     Image(systemName: "drop.fill")
-                        .foregroundColor(.otisInfo)
+                        .foregroundStyle(Color.otisInfo)
                 }
             }
 
@@ -157,7 +158,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.mealReminder)
                 } icon: {
                     Image(systemName: "fork.knife")
-                        .foregroundColor(.otisSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                 }
             }
         } header: {
@@ -178,7 +179,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.napNeeded)
                 } icon: {
                     Image(systemName: "moon.fill")
-                        .foregroundColor(.otisMuted)
+                        .foregroundStyle(Color.otisMuted)
                 }
             }
 
@@ -208,7 +209,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.walkReminders)
                 } icon: {
                     Image(systemName: "figure.walk")
-                        .foregroundColor(.otisAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
         } header: {
@@ -229,7 +230,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.appointmentReminders)
                 } icon: {
                     Image(systemName: "calendar")
-                        .foregroundColor(.otisAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
         } header: {
@@ -237,6 +238,27 @@ struct NotificationSettingsView: View {
         } footer: {
             if settings.appointmentReminders.isEnabled {
                 Text(Strings.Notifications.appointmentReminderDescription)
+            }
+        }
+    }
+
+    // MARK: - Moments Section
+
+    private var momentsSection: some View {
+        Section {
+            Toggle(isOn: $settings.momentsReminders.isEnabled) {
+                Label {
+                    Text(Strings.Notifications.momentsReminders)
+                } icon: {
+                    Image(systemName: "photo.fill")
+                        .foregroundStyle(.pink)
+                }
+            }
+        } header: {
+            Text(Strings.Notifications.momentsSection)
+        } footer: {
+            if settings.momentsReminders.isEnabled {
+                Text(Strings.Notifications.momentsReminderDescription)
             }
         }
     }

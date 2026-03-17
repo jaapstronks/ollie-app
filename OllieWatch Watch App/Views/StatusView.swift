@@ -7,14 +7,14 @@
 import SwiftUI
 
 struct StatusView: View {
-    @ObservedObject var dataProvider: WatchDataProvider
+    var dataProvider: WatchDataProvider
 
     var body: some View {
         VStack(spacing: 12) {
             // Puppy name header
             Text(dataProvider.puppyName)
                 .font(.headline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             Spacer()
 
@@ -39,17 +39,17 @@ struct StatusView: View {
             VStack(spacing: 6) {
                 Image(systemName: "moon.zzz.fill")
                     .font(.system(size: 36))
-                    .foregroundColor(.purple)
+                    .foregroundStyle(.purple)
 
                 Text("Sleeping")
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .foregroundColor(.purple)
+                    .foregroundStyle(.purple)
 
                 if let sleepStart = dataProvider.sleepStartTime {
                     Text(sleepDuration(since: sleepStart))
                         .font(.body)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -58,14 +58,14 @@ struct StatusView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "drop.fill")
                         .font(.caption)
-                        .foregroundColor(urgencyColor)
+                        .foregroundStyle(urgencyColor)
                     Text(dataProvider.timeSinceLastPee())
                         .font(.headline)
-                        .foregroundColor(urgencyColor)
+                        .foregroundStyle(urgencyColor)
                 }
                 Text("since last pee")
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -77,11 +77,11 @@ struct StatusView: View {
         VStack(spacing: 4) {
             Text(dataProvider.timeSinceLastPee())
                 .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                .foregroundColor(urgencyColor)
+                .foregroundStyle(urgencyColor)
 
             Text("since last pee")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
     }
 

@@ -456,37 +456,37 @@
         }
       }
     },
-    "€19": {
-      "extractionState": "stale",
+    "Already subscribed?": {
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "19 €"
+            "value": "Bereits abonniert?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "19 €"
+            "value": "Ya suscrito?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "19 €"
+            "value": "Già abbonato?"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "€19"
+            "value": "Al geabonneerd?"
           }
         },
-        "fr": {
+        "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "19 €"
+            "value": "Redan prenumerant?"
           }
         }
       }
@@ -771,6 +771,41 @@
         }
       }
     },
+    "Free Trial": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kostenlose Testversion"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prueba gratis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova gratuita"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis proefperiode"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis provperiod"
+          }
+        }
+      }
+    },
     "How is my puppy in Otis": {
       "extractionState": "stale",
       "localizations": {
@@ -802,41 +837,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Comment va mon chiot dans Otis"
-          }
-        }
-      }
-    },
-    "Log a walk with your puppy": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einen Spaziergang mit deinem Welpen erfassen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra un paseo con tu cachorro"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra una passeggiata con il tuo cucciolo"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Log een wandeling met je puppy"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrez une promenade avec votre chiot"
           }
         }
       }
@@ -946,6 +946,111 @@
         }
       }
     },
+    "Log Wake Up": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufwachen erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Despertar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra risveglio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Wakker"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer réveil"
+          }
+        }
+      }
+    },
+    "Log Walk": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spaziergang erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Wandeling"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer promenade"
+          }
+        }
+      }
+    },
+    "Log a walk with your puppy": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einen Spaziergang mit deinem Welpen erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra un paseo con tu cachorro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra una passeggiata con il tuo cucciolo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log een wandeling met je puppy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez une promenade avec votre chiot"
+          }
+        }
+      }
+    },
     "Log that your puppy ate": {
       "extractionState": "stale",
       "localizations": {
@@ -1047,76 +1152,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrez que votre chiot s'est réveillé"
-          }
-        }
-      }
-    },
-    "Log Wake Up": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufwachen erfassen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar Despertar"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra risveglio"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Log Wakker"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer réveil"
-          }
-        }
-      }
-    },
-    "Log Walk": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spaziergang erfassen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar Paseo"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra passeggiata"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Log Wandeling"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer promenade"
           }
         }
       }
@@ -1471,41 +1506,6 @@
         }
       }
     },
-    "Otis Premium": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis Premium"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis Premium"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis Premium"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis Premium"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis Premium"
-          }
-        }
-      }
-    },
     "One-time purchase, per puppy profile": {
       "extractionState": "stale",
       "localizations": {
@@ -1572,6 +1572,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir l'app Raccourcis"
+          }
+        }
+      }
+    },
+    "Otis Premium": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
           }
         }
       }
@@ -2377,6 +2412,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "Votre essai gratuit est terminé. Veuillez passer à la version supérieure dans l'app Otis pour continuer."
+          }
+        }
+      }
+    },
+    "€19": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "€19"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
           }
         }
       }

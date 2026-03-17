@@ -75,6 +75,39 @@ public struct SleepCalculations {
         return .unknown
     }
 
+    /// Optimized: Determine sleep state using pre-categorized events
+    /// Use this when you've already categorized events for other calculations
+    public static func currentSleepState(categories: EventCategories, events: [PuppyEvent]) -> SleepState {
+        // Check for active coverage gap
+        if categories.hasActiveCoverageGap(in: events) {
+            return .unknown
+        }
+
+        // Sleep/wake events are already sorted in categories
+        let sleepWakeRefs = categories.sleepWakeEvents
+        guard let lastRef = sleepWakeRefs.last else {
+            return .unknown
+        }
+
+        let now = Date()
+
+        if lastRef.type == .slapen {
+            if let duration = lastRef.durationMin {
+                let wakeTime = lastRef.time.addingTimeInterval(Double(duration) * 60)
+                let minutesAwake = Int(now.timeIntervalSince(wakeTime) / 60)
+                return .awake(since: wakeTime, durationMin: max(0, minutesAwake))
+            } else {
+                let durationMin = Int(now.timeIntervalSince(lastRef.time) / 60)
+                return .sleeping(since: lastRef.time, durationMin: durationMin)
+            }
+        } else if lastRef.type == .ontwaken {
+            let durationMin = Int(now.timeIntervalSince(lastRef.time) / 60)
+            return .awake(since: lastRef.time, durationMin: durationMin)
+        }
+
+        return .unknown
+    }
+
     /// Check if a sleep duration qualifies as a nap
     public static func isNap(durationMin: Int) -> Bool {
         durationMin < napThresholdMinutes

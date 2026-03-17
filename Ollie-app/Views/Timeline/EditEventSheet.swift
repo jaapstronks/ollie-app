@@ -11,7 +11,6 @@ struct EditEventSheet: View {
     let event: PuppyEvent
     let onSave: (PuppyEvent) -> Void
     var onDelete: (() -> Void)?
-    var householdMembers: HouseholdMembers?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -25,19 +24,27 @@ struct EditEventSheet: View {
     @State private var durationMin: String
     @State private var weightKg: String
     @State private var showingDeleteConfirmation = false
+    @State private var showingLikersSheet = false
+    @State private var showingPhotoViewer = false
+    @State private var localEvent: PuppyEvent
 
-    /// Look up the member who logged this event
-    private var loggedByMember: HouseholdMember? {
-        guard let loggedBy = event.loggedBy,
-              let members = householdMembers else { return nil }
-        return members.member(byId: loggedBy)
+    @Environment(EventStore.self) private var eventStore
+
+    /// Get the CloudKit record ID of who logged this event
+    private var loggedByRecordID: String? {
+        event.loggedBy
     }
 
-    init(event: PuppyEvent, onSave: @escaping (PuppyEvent) -> Void, onDelete: (() -> Void)? = nil, householdMembers: HouseholdMembers? = nil) {
+    /// Check if event was logged by someone else
+    private var wasLoggedByOther: Bool {
+        guard let recordID = loggedByRecordID else { return false }
+        return !UserIdentityStore.shared.isCurrentUser(recordID)
+    }
+
+    init(event: PuppyEvent, onSave: @escaping (PuppyEvent) -> Void, onDelete: (() -> Void)? = nil) {
         self.event = event
         self.onSave = onSave
         self.onDelete = onDelete
-        self.householdMembers = householdMembers
 
         // Initialize state with existing values
         _time = State(initialValue: event.time)
@@ -49,6 +56,7 @@ struct EditEventSheet: View {
         _result = State(initialValue: event.result ?? "")
         _durationMin = State(initialValue: event.durationMin.map { String($0) } ?? "")
         _weightKg = State(initialValue: event.weightKg.map { String($0) } ?? "")
+        _localEvent = State(initialValue: event)
     }
 
     var body: some View {
@@ -63,16 +71,61 @@ struct EditEventSheet: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
 
-                            // Show who logged this event (only if loggedBy is set)
-                            if let member = loggedByMember {
+                            // Show attribution if logged by someone else
+                            if wasLoggedByOther {
                                 HStack(spacing: 4) {
-                                    HouseholdMemberAvatar(member: member, size: 14)
-                                    Text(member.name)
+                                    UserAvatarFromRecordID(cloudKitRecordID: loggedByRecordID, size: 14)
+                                    Text(ParticipantResolver.shared.resolve(cloudKitRecordID: loggedByRecordID ?? "").displayName)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
                         }
+
+                        Spacer()
+
+                        // Like button
+                        LikeButton(event: localEvent) {
+                            toggleLike()
+                        }
+                    }
+                }
+
+                // Likes section (if any likes exist)
+                if localEvent.hasLikes {
+                    Section {
+                        Button {
+                            showingLikersSheet = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "heart.fill")
+                                    .foregroundStyle(.red)
+                                Text(Strings.Likes.likedBy)
+                                Spacer()
+                                Text("\(localEvent.likeCount)")
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+
+                // Photo section (if event has a photo)
+                if event.photo != nil {
+                    Section {
+                        Button {
+                            showingPhotoViewer = true
+                        } label: {
+                            EventThumbnailView(event: event)
+                                .frame(height: 180)
+                                .frame(maxWidth: .infinity)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                        .buttonStyle(.plain)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     }
                 }
 
@@ -189,6 +242,21 @@ struct EditEventSheet: View {
                     .accessibilityIdentifier("EDIT_EVENT_SAVE_BUTTON")
                 }
             }
+            .sheet(isPresented: $showingLikersSheet) {
+                LikersSheet(event: localEvent)
+            }
+            .fullScreenCover(isPresented: $showingPhotoViewer) {
+                MediaPreviewView(event: event) {
+                    // Photo deleted - dismiss the edit sheet entirely
+                    dismiss()
+                }
+            }
+        }
+    }
+
+    private func toggleLike() {
+        if let updated = eventStore.toggleLike(on: localEvent) {
+            localEvent = updated
         }
     }
 
@@ -197,10 +265,10 @@ struct EditEventSheet: View {
         updatedEvent.time = time
         updatedEvent.location = location
         updatedEvent.napLocation = napLocation
-        updatedEvent.note = note.isEmpty ? nil : note
-        updatedEvent.who = who.isEmpty ? nil : who
-        updatedEvent.exercise = exercise.isEmpty ? nil : exercise
-        updatedEvent.result = result.isEmpty ? nil : result
+        updatedEvent.note = note.nilIfBlank
+        updatedEvent.who = who.nilIfBlank
+        updatedEvent.exercise = exercise.nilIfBlank
+        updatedEvent.result = result.nilIfBlank
         updatedEvent.durationMin = Int(durationMin)
         updatedEvent.weightKg = Double(weightKg)
 
@@ -220,4 +288,5 @@ struct EditEventSheet: View {
     ) { event in
         print("Saved: \(event)")
     }
+    .environment(EventStore())
 }

@@ -14,9 +14,11 @@
 //
 
 import Foundation
+import Observation
 import OtisShared
 import SwiftUI
 import Combine
+import Sentry
 
 /// Unified timeline item - either a regular event or a sleep session
 /// Moved to ViewModel to avoid recomputation on every view render
@@ -40,10 +42,12 @@ enum TimelineItem: Identifiable {
 }
 
 /// ViewModel for the timeline view, manages event display and logging
+/// Uses @Observable for granular view updates (only re-renders views that access changed properties)
+@Observable
 @MainActor
-class TimelineViewModel: ObservableObject {
-    @Published var currentDate: Date = Date()
-    @Published var events: [PuppyEvent] = []
+class TimelineViewModel {
+    var currentDate: Date = Date()
+    var events: [PuppyEvent] = []
 
     /// Events filtered for timeline display (excludes weight events which belong on Health tab only)
     var timelineDisplayEvents: [PuppyEvent] {
@@ -52,15 +56,45 @@ class TimelineViewModel: ObservableObject {
 
     /// Pre-computed timeline items (events + sleep sessions)
     /// Updated only when events change to avoid O(n²) recomputation on every view render
-    @Published private(set) var timelineItems: [TimelineItem] = []
+    private(set) var timelineItems: [TimelineItem] = []
+
+    /// Cached partner activity summary - updated only when events change
+    /// PERFORMANCE: Avoids synchronous Core Data fetch on every view render
+    private(set) var partnerActivitySummaryCache: PartnerActivitySummary?
+
+    /// Cached combined sleep/potty state - updated only when events change
+    /// PERFORMANCE: Avoids recomputation on every view render
+    private(set) var cachedCombinedState: CombinedSleepPottyState = .unknown
+
+    /// Cached sleep state - updated immediately when events change
+    /// REACTIVITY FIX: Ensures sleep status card updates instantly after logging wake-up
+    private(set) var cachedSleepState: SleepState = .unknown
+
+    /// Cached potty prediction - updated immediately when events change
+    /// REACTIVITY FIX: Ensures potty status card updates instantly after logging potty
+    private(set) var cachedPottyPrediction: PottyPrediction?
+
+    /// Cached separated upcoming items - updated only when events/forecasts change
+    /// PERFORMANCE: Avoids UpcomingCalculations + AI reordering on every view render
+    private(set) var cachedSeparatedItems: (actionable: [ActionableItem], upcoming: [UpcomingItem]) = ([], [])
+
+    /// Cached vertical timeline items - updated only when events change
+    /// PERFORMANCE: buildVerticalItems was called 3+ times per render (for filtering)
+    private(set) var cachedVerticalTimelineItems: [VerticalTimelineItem] = []
 
     /// Celebration trigger for milestone moments
-    @Published var showCelebration = false
-    @Published var celebrationStyle: CelebrationPreset = .milestone
+    var showCelebration = false
+    var celebrationStyle: CelebrationPreset = .milestone
+    var celebrationStreakCount: Int?
     private var pendingCelebrationStyle: CelebrationPreset?
+    private var pendingCelebrationStreakCount: Int?
+
+    /// Refresh trigger for forcing view updates when external state changes
+    /// Increment this to trigger a view update (used with @Observable)
+    var refreshTrigger: Int = 0
 
     /// Sheet coordinator for all sheet presentations
-    @Published var sheetCoordinator = SheetCoordinator()
+    var sheetCoordinator = SheetCoordinator()
 
     // MARK: - Activity State
 
@@ -83,6 +117,11 @@ class TimelineViewModel: ObservableObject {
         activityManager.isNapInProgress
     }
 
+    // MARK: - Shared Event Data Provider
+
+    /// Centralized event data cache (single fetch, shared across services)
+    let eventDataProvider: EventDataProvider
+
     // MARK: - Stats Cache (extracted to separate service)
 
     /// Stats cache service (manages cached stats to avoid recomputation)
@@ -95,6 +134,7 @@ class TimelineViewModel: ObservableObject {
     var cachedRecentWalks: [PuppyEvent] { statsCache.recentWalks }
     var cachedWeekWalkStats: (count: Int, totalMinutes: Int) { statsCache.weekWalkStats }
     var walkStats: WalkStats? { statsCache.walkStats }
+    var cachedGapStats: GapStats { statsCache.gapStats }
 
     // MARK: - Extracted Services
 
@@ -111,41 +151,37 @@ class TimelineViewModel: ObservableObject {
 
     /// Captured potty state at wake time (for post-wake tracking)
     /// Delegates to PredictionService
-    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
+    private(set) var wakeTimePottyState: WakeTimePottyState?
 
     /// Time of last potty event (for clearing post-wake state)
     internal var lastPottyLogTime: Date?
 
     /// Date when user dismissed the assumed overnight sleep card (reset daily)
-    @Published internal var dismissedAssumedSleepDate: Date?
+    internal var dismissedAssumedSleepDate: Date?
 
     /// Date when user dismissed the stale logging banner (reset daily)
-    @Published internal var dismissedStaleLoggingDate: Date?
+    internal var dismissedStaleLoggingDate: Date?
 
     /// Whether user has dismissed the first run welcome card (persisted)
-    @Published internal var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
+    internal var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
 
-    /// Subscription to forward SheetCoordinator changes
-    private var sheetCoordinatorCancellable: AnyCancellable?
-    private var activeSheetCancellable: AnyCancellable?
+    /// Background refresh task for stats/predictions (coalesces rapid event changes)
+    private var backgroundRefreshTask: Task<Void, Never>?
 
-    /// Subscription to forward ActivityTrackingManager changes
-    private var activityManagerCancellable: AnyCancellable?
+    /// Subscription for sheet dismissal handling
+    private var activeSheetCancellable: AnyCancellable?
 
     /// Subscription to observe EventStore events
     private var eventStoreCancellable: AnyCancellable?
 
-    /// Subscription to forward TimelineStatsCache changes
-    private var statsCacheCancellable: AnyCancellable?
+    /// Subscription for moment notification handling
+    private var momentNotificationCancellable: AnyCancellable?
 
-    /// Subscription to forward EventLoggingService changes
-    private var eventLoggingServiceCancellable: AnyCancellable?
-
-    /// Subscription to forward PredictionService changes
-    private var predictionServiceCancellable: AnyCancellable?
+    /// Subscription to reset to today when app becomes active on a new day
+    private var appBecameActiveCancellable: AnyCancellable?
 
     let eventStore: EventStore
     let profileStore: ProfileStore
@@ -162,8 +198,15 @@ class TimelineViewModel: ObservableObject {
         spotStore: SpotStore? = nil,
         locationManager: LocationManager? = nil,
         medicationStore: MedicationStore? = nil,
-        appointmentStore: AppointmentStore? = nil
+        appointmentStore: AppointmentStore? = nil,
+        dailyAggregateService: DailyAggregateService? = nil
     ) {
+        // PERFORMANCE: Track TimelineViewModel initialization
+        let initTransaction = CrashReporter.startTransaction(
+            name: "TimelineViewModel Init",
+            operation: "viewmodel.init"
+        )
+
         self.eventStore = eventStore
         self.profileStore = profileStore
         self.notificationService = notificationService
@@ -172,52 +215,49 @@ class TimelineViewModel: ObservableObject {
         self.medicationStore = medicationStore
         self.appointmentStore = appointmentStore
 
-        // Create stats cache (extracted service)
-        self.statsCache = TimelineStatsCache(eventStore: eventStore, profileStore: profileStore)
+        // Create shared event data provider (single fetch, shared across services)
+        let dataProviderSpan = initTransaction?.startChild(
+            operation: "service.init",
+            description: "EventDataProvider"
+        )
+        self.eventDataProvider = EventDataProvider(eventStore: eventStore)
+        dataProviderSpan?.finish()
+
+        // Create stats cache using shared event data provider
+        let statsCacheSpan = initTransaction?.startChild(
+            operation: "service.init",
+            description: "TimelineStatsCache"
+        )
+        // Use provided aggregate service or shared instance
+        let aggregateService = dailyAggregateService ?? DailyAggregateService.shared
+        self.statsCache = TimelineStatsCache(
+            eventDataProvider: eventDataProvider,
+            profileStore: profileStore,
+            dailyAggregateService: aggregateService
+        )
+        statsCacheSpan?.finish()
 
         // Create extracted services
+        let servicesSpan = initTransaction?.startChild(
+            operation: "service.init",
+            description: "Extracted Services"
+        )
         self.eventLoggingService = EventLoggingService(eventStore: eventStore, profileStore: profileStore)
         self.coverageGapService = CoverageGapService(eventStore: eventStore, profileStore: profileStore)
         self.predictionService = PredictionService(profileStore: profileStore)
+        servicesSpan?.finish()
 
-        // Forward SheetCoordinator's objectWillChange to this ViewModel
-        // This ensures views are notified when sheet state changes
-        sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
+        // NOTE: With @Observable, we no longer need to forward objectWillChange from nested objects.
+        // Views will only re-render when they access specific properties that change.
+        // All nested services (sheetCoordinator, activityManager, etc.) use @Observable,
+        // and their changes are reflected through the properties they update on this class.
 
         // Flush deferred celebrations as soon as sheets are dismissed.
-        activeSheetCancellable = sheetCoordinator.$activeSheet
-            .sink { [weak self] activeSheet in
-                guard activeSheet == nil else { return }
+        // Note: SheetCoordinator is @Observable, so we use notifications instead of Combine publishers
+        activeSheetCancellable = NotificationCenter.default.publisher(for: .sheetDismissed)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
                 self?.flushPendingCelebrationIfNeeded()
-            }
-
-        // Forward ActivityTrackingManager's objectWillChange to this ViewModel
-        activityManagerCancellable = activityManager.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-
-        // Forward TimelineStatsCache's objectWillChange to this ViewModel
-        statsCacheCancellable = statsCache.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-
-        // Forward EventLoggingService's objectWillChange to this ViewModel
-        eventLoggingServiceCancellable = eventLoggingService.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-
-        // Note: CoverageGapService uses callbacks, not ObservableObject
-
-        // Forward PredictionService's objectWillChange to this ViewModel
-        predictionServiceCancellable = predictionService.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
             }
 
         // Set up service callbacks
@@ -228,26 +268,98 @@ class TimelineViewModel: ObservableObject {
 
         // Observe EventStore's events and sync to this ViewModel
         // This ensures events are updated when EventStore loads them asynchronously
-        eventStoreCancellable = eventStore.$events
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] loadedEvents in
+        // Note: EventStore is @Observable, not ObservableObject, so we use notifications
+        eventStoreCancellable = NotificationCenter.default.publisher(for: .eventsDidChange)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
                 guard let self = self else { return }
-                self.events = loadedEvents
-                // Rebuild timeline items and refresh stats since events changed
+                self.events = self.eventStore.events
+
+                // Rebuild timeline items immediately (UI needs this)
                 self.rebuildTimelineItems()
-                self.statsCache.refresh(force: true)
-                // Also refresh predictions
-                self.refreshPredictions()
+
+                // REACTIVITY FIX: Update combined state immediately for sleep/potty card visibility
+                // This prevents stale card visibility after logging events (e.g., sleep card staying visible after wake)
+                // Use fresh events (yesterday + today) instead of stale cached events
+                let yesterday = Date().addingDays(-1).startOfDay
+                let endOfToday = Date().endOfDay
+                let freshRecentEvents = self.eventStore.getEvents(from: yesterday, to: endOfToday)
+                self.cachedCombinedState = self.calculateCombinedState(withEvents: freshRecentEvents)
+
+                // REACTIVITY FIX: Update sleep state immediately for status card content
+                // This ensures the sleep card shows correct state (sleeping vs awake) after logging
+                self.cachedSleepState = SleepCalculations.currentSleepState(events: freshRecentEvents)
+
+                // Debounce expensive stats/predictions refresh
+                // This coalesces rapid event changes (e.g., bulk import, quick logging)
+                self.scheduleBackgroundRefresh()
+            }
+
+        // Subscribe to EventDataProvider changes to refresh caches when historical data loads
+        // This fixes the race condition where refreshCachedProperties runs before data is ready
+        // PERF: Using Swift Observation instead of Combine
+        observeEventDataProvider()
+
+        // Listen for moment notification taps to open lightbox
+        momentNotificationCancellable = NotificationCenter.default
+            .publisher(for: .openMomentFromNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] notification in
+                guard let eventId = notification.userInfo?["eventId"] as? UUID else { return }
+                self?.openMomentFromNotification(eventId: eventId)
+            }
+
+        // Reset to today when app becomes active on a new day
+        // This handles the case where user opens app on Day 2 but was last viewing Day 1
+        appBecameActiveCancellable = NotificationCenter.default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.resetToTodayIfNeeded()
+                // Check for pending Live Activity actions (e.g., "Wake Up" button tapped)
+                self?.checkForPendingLiveActivityActions()
             }
 
         loadEvents()
+
+        // Clean up any orphaned Live Activities from app crashes or force-quits
+        cleanupOrphanedLiveActivities()
+
+        // Finish init transaction
+        initTransaction?.finish()
+    }
+
+    /// Reset to today if the current date is no longer today
+    /// Called when app becomes active to ensure fresh start on new day
+    private func resetToTodayIfNeeded() {
+        guard !currentDate.isToday else { return }
+        goToToday()
+    }
+
+    /// Open the moments lightbox for an event tapped from a notification
+    private func openMomentFromNotification(eventId: UUID) {
+        // Get recent moment events for the lightbox
+        let momentEvents = eventStore.getEventsWithMedia(
+            from: Date.daysAgo(30),
+            to: Date()
+        ).sorted { $0.time > $1.time }
+
+        // Find the index of the tapped event
+        guard let index = momentEvents.firstIndex(where: { $0.id == eventId }) else {
+            // Event not found - maybe too old. Just show the first moment.
+            if !momentEvents.isEmpty {
+                sheetCoordinator.presentMomentsLightbox(events: momentEvents, startIndex: 0)
+            }
+            return
+        }
+
+        sheetCoordinator.presentMomentsLightbox(events: momentEvents, startIndex: index)
     }
 
     // MARK: - Convenience Accessors for Sheet State
 
     /// Active sheet binding for SwiftUI sheet(item:) modifier
-    /// This binding is needed because $viewModel.sheetCoordinator.activeSheet
-    /// doesn't properly trigger view updates with nested ObservableObjects
+    /// This binding provides a convenient way to access the nested sheet coordinator's state
     var activeSheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
         Binding(
             get: { self.sheetCoordinator.activeSheet },
@@ -295,6 +407,31 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.dismissCelebrationBanner()
     }
 
+    /// Observe EventDataProvider changes using Swift Observation framework
+    /// When historical data loads, refresh cached properties
+    @ObservationIgnored private var eventDataProviderObservationTask: Task<Void, Never>?
+
+    private func observeEventDataProvider() {
+        withObservationTracking {
+            // Track changes to historical event data
+            _ = eventDataProvider.weekEvents
+            _ = eventDataProvider.monthEvents
+            _ = eventDataProvider.isRefreshing
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                // Debounce rapid changes by scheduling on next run loop
+                self.eventDataProviderObservationTask?.cancel()
+                self.eventDataProviderObservationTask = Task {
+                    try? await Task.sleep(for: .seconds(1))
+                    guard !Task.isCancelled else { return }
+                    await self.refreshCachedProperties()
+                }
+                self.observeEventDataProvider()
+            }
+        }
+    }
+
     // MARK: - Event Loading
 
     func loadEvents() {
@@ -305,11 +442,52 @@ class TimelineViewModel: ObservableObject {
         // updated events and call rebuildTimelineItems() + refreshCachedStats().
     }
 
+    // PERF: Debounce timestamp for rebuildTimelineItems
+    private static var lastTimelineRebuild: Date = .distantPast
+
     /// Rebuild the pre-computed timeline items from current events
     /// This avoids O(n²) session building on every view render
     /// Delegates to TimelineItemBuilder for pure function logic
     internal func rebuildTimelineItems() {
+        // PERF: Global debounce - skip if rebuilt recently by any instance
+        let now = Date()
+        guard now.timeIntervalSince(Self.lastTimelineRebuild) > 0.1 else {
+            return
+        }
+        Self.lastTimelineRebuild = now
+
+        // PERFORMANCE: Track timeline rebuild time
+        let rebuildTransaction = CrashReporter.startTransaction(
+            name: "Rebuild Timeline Items",
+            operation: "timeline.rebuild"
+        )
+
+        let timelineSpan = rebuildTransaction?.startChild(
+            operation: "timeline.build",
+            description: "Build Timeline Items"
+        )
         timelineItems = TimelineItemBuilder.buildTimelineItems(from: events)
+        timelineSpan?.finish()
+
+        // PERFORMANCE: Also rebuild vertical timeline items (was computed 3+ times per render)
+        let verticalSpan = rebuildTransaction?.startChild(
+            operation: "timeline.build",
+            description: "Build Vertical Items"
+        )
+        let todaysAppointments: [DogAppointment]
+        if let store = appointmentStore {
+            todaysAppointments = store.appointments(for: currentDate)
+        } else {
+            todaysAppointments = []
+        }
+        cachedVerticalTimelineItems = TimelineItemBuilder.buildVerticalItems(
+            events: events,
+            appointments: todaysAppointments,
+            puppyName: puppyName
+        )
+        verticalSpan?.finish()
+
+        rebuildTransaction?.finish()
     }
 
 
@@ -368,10 +546,14 @@ class TimelineViewModel: ObservableObject {
     /// Configure callbacks for all extracted services
     private func setupServiceCallbacks() {
         // EventLoggingService callbacks
+        // NOTE: statsCache.refresh() and refreshPredictions() are NOT needed here
+        // because EventStore.$events subscription already triggers them (lines 237-247).
+        // Adding them here would cause double refresh on every event log.
         eventLoggingService.onEventsChanged = { [weak self] in
-            self?.syncEventsFromStore()
-            self?.statsCache.refresh(force: true)
-            self?.refreshPredictions()
+            // Events are synced via EventStore.$events subscription, no need to duplicate
+            // Only update first-week experience counts (not handled elsewhere)
+            guard let self = self else { return }
+            FirstWeekExperienceService.shared.refreshCounts(from: self.events)
         }
 
         eventLoggingService.onCelebration = { [weak self] style, message in
@@ -394,9 +576,10 @@ class TimelineViewModel: ObservableObject {
             self?.sheetCoordinator.presentSheet(sheet)
         }
 
+        // NOTE: Events sync and stats refresh are handled by EventStore.$events subscription
         coverageGapService.onEventsChanged = { [weak self] in
-            self?.syncEventsFromStore()
-            self?.statsCache.refresh(force: true)
+            guard let self = self else { return }
+            FirstWeekExperienceService.shared.refreshCounts(from: self.events)
         }
 
         coverageGapService.onUpdateEvent = { [weak self] event in
@@ -435,6 +618,11 @@ class TimelineViewModel: ObservableObject {
             guard let self = self else { return nil }
             return self.events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen })
         }
+
+        // Provide puppy name for Live Activities
+        activityManager.getPuppyName = { [weak self] in
+            self?.puppyName ?? "Puppy"
+        }
     }
 
     // MARK: - Internal Helper Properties (for extensions)
@@ -447,8 +635,9 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Internal Helper Methods (for extensions)
 
     /// Trigger celebration immediately, pulsing the boolean to retrigger reliably.
-    private func presentCelebration(_ style: CelebrationPreset) {
+    private func presentCelebration(_ style: CelebrationPreset, streakCount: Int? = nil) {
         celebrationStyle = style
+        celebrationStreakCount = streakCount
         showCelebration = false
         DispatchQueue.main.async { [weak self] in
             self?.showCelebration = true
@@ -456,26 +645,53 @@ class TimelineViewModel: ObservableObject {
     }
 
     /// Trigger celebration, deferring if a sheet is currently covering the UI.
-    func triggerCelebration(_ style: CelebrationPreset) {
+    func triggerCelebration(_ style: CelebrationPreset, streakCount: Int? = nil) {
         guard sheetCoordinator.activeSheet == nil else {
             pendingCelebrationStyle = style
+            pendingCelebrationStreakCount = streakCount
             return
         }
-        presentCelebration(style)
+        presentCelebration(style, streakCount: streakCount)
     }
 
     /// Flush any deferred celebration when sheets are dismissed.
     func flushPendingCelebrationIfNeeded() {
         guard sheetCoordinator.activeSheet == nil,
               let pendingStyle = pendingCelebrationStyle else { return }
+        let streakCount = pendingCelebrationStreakCount
         pendingCelebrationStyle = nil
-        presentCelebration(pendingStyle)
+        pendingCelebrationStreakCount = nil
+        presentCelebration(pendingStyle, streakCount: streakCount)
     }
 
     /// Sync events from EventStore to local array
     func syncEventsFromStore() {
         self.events = eventStore.events
         rebuildTimelineItems()
+        // Update first-week experience counts for progressive disclosure
+        FirstWeekExperienceService.shared.refreshCounts(from: eventStore.events)
+
+        // REACTIVITY FIX: Update combined state immediately for sleep/potty card visibility
+        // This prevents stale card visibility after logging events (e.g., sleep card staying visible after wake)
+        // Use fresh events (yesterday + today) instead of stale cached events
+        let yesterday = Date().addingDays(-1).startOfDay
+        let endOfToday = Date().endOfDay
+        let freshRecentEvents = eventStore.getEvents(from: yesterday, to: endOfToday)
+        self.cachedCombinedState = self.calculateCombinedState(withEvents: freshRecentEvents)
+
+        // REACTIVITY FIX: Update sleep state immediately for status card content
+        // This ensures the sleep card shows correct state (sleeping vs awake) after logging
+        self.cachedSleepState = SleepCalculations.currentSleepState(events: freshRecentEvents)
+
+        // REACTIVITY FIX: Update potty prediction immediately for instant card updates
+        // This ensures the potty status card updates/hides instantly after logging potty
+        if let profile = profileStore.profile {
+            self.cachedPottyPrediction = PredictionCalculations.calculatePrediction(
+                events: freshRecentEvents,
+                config: profile.predictionConfig,
+                gapStats: cachedGapStats
+            )
+        }
     }
 
     /// Notify to refresh notifications
@@ -488,13 +704,116 @@ class TimelineViewModel: ObservableObject {
         statsCache.refresh(force: true)
     }
 
-    /// Refresh prediction service state
+    /// Schedule a debounced background refresh of stats and predictions
+    /// Coalesces rapid event changes to avoid redundant calculations
+    private func scheduleBackgroundRefresh() {
+        // Cancel any pending refresh
+        backgroundRefreshTask?.cancel()
+
+        // Schedule new refresh after delay
+        // PERF: Increased from 150ms to 500ms to better coalesce rapid changes
+        backgroundRefreshTask = Task {
+            // Wait for additional events to arrive
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+
+            // PERFORMANCE: Skip heavy refreshes while a sheet is active
+            // This prevents stuttering in time pickers and other interactive elements
+            guard sheetCoordinator.activeSheet == nil else {
+                return
+            }
+
+            // Now run the expensive refreshes
+            // PERF: Don't use force: true - let the global debounce in TimelineStatsCache work
+            self.statsCache.refresh(force: false)
+            self.refreshPredictions()
+
+            // PERFORMANCE: Refresh cached properties that were previously computed
+            // These use pre-fetched data from EventDataProvider (no additional DB fetch)
+            await self.refreshCachedProperties()
+        }
+    }
+
+    // PERF: Global timestamp to prevent multiple ViewModel instances from refreshing simultaneously
+    private static var lastCachedPropertiesRefresh: Date = .distantPast
+
+    /// Refresh cached properties that were previously expensive computed properties
+    /// Uses pre-fetched data from EventDataProvider to avoid blocking main thread
+    private func refreshCachedProperties() async {
+        // PERF: Global debounce - skip if refreshed recently by any instance
+        let now = Date()
+        guard now.timeIntervalSince(Self.lastCachedPropertiesRefresh) > 0.5 else {
+            return
+        }
+        Self.lastCachedPropertiesRefresh = now
+
+        // PERFORMANCE: Track cached properties refresh
+        let refreshTransaction = CrashReporter.startTransaction(
+            name: "Refresh Cached Properties",
+            operation: "cache.refresh"
+        )
+
+        // Calculate partner activity from cache (uses recentEvents from EventDataProvider)
+        let partnerSpan = refreshTransaction?.startChild(
+            operation: "cache.compute",
+            description: "Partner Activity Summary"
+        )
+        let recentEvents = eventDataProvider.recentEvents
+        let partnerSummary = calculatePartnerActivitySummary(from: recentEvents)
+        partnerSpan?.finish()
+
+        // Update cached properties on main thread
+        self.partnerActivitySummaryCache = partnerSummary
+
+        // REACTIVITY FIX: Use fresh events from EventStore for sleep/potty state
+        // The EventDataProvider cache may be stale due to its 300ms refresh delay
+        // This prevents "fighting" status cards where stale state overwrites correct state
+        let stateSpan = refreshTransaction?.startChild(
+            operation: "cache.compute",
+            description: "Combined Sleep/Potty State"
+        )
+        let yesterday = Date().addingDays(-1).startOfDay
+        let endOfToday = Date().endOfDay
+        let freshStateEvents = eventStore.getEvents(from: yesterday, to: endOfToday)
+        self.cachedCombinedState = self.calculateCombinedState(withEvents: freshStateEvents)
+        self.cachedSleepState = SleepCalculations.currentSleepState(events: freshStateEvents)
+        stateSpan?.finish()
+
+        // PERFORMANCE: Cache separated upcoming items (previously computed on every view render)
+        // Note: This uses empty forecasts - views can still call separatedUpcomingItems() with forecasts if needed
+        let upcomingSpan = refreshTransaction?.startChild(
+            operation: "cache.compute",
+            description: "Separated Upcoming Items"
+        )
+        self.cachedSeparatedItems = self.separatedUpcomingItems(forecasts: [])
+        upcomingSpan?.finish()
+
+        refreshTransaction?.finish()
+    }
+
+    /// Refresh prediction service state (async - fetches events on background thread)
     func refreshPredictions() {
+        // Fire and forget - runs async to avoid blocking main thread
+        Task {
+            await refreshPredictionsAsync()
+        }
+    }
+
+    /// Async implementation of predictions refresh - fetches events on background thread
+    private func refreshPredictionsAsync() async {
+        // Fetch all event ranges concurrently on background threads
+        async let recentFetch = getRecentEventsAsync()
+        async let historicalFetch = getHistoricalEventsAsync(days: 7)
+        async let allFetch = getAllEventsAsync()
+
+        let (recentEvents, historicalEvents, allEvents) = await (recentFetch, historicalFetch, allFetch)
+
+        // Now call prediction service with pre-fetched data (no blocking)
         predictionService.refresh(
             todayEvents: events,
-            recentEvents: getRecentEvents(),
-            historicalEvents: getHistoricalEvents(days: 7),
-            allEvents: getAllEvents(),
+            recentEvents: recentEvents,
+            historicalEvents: historicalEvents,
+            allEvents: allEvents,
             currentDate: currentDate,
             isShowingToday: isShowingToday,
             hasActiveCoverageGap: activeCoverageGap != nil
@@ -520,6 +839,11 @@ class TimelineViewModel: ObservableObject {
         wakeTimePottyState = nil
     }
 
+    /// Clear the partner activity summary cache (used when dismissing the card)
+    func clearPartnerActivityCache() {
+        partnerActivitySummaryCache = nil
+    }
+
     /// Get events from the past N days (for pattern analysis)
     /// Uses in-memory events for today + Core Data for historical data
     func getHistoricalEvents(days: Int) -> [PuppyEvent] {
@@ -537,6 +861,22 @@ class TimelineViewModel: ObservableObject {
         return (historicalEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
+    /// Async version - uses cached events from EventDataProvider (no DB fetch needed)
+    func getHistoricalEventsAsync(days: Int) async -> [PuppyEvent] {
+        // Use pre-cached data from EventDataProvider
+        // This avoids redundant Core Data fetches since EventDataProvider already has the data
+        switch days {
+        case ...7:
+            return eventDataProvider.weekEvents
+        case ...8:
+            return eventDataProvider.eightDayEvents
+        case ...15:
+            return eventDataProvider.extendedEvents
+        default:
+            return eventDataProvider.monthEvents
+        }
+    }
+
     /// Get all events (up to 30 days back for streak history)
     /// Uses in-memory events for today (fresh) + Core Data for historical (stable)
     func getAllEvents() -> [PuppyEvent] {
@@ -552,6 +892,13 @@ class TimelineViewModel: ObservableObject {
         let todayEvents = events.filter { calendar.isDateInToday($0.time) }
 
         return (historicalEvents + todayEvents).sorted { $0.time > $1.time }
+    }
+
+    /// Async version - uses cached events from EventDataProvider (no DB fetch needed)
+    func getAllEventsAsync() async -> [PuppyEvent] {
+        // Use pre-cached 30-day data from EventDataProvider
+        // EventDataProvider already combines historical + today's events
+        return eventDataProvider.monthEvents
     }
 
     /// Get events from today and yesterday (for cross-midnight tracking)
@@ -576,6 +923,13 @@ class TimelineViewModel: ObservableObject {
         return (yesterdayEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
+    /// Async version - uses cached events from EventDataProvider (no DB fetch needed)
+    func getRecentEventsAsync() async -> [PuppyEvent] {
+        // Use pre-cached 2-day data from EventDataProvider
+        // EventDataProvider already combines yesterday + today's events
+        return eventDataProvider.recentEvents
+    }
+
     // MARK: - Private Helpers
 
     /// Refresh scheduled notifications after events change
@@ -592,7 +946,8 @@ class TimelineViewModel: ObservableObject {
 
         notificationTask = Task {
             guard !Task.isCancelled else { return }
-            let recentEvents = getRecentEvents()
+            // Use async version to avoid blocking
+            let recentEvents = await getRecentEventsAsync()
             await service.refreshNotifications(
                 events: recentEvents,
                 profile: profile,

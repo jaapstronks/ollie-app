@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 /// Sheet for adding or editing a document
 struct AddDocumentSheet: View {
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
     var existingDocument: Document?
 
     @Environment(\.dismiss) private var dismiss
@@ -59,7 +59,7 @@ struct AddDocumentSheet: View {
                                 if let pageCount = PDFDocument(data: pdfData)?.pageCount {
                                     Text(Strings.Documents.pageCount(pageCount))
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                 }
                             }
 
@@ -74,7 +74,7 @@ struct AddDocumentSheet: View {
                                 }
                             } label: {
                                 Label(Strings.MediaAttachment.remove, systemImage: "xmark.circle.fill")
-                                    .foregroundColor(.red)
+                                    .foregroundStyle(.red)
                             }
                         }
                     } else {
@@ -236,9 +236,9 @@ struct AddDocumentSheet: View {
         let document = Document(
             id: existingDocument?.id ?? UUID(),
             type: documentType,
-            title: customTitle.isEmpty ? nil : customTitle,
-            note: notes.isEmpty ? nil : notes,
-            insuranceAgency: insuranceAgency.isEmpty ? nil : insuranceAgency,
+            title: customTitle.nilIfBlank,
+            note: notes.nilIfBlank,
+            insuranceAgency: insuranceAgency.nilIfBlank,
             attachmentType: attachmentType,
             documentDate: hasDocumentDate ? documentDate : nil,
             expiryDate: hasExpiry ? expiryDate : nil,
@@ -302,7 +302,7 @@ private struct PDFThumbnailPreview: View {
                     .fill(Color(.systemGray5))
                     .overlay {
                         Image(systemName: "doc.fill")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
             }
         }

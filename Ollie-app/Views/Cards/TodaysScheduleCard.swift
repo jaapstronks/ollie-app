@@ -9,7 +9,7 @@ import OtisShared
 
 /// Card showing today's scheduled appointments
 struct TodaysScheduleCard: View {
-    @ObservedObject var appointmentStore: AppointmentStore
+    var appointmentStore: AppointmentStore
     var onViewAll: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -20,11 +20,11 @@ struct TodaysScheduleCard: View {
 
     var body: some View {
         if !todaysAppointments.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                // Header
-                headerView
+            VStack(alignment: .leading, spacing: 8) {
+                // Section header (outside card, matches RecentActivityPreview pattern)
+                sectionHeader
 
-                // Appointment list
+                // Content card
                 VStack(spacing: 8) {
                     ForEach(todaysAppointments.prefix(3)) { appointment in
                         appointmentRow(appointment)
@@ -35,46 +35,47 @@ struct TodaysScheduleCard: View {
                         showMoreButton
                     }
                 }
+                .padding()
+                .glassCard(tint: .accent)
             }
-            .padding()
-            .glassCard(tint: .accent)
         }
     }
 
-    // MARK: - Header
+    // MARK: - Section Header
 
     @ViewBuilder
-    private var headerView: some View {
+    private var sectionHeader: some View {
         Button {
             onViewAll?()
         } label: {
-            HStack {
-                Image(systemName: "calendar")
-                    .foregroundStyle(Color.otisAccent)
-
+            HStack(spacing: 6) {
                 Text(Strings.Appointments.todaysSchedule)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
-
-                Spacer()
+                    .foregroundStyle(.secondary)
 
                 // Count badge
                 Text("\(todaysAppointments.count)")
-                    .font(.caption)
+                    .font(.caption2)
+                    .fontWeight(.medium)
                     .foregroundStyle(.secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.secondary.opacity(0.1))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.secondary.opacity(0.12))
                     .clipShape(Capsule())
+
+                Spacer()
 
                 // Navigation indicator
                 Image(systemName: "chevron.right")
-                    .font(.caption)
+                    .font(.caption2)
+                    .fontWeight(.semibold)
                     .foregroundStyle(.tertiary)
             }
+            .padding(.horizontal, 4)
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(.isHeader)
     }
 
     // MARK: - Appointment Row

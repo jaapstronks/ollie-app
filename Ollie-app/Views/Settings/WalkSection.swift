@@ -21,7 +21,7 @@ struct WalkSection: View {
                 // Mode indicator
                 HStack {
                     Image(systemName: profile.walkSchedule.mode == .flexible ? "clock.arrow.2.circlepath" : "clock")
-                        .foregroundColor(.otisAccent)
+                        .foregroundStyle(Color.otisAccent)
                     Text(profile.walkSchedule.mode.label)
                         .font(.subheadline)
                     Spacer()
@@ -30,17 +30,17 @@ struct WalkSection: View {
                 // Walks per day
                 HStack {
                     Text(Strings.WalkScheduleEditor.walksPerDay(profile.walkSchedule.walksPerDay))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Spacer()
                     Text(Strings.WalkScheduleEditor.intervalSummary(profile.walkSchedule.intervalMinutes))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 .font(.caption)
 
                 // Max exercise
                 HStack {
                     Text(Strings.WalkScheduleEditor.maxExerciseSummary(profile.maxExerciseMinutes))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Spacer()
                 }
                 .font(.caption)
@@ -51,10 +51,10 @@ struct WalkSection: View {
             ForEach(profile.walkSchedule.walks.prefix(4)) { walk in
                 HStack {
                     Text(walk.label)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Spacer()
                     Text(walk.targetTime)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 .font(.subheadline)
             }
@@ -62,7 +62,7 @@ struct WalkSection: View {
             if profile.walkSchedule.walks.count > 4 {
                 Text("+ \(profile.walkSchedule.walks.count - 4) more walks")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             // Edit button
@@ -79,7 +79,7 @@ struct WalkSection: View {
             Text(Strings.WalkScheduleEditor.title)
             Spacer()
             Image(systemName: "figure.walk")
-                .foregroundColor(.otisAccent)
+                .foregroundStyle(Color.otisAccent)
         }
     }
 }

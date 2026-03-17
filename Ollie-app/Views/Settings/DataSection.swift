@@ -9,8 +9,8 @@ import OtisShared
 
 /// Data import and management section
 struct DataSection: View {
-    @ObservedObject var dataImporter: DataImporter
-    @ObservedObject var eventStore: EventStore
+    var dataImporter: DataImporter
+    var eventStore: EventStore
     @Binding var showingImportSheet: Bool
 
     var body: some View {
@@ -19,7 +19,7 @@ struct DataSection: View {
                 HStack {
                     ProgressView()
                     Text(dataImporter.progress)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             } else {
                 Button {
@@ -32,7 +32,7 @@ struct DataSection: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(Strings.DataImport.lastImportResult)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(Strings.DataImport.importSummary(
                             components: result.componentsImported,
                             items: result.itemsImported
@@ -47,7 +47,7 @@ struct DataSection: View {
 
 /// Danger zone section for destructive actions
 struct DangerSection: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
 
     var body: some View {
         Section {

@@ -12,6 +12,14 @@
 				<string>cloudkit-iCloud.nl.jaapstronks.Otis</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Otis Deep Links</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>otis</string>
+			</array>
+		</dict>
 	</array>
 	<key>SENTRY_DSN</key>
 	<string>$(SENTRY_DSN)</string>
@@ -20,7 +28,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Otis wants to use the camera to take photos of your puppy.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Otis uses your location to save walk spots so you can easily log walks at your favorite places.</string>
+	<string>Otis uses your location to save walk spots and track your walks on the map.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Otis tracks your location during walks to show your route on the map, even when the app is in the background.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Otis wants access to your photos to add moments.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
@@ -31,12 +41,23 @@
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>location</string>
 	</array>
 	<key>CKSharingSupported</key>
 	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>comgooglemaps</string>
+		<string>instagram-stories</string>
+		<string>instagram</string>
+		<string>facebook-stories</string>
+		<string>fb</string>
+		<string>twitter</string>
+		<string>whatsapp</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save shareable cards to your photo library</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 </dict>
 </plist>

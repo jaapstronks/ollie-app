@@ -82,6 +82,15 @@ public enum DateFormatters {
         formatter.formatOptions = [.withInternetDateTime, .withTimeZone, .withFractionalSeconds]
         return formatter
     }()
+
+    /// Localized medium date (e.g., "Mar 8, 2026" in en_US, "8 mrt 2026" in nl_NL)
+    /// Uses system locale for proper localization
+    public static let localizedMedium: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
 }
 
 // MARK: - Cached Calendar
@@ -159,6 +168,31 @@ extension Date {
         AppCalendar.current.isDate(self, inSameDayAs: other)
     }
 
+    /// Check if this date is within the last N days (from now)
+    public func isWithinLastDays(_ days: Int) -> Bool {
+        self >= Date.daysAgo(days)
+    }
+
+    /// Check if this date falls within a specific date range (inclusive)
+    public func isBetween(_ start: Date, and end: Date) -> Bool {
+        self >= start && self < end
+    }
+
+    /// Check if this date is within the "this week" window (last 7 days)
+    public var isThisWeek: Bool {
+        isWithinLastDays(7)
+    }
+
+    /// Check if this date is within the "last week" window (7-14 days ago)
+    public var isLastWeek: Bool {
+        isBetween(Date.daysAgo(14), and: Date.daysAgo(7))
+    }
+
+    /// Check if this date is within the "this month" window (last 30 days)
+    public var isThisMonth: Bool {
+        isWithinLastDays(30)
+    }
+
     // MARK: - Date Arithmetic
 
     /// Add days to date
@@ -171,6 +205,16 @@ extension Date {
         AppCalendar.current.date(byAdding: .weekOfYear, value: weeks, to: self)!
     }
 
+    /// Add months to date
+    public func addingMonths(_ months: Int) -> Date {
+        AppCalendar.current.date(byAdding: .month, value: months, to: self)!
+    }
+
+    /// Add years to date
+    public func addingYears(_ years: Int) -> Date {
+        AppCalendar.current.date(byAdding: .year, value: years, to: self)!
+    }
+
     /// Add hours to date
     public func addingHours(_ hours: Int) -> Date {
         AppCalendar.current.date(byAdding: .hour, value: hours, to: self)!
@@ -179,6 +223,28 @@ extension Date {
     /// Add minutes to date
     public func addingMinutes(_ minutes: Int) -> Date {
         AppCalendar.current.date(byAdding: .minute, value: minutes, to: self)!
+    }
+
+    // MARK: - Convenience Past/Future Dates
+
+    /// Get a date N days ago from now
+    public static func daysAgo(_ days: Int) -> Date {
+        Date().addingDays(-days)
+    }
+
+    /// Get a date N weeks ago from now
+    public static func weeksAgo(_ weeks: Int) -> Date {
+        Date().addingWeeks(-weeks)
+    }
+
+    /// Get a date N months ago from now
+    public static func monthsAgo(_ months: Int) -> Date {
+        Date().addingMonths(-months)
+    }
+
+    /// Get a date N days from now
+    public static func daysFromNow(_ days: Int) -> Date {
+        Date().addingDays(days)
     }
 
     /// Days since another date
@@ -215,9 +281,38 @@ extension Date {
         Int(timeIntervalSince(other) / 60)
     }
 
+    /// Milliseconds since another date
+    public func millisecondsSince(_ other: Date) -> Int {
+        Int(timeIntervalSince(other) * 1000)
+    }
+
     /// Hours since another date (fractional)
     public func hoursSince(_ other: Date) -> Double {
         timeIntervalSince(other) / 3600
+    }
+
+    // MARK: - Caching Stamps
+
+    /// Format as YYYY-MM-DD for cache keys and budget tracking
+    public func dayStamp() -> String {
+        dateString
+    }
+
+    /// Format as YYYY-MM-DD-HH for hourly cache keys
+    public func hourStamp() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd-HH"
+        formatter.timeZone = TimeZone.current
+        return formatter.string(from: self)
+    }
+
+    /// Format as YYYY-MM-DD-W where W is the window bucket for cache keys
+    /// Groups hours into buckets (e.g., hours=6 creates 4 buckets per day: 0, 1, 2, 3)
+    public func windowStamp(hours: Int) -> String {
+        let hour = AppCalendar.current.component(.hour, from: self)
+        let bucket = max(1, hours)
+        let window = hour / bucket
+        return "\(dateString)-\(window)"
     }
 
     // MARK: - Display Formatting
@@ -242,6 +337,22 @@ extension Date {
     public var mediumDateString: String {
         DateFormatters.dutchMediumDate.string(from: self)
     }
+
+    // MARK: - Localized Display Formatting
+
+    /// Format as localized medium date (e.g., "Mar 8, 2026" or "8 mrt 2026")
+    /// Uses system locale for proper localization
+    public func formattedMedium() -> String {
+        DateFormatters.localizedMedium.string(from: self)
+    }
+
+    /// Format as relative time (e.g., "2h ago", "yesterday")
+    /// - Parameter style: The units style for the formatter (default: .abbreviated)
+    public func relativeFormatted(style: RelativeDateTimeFormatter.UnitsStyle = .abbreviated) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = style
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
 }
 
 // MARK: - DateFormatter Extensions
@@ -263,6 +374,8 @@ public enum DurationFormatStyle {
     case compact
     /// Full format for app UI: "5 min", "1u 30m"
     case full
+    /// Natural language for notifications: "an hour", "45 minutes", "an hour and a half"
+    case naturalLanguage
 }
 
 /// Centralized duration formatting to avoid duplication
@@ -298,6 +411,42 @@ public enum DurationFormatter {
                 return "\(hours) \(Strings.Common.hours)"
             } else {
                 return "\(hours)u \(mins)m"
+            }
+
+        case .naturalLanguage:
+            return formatNaturalLanguage(minutes)
+        }
+    }
+
+    /// Format minutes as natural language (e.g., "an hour", "45 minutes", "an hour and a half")
+    private static func formatNaturalLanguage(_ minutes: Int) -> String {
+        switch minutes {
+        case 0..<2:
+            return Strings.Duration.aMoment
+        case 2..<5:
+            return Strings.Duration.aFewMinutes
+        case 25...35:
+            return Strings.Duration.halfAnHour
+        case 55...65:
+            return Strings.Duration.anHour
+        case 85...95:
+            return Strings.Duration.anHourAndAHalf
+        case 115...125:
+            return Strings.Duration.twoHours
+        default:
+            // For other values, use numeric format with "minutes" or "hours"
+            if minutes < 60 {
+                return Strings.Duration.minutesNatural(minutes)
+            } else {
+                let hours = minutes / 60
+                let remainingMins = minutes % 60
+                if remainingMins < 10 {
+                    return Strings.Duration.aboutHours(hours)
+                } else if remainingMins >= 25 && remainingMins <= 35 {
+                    return Strings.Duration.hoursAndAHalf(hours)
+                } else {
+                    return Strings.Duration.aboutHours(hours)
+                }
             }
         }
     }

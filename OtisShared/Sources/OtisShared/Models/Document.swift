@@ -48,23 +48,23 @@ public enum DocumentType: String, Codable, CaseIterable, Sendable {
     public var displayName: String {
         switch self {
         case .passport:
-            return String(localized: "Passport", comment: "Document type: pet passport")
+            return Strings.Documents.passport
         case .chipRegistration:
-            return String(localized: "Chip Registration", comment: "Document type: microchip registration")
+            return Strings.Documents.chipRegistration
         case .insurance:
-            return String(localized: "Insurance", comment: "Document type: pet insurance")
+            return Strings.Documents.insurance
         case .pedigree:
-            return String(localized: "Pedigree", comment: "Document type: breed pedigree")
+            return Strings.Documents.pedigree
         case .vaccination:
-            return String(localized: "Vaccination Record", comment: "Document type: vaccination record")
+            return Strings.Documents.vaccination
         case .medicalRecord:
-            return String(localized: "Medical Record", comment: "Document type: medical record")
+            return Strings.Documents.medicalRecord
         case .registration:
-            return String(localized: "Registration", comment: "Document type: official registration")
+            return Strings.Documents.registration
         case .trainingCertificate:
-            return String(localized: "Training Certificate", comment: "Document type: training certificate")
+            return Strings.Documents.trainingCertificate
         case .other:
-            return String(localized: "Other", comment: "Document type: other document")
+            return Strings.Documents.other
         }
     }
 }
@@ -144,15 +144,13 @@ public struct Document: Identifiable, Codable, Sendable, Hashable {
     /// Whether the document expires within 30 days
     public var expiresSoon: Bool {
         guard let expiry = expiryDate else { return false }
-        let thirtyDaysFromNow = Calendar.current.date(byAdding: .day, value: 30, to: Date()) ?? Date()
-        return expiry > Date() && expiry <= thirtyDaysFromNow
+        return expiry > Date() && expiry <= Date.daysFromNow(30)
     }
 
     /// Days until expiry (nil if no expiry date, negative if expired)
     public var daysUntilExpiry: Int? {
         guard let expiry = expiryDate else { return nil }
-        let calendar = Calendar.current
-        return calendar.dateComponents([.day], from: calendar.startOfDay(for: Date()), to: calendar.startOfDay(for: expiry)).day
+        return expiry.startOfDay.daysSince(Date().startOfDay)
     }
 }
 

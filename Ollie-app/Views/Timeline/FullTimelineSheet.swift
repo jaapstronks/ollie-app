@@ -10,7 +10,7 @@ import OtisShared
 
 /// Full timeline sheet with day navigation
 struct FullTimelineSheet: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     let onEditEvent: (PuppyEvent) -> Void
     let onDeleteEvent: (PuppyEvent) -> Void
     var onPhotoTap: ((PuppyEvent) -> Void)?

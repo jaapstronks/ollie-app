@@ -13,12 +13,15 @@ struct MediaPreviewView: View {
     let onDelete: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(ProfileStore.self) private var profileStore
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
     @State private var showControls: Bool = true
     @State private var showDeleteConfirmation: Bool = false
+    @State private var showShareSheet: Bool = false
+    @State private var loadedImage: UIImage?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var documentsURL: URL {
@@ -42,9 +45,7 @@ struct MediaPreviewView: View {
                 Color.black.ignoresSafeArea()
 
                 // Photo with gestures (fallback to thumbnail if photo is nil)
-                if let photoPath = event.photo ?? event.thumbnailPath,
-                   let data = try? Data(contentsOf: documentsURL.appendingPathComponent(photoPath)),
-                   let uiImage = UIImage(data: data) {
+                if let uiImage = loadedImage {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFit()
@@ -123,7 +124,7 @@ struct MediaPreviewView: View {
                         .accessibilityHint(Strings.MediaPreview.zoomHint)
                 } else {
                     Text(Strings.MediaPreview.photoNotFound)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                 }
 
                 // Controls overlay
@@ -136,7 +137,7 @@ struct MediaPreviewView: View {
                             } label: {
                                 Image(systemName: "xmark")
                                     .font(.title2)
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
@@ -145,12 +146,26 @@ struct MediaPreviewView: View {
 
                             Spacer()
 
+                            // Share button
+                            Button {
+                                HapticFeedback.light()
+                                showShareSheet = true
+                            } label: {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.title2)
+                                    .foregroundStyle(.white)
+                                    .padding()
+                                    .background(Circle().fill(Color.black.opacity(0.5)))
+                            }
+                            .accessibilityLabel(Strings.Sharing.shareThisMoment)
+                            .accessibilityIdentifier("MEDIA_SHARE_BUTTON")
+
                             Button {
                                 showDeleteConfirmation = true
                             } label: {
                                 Image(systemName: "trash")
                                     .font(.title2)
-                                    .foregroundColor(.red)
+                                    .foregroundStyle(.red)
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
@@ -168,25 +183,25 @@ struct MediaPreviewView: View {
                                     .accessibilityHidden(true)
                                 Text(event.type.label)
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
 
                                 Spacer()
 
                                 Text(event.time.formatted(date: .abbreviated, time: .shortened))
                                     .font(.subheadline)
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundStyle(.white.opacity(0.8))
                             }
 
                             if let note = event.note, !note.isEmpty {
                                 Text(note)
                                     .font(.body)
-                                    .foregroundColor(.white.opacity(0.9))
+                                    .foregroundStyle(.white.opacity(0.9))
                             }
 
                             if let lat = event.latitude, let lon = event.longitude {
                                 Label(String(format: "%.4f, %.4f", lat, lon), systemImage: "location")
                                     .font(.caption)
-                                    .foregroundColor(.white.opacity(0.7))
+                                    .foregroundStyle(.white.opacity(0.7))
                             }
                         }
                         .padding()
@@ -213,7 +228,29 @@ struct MediaPreviewView: View {
         } message: {
             Text(Strings.MediaPreview.deleteConfirmMessage)
         }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = loadedImage, let profile = profileStore.activeProfile {
+                ShareOptionsSheet(card: MomentShareCard(
+                    event: event,
+                    profile: profile,
+                    momentImage: image
+                ))
+            }
+        }
+        .onAppear {
+            loadImage()
+        }
         .statusBarHidden(true)
+    }
+
+    // MARK: - Image Loading
+
+    private func loadImage() {
+        guard let photoPath = event.photo ?? event.thumbnailPath else { return }
+        let imageURL = documentsURL.appendingPathComponent(photoPath)
+        guard let data = try? Data(contentsOf: imageURL),
+              let image = UIImage(data: data) else { return }
+        loadedImage = image
     }
 }
 
@@ -222,4 +259,5 @@ struct MediaPreviewView: View {
         event: PuppyEvent(time: Date(), type: .moment, note: "Test moment"),
         onDelete: {}
     )
+    .environment(ProfileStore.shared)
 }

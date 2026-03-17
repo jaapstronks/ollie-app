@@ -10,62 +10,41 @@ import OtisShared
 
 /// Personalized potty training guide sheet
 struct PottyTrainingGuideSheet: View {
-    let streakInfo: StreakInfo
-    let patternAnalysis: PatternAnalysis
-    let outdoorPercentage: Int
-    let ageInWeeks: Int
+    @Bindable var viewModel: PottyTrainingGuideViewModel
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-
-    /// Determine which age phase the puppy is in
-    private var agePhase: AgePhase {
-        switch ageInWeeks {
-        case ..<12: return .early
-        case 12..<16: return .middle
-        default: return .older
-        }
-    }
-
-    private enum AgePhase {
-        case early   // 8-12 weeks
-        case middle  // 12-16 weeks
-        case older   // 16+ weeks
-    }
-
-    /// Top pattern triggers for display
-    private var topTriggers: [PatternTrigger] {
-        patternAnalysis.triggers
-            .filter { $0.hasData }
-            .sorted { $0.successRate > $1.successRate }
-            .prefix(3)
-            .map { $0 }
-    }
-
-    /// Whether user has meaningful data
-    private var hasData: Bool {
-        outdoorPercentage > 0 || streakInfo.currentStreak > 0 || !topTriggers.isEmpty
-    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Stats section
-                    if hasData {
-                        statsSection
+                    if viewModel.isMastered {
+                        // Mastered state
+                        masteredSection
                     } else {
-                        getStartedSection
+                        // AI Potty Analysis (personalized insights)
+                        AIPottyAnalysisCard()
+
+                        // Stats section
+                        if viewModel.hasData {
+                            statsSection
+                        } else {
+                            getStartedSection
+                        }
+
+                        // Key principles (always show)
+                        principlesSection
+
+                        // Age-based tips
+                        ageBasedTipsSection
+
+                        // Common mistakes
+                        commonMistakesSection
+
+                        // Mark as mastered button
+                        markAsMasteredButton
                     }
-
-                    // Key principles (always show)
-                    principlesSection
-
-                    // Age-based tips
-                    ageBasedTipsSection
-
-                    // Common mistakes
-                    commonMistakesSection
                 }
                 .padding()
                 .padding(.bottom, 20)
@@ -79,6 +58,209 @@ struct PottyTrainingGuideSheet: View {
                     }
                 }
             }
+            .confirmationDialog(
+                Strings.Training.PottyTraining.markMastered,
+                isPresented: $viewModel.showMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Training.PottyTraining.markMastered) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        viewModel.markAsMastered()
+                    }
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Training.PottyTraining.markMasteredDescription)
+            }
+        }
+    }
+
+    // MARK: - Mastered Section
+
+    @ViewBuilder
+    private var masteredSection: some View {
+        VStack(spacing: 24) {
+            // Celebration header
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.green.opacity(0.15))
+                        .frame(width: 80, height: 80)
+
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.green)
+                }
+
+                Text(Strings.Training.PottyTraining.masteredCelebration)
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text(Strings.Training.PottyTraining.masteredDescription)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+
+                if !viewModel.masteredDateFormatted.isEmpty {
+                    Text(Strings.Training.PottyTraining.masteredOn(date: viewModel.masteredDateFormatted))
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .padding(.top, 20)
+
+            // Incident message (gentle, not patronizing)
+            if viewModel.shouldShowIncidentMessage {
+                incidentMessageCard
+            }
+
+            // Reactivation prompt (3+ incidents)
+            if viewModel.shouldShowReactivationPrompt {
+                reactivationPromptCard
+            }
+
+            Divider()
+
+            // Key principles reminder (collapsed)
+            principlesSection
+
+            Divider()
+
+            // Always-available reactivate link
+            Button {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    viewModel.reactivateTracking()
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.subheadline)
+                    Text(Strings.Training.PottyTraining.reactivateLink)
+                        .font(.subheadline)
+                }
+                .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 8)
+        }
+    }
+
+    // MARK: - Incident Message Card (gentle tone)
+
+    @ViewBuilder
+    private var incidentMessageCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Image(systemName: "leaf.fill")
+                    .foregroundStyle(.orange)
+                Text(Strings.Training.PottyTraining.incidentHappened)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+
+            Text(Strings.Training.PottyTraining.incidentMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Button {
+                viewModel.acknowledgeIncident()
+            } label: {
+                Text(Strings.Common.gotIt)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.orange)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.orange.opacity(colorScheme == .dark ? 0.15 : 0.08))
+        )
+    }
+
+    // MARK: - Reactivation Prompt Card
+
+    @ViewBuilder
+    private var reactivationPromptCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "arrow.counterclockwise.circle.fill")
+                    .foregroundStyle(.indigo)
+                Text(Strings.Training.PottyTraining.reactivationTitle)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+            }
+
+            Text(Strings.Training.PottyTraining.reactivationMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 12) {
+                Button {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        viewModel.reactivateTracking()
+                    }
+                } label: {
+                    Text(Strings.Training.PottyTraining.reactivateNow)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Capsule().fill(Color.indigo))
+                }
+                .buttonStyle(.plain)
+
+                Button {
+                    viewModel.dismissReactivationPrompt()
+                } label: {
+                    Text(Strings.Training.PottyTraining.notNow)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.indigo.opacity(colorScheme == .dark ? 0.15 : 0.08))
+        )
+    }
+
+    // MARK: - Mark as Mastered Button
+
+    @ViewBuilder
+    private var markAsMasteredButton: some View {
+        VStack(spacing: 8) {
+            Divider()
+                .padding(.top, 8)
+
+            Button {
+                viewModel.showMasteryConfirmation = true
+            } label: {
+                HStack {
+                    Image(systemName: "checkmark.seal.fill")
+                    Text(Strings.Training.PottyTraining.markMastered)
+                }
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.green)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.green.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                )
+            }
+            .buttonStyle(.plain)
+
+            Text(Strings.Training.PottyTraining.markMasteredDescription)
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
         }
     }
 
@@ -95,22 +277,22 @@ struct PottyTrainingGuideSheet: View {
                 // Outdoor rate
                 statCard(
                     title: Strings.Training.Guides.outdoorRate,
-                    value: "\(outdoorPercentage)%",
+                    value: "\(viewModel.outdoorPercentage)%",
                     icon: "target",
-                    color: percentageColor
+                    color: viewModel.percentageColor
                 )
 
                 // Current streak
                 statCard(
                     title: Strings.Training.Guides.outdoorStreak,
-                    value: "\(streakInfo.currentStreak)",
-                    icon: StreakCalculations.iconName(for: streakInfo.currentStreak),
-                    color: StreakCalculations.iconColor(for: streakInfo.currentStreak)
+                    value: "\(viewModel.streakInfo.currentStreak)",
+                    icon: StreakCalculations.iconName(for: viewModel.streakInfo.currentStreak),
+                    color: StreakCalculations.iconColor(for: viewModel.streakInfo.currentStreak)
                 )
             }
 
             // Top triggers (if available)
-            if !topTriggers.isEmpty {
+            if !viewModel.topTriggers.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(Strings.Train.topTriggers)
                         .font(.caption)
@@ -118,7 +300,7 @@ struct PottyTrainingGuideSheet: View {
                         .foregroundStyle(.secondary)
 
                     HStack(spacing: 10) {
-                        ForEach(topTriggers) { trigger in
+                        ForEach(viewModel.topTriggers) { trigger in
                             triggerBadge(trigger)
                         }
                     }
@@ -150,7 +332,7 @@ struct PottyTrainingGuideSheet: View {
         .padding(12)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(color.opacity(colorScheme == .dark ? 0.15 : 0.08))
+                .fill(color.backgroundOpacity(colorScheme: colorScheme))
         )
     }
 
@@ -169,17 +351,8 @@ struct PottyTrainingGuideSheet: View {
         .padding(.vertical, 4)
         .background(
             Capsule()
-                .fill(trigger.iconColor.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                .fill(trigger.iconColor.badgeOpacity(colorScheme: colorScheme))
         )
-    }
-
-    private var percentageColor: Color {
-        switch outdoorPercentage {
-        case 90...: return .otisSuccess
-        case 70...: return .otisAccent
-        case 50...: return .otisWarning
-        default: return .otisDanger
-        }
     }
 
     // MARK: - Get Started Section
@@ -214,31 +387,14 @@ struct PottyTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 8) {
-                principleRow(text: Strings.Training.Guides.principleTiming, icon: "clock.fill")
-                principleRow(text: Strings.Training.Guides.principleReward, icon: "star.fill")
-                principleRow(text: Strings.Training.Guides.principleSupervise, icon: "eye.fill")
-                principleRow(text: Strings.Training.Guides.principlePatience, icon: "heart.fill")
+                InfoListRow.principle(Strings.Training.Guides.principleTiming, icon: "clock.fill")
+                InfoListRow.principle(Strings.Training.Guides.principleReward, icon: "star.fill")
+                InfoListRow.principle(Strings.Training.Guides.principleSupervise, icon: "eye.fill")
+                InfoListRow.principle(Strings.Training.Guides.principlePatience, icon: "heart.fill")
             }
         }
         .padding()
         .glassStatusCard(tintColor: nil)
-    }
-
-    @ViewBuilder
-    private func principleRow(text: String, icon: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(Color.otisAccent)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 
     // MARK: - Age-Based Tips Section
@@ -251,71 +407,20 @@ struct PottyTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             // Show phase header
-            Text(phaseTitle)
+            Text(viewModel.phaseTitle)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundStyle(Color.otisAccent)
                 .padding(.top, 4)
 
             VStack(spacing: 8) {
-                ForEach(phaseTips, id: \.self) { tip in
-                    tipRow(text: tip)
+                ForEach(viewModel.phaseTips, id: \.self) { tip in
+                    InfoListRow.tip(tip)
                 }
             }
         }
         .padding()
         .glassStatusCard(tintColor: .otisAccent.opacity(0.1))
-    }
-
-    private var phaseTitle: String {
-        switch agePhase {
-        case .early: return Strings.Training.Guides.earlyWeeks
-        case .middle: return Strings.Training.Guides.middleWeeks
-        case .older: return Strings.Training.Guides.olderPuppy
-        }
-    }
-
-    private var phaseTips: [String] {
-        switch agePhase {
-        case .early:
-            return [
-                Strings.Training.Guides.earlyTip1,
-                Strings.Training.Guides.earlyTip2,
-                Strings.Training.Guides.earlyTip3,
-                Strings.Training.Guides.earlyTip4
-            ]
-        case .middle:
-            return [
-                Strings.Training.Guides.middleTip1,
-                Strings.Training.Guides.middleTip2,
-                Strings.Training.Guides.middleTip3,
-                Strings.Training.Guides.middleTip4
-            ]
-        case .older:
-            return [
-                Strings.Training.Guides.olderTip1,
-                Strings.Training.Guides.olderTip2,
-                Strings.Training.Guides.olderTip3,
-                Strings.Training.Guides.olderTip4
-            ]
-        }
-    }
-
-    @ViewBuilder
-    private func tipRow(text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.caption)
-                .foregroundStyle(Color.otisSuccess)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 
     // MARK: - Common Mistakes Section
@@ -328,31 +433,14 @@ struct PottyTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 8) {
-                mistakeRow(text: Strings.Training.Guides.pottyMistake1)
-                mistakeRow(text: Strings.Training.Guides.pottyMistake2)
-                mistakeRow(text: Strings.Training.Guides.pottyMistake3)
-                mistakeRow(text: Strings.Training.Guides.pottyMistake4)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake1)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake2)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake3)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake4)
             }
         }
         .padding()
         .glassStatusCard(tintColor: .otisWarning.opacity(0.1))
-    }
-
-    @ViewBuilder
-    private func mistakeRow(text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "xmark.circle.fill")
-                .font(.caption)
-                .foregroundStyle(Color.otisWarning)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 }
 
@@ -360,44 +448,87 @@ struct PottyTrainingGuideSheet: View {
 
 #Preview("With Data") {
     PottyTrainingGuideSheet(
-        streakInfo: StreakInfo(
-            currentStreak: 5,
-            bestStreak: 8,
-            lastOutdoorTime: Date(),
-            lastIndoorTime: nil
-        ),
-        patternAnalysis: PatternAnalysis(
-            triggers: [
-                PatternTrigger(id: "sleep", name: "After Sleep", iconName: "moon.zzz.fill", iconColor: .otisSleep, outdoorCount: 9, indoorCount: 1),
-                PatternTrigger(id: "meal", name: "After Eating", iconName: "fork.knife", iconColor: .otisAccent, outdoorCount: 7, indoorCount: 2),
-                PatternTrigger(id: "walk", name: "During Walk", iconName: "figure.walk", iconColor: .otisAccent, outdoorCount: 10, indoorCount: 0)
-            ],
-            periodDays: 7
-        ),
-        outdoorPercentage: 82,
-        ageInWeeks: 10
+        viewModel: PottyTrainingGuideViewModel(
+            streakInfo: StreakInfo(
+                currentStreak: 5,
+                bestStreak: 8,
+                lastOutdoorTime: Date(),
+                lastIndoorTime: nil
+            ),
+            patternAnalysis: PatternAnalysis(
+                triggers: [
+                    PatternTrigger(id: "sleep", name: "After Sleep", iconName: "moon.zzz.fill", iconColor: .otisSleep, outdoorCount: 9, indoorCount: 1),
+                    PatternTrigger(id: "meal", name: "After Eating", iconName: "fork.knife", iconColor: .otisAccent, outdoorCount: 7, indoorCount: 2),
+                    PatternTrigger(id: "walk", name: "During Walk", iconName: "figure.walk", iconColor: .otisAccent, outdoorCount: 10, indoorCount: 0)
+                ],
+                periodDays: 7
+            ),
+            outdoorPercentage: 82,
+            ageInWeeks: 10,
+            shouldShowIncidentMessage: false,
+            shouldShowReactivationPrompt: false,
+            incidentCount: 0
+        )
     )
 }
 
 #Preview("New User") {
     PottyTrainingGuideSheet(
-        streakInfo: .empty,
-        patternAnalysis: .empty,
-        outdoorPercentage: 0,
-        ageInWeeks: 8
+        viewModel: PottyTrainingGuideViewModel(
+            streakInfo: .empty,
+            patternAnalysis: .empty,
+            outdoorPercentage: 0,
+            ageInWeeks: 8,
+            shouldShowIncidentMessage: false,
+            shouldShowReactivationPrompt: false,
+            incidentCount: 0
+        )
     )
 }
 
 #Preview("Older Puppy") {
     PottyTrainingGuideSheet(
-        streakInfo: StreakInfo(
-            currentStreak: 14,
-            bestStreak: 14,
-            lastOutdoorTime: Date(),
-            lastIndoorTime: nil
-        ),
-        patternAnalysis: .empty,
-        outdoorPercentage: 95,
-        ageInWeeks: 20
+        viewModel: PottyTrainingGuideViewModel(
+            streakInfo: StreakInfo(
+                currentStreak: 14,
+                bestStreak: 14,
+                lastOutdoorTime: Date(),
+                lastIndoorTime: nil
+            ),
+            patternAnalysis: .empty,
+            outdoorPercentage: 95,
+            ageInWeeks: 20,
+            shouldShowIncidentMessage: false,
+            shouldShowReactivationPrompt: false,
+            incidentCount: 0
+        )
+    )
+}
+
+#Preview("Mastered with Incident") {
+    PottyTrainingGuideSheet(
+        viewModel: PottyTrainingGuideViewModel(
+            streakInfo: .empty,
+            patternAnalysis: .empty,
+            outdoorPercentage: 100,
+            ageInWeeks: 24,
+            shouldShowIncidentMessage: true,
+            shouldShowReactivationPrompt: false,
+            incidentCount: 1
+        )
+    )
+}
+
+#Preview("Mastered with Reactivation Prompt") {
+    PottyTrainingGuideSheet(
+        viewModel: PottyTrainingGuideViewModel(
+            streakInfo: .empty,
+            patternAnalysis: .empty,
+            outdoorPercentage: 100,
+            ageInWeeks: 24,
+            shouldShowIncidentMessage: false,
+            shouldShowReactivationPrompt: true,
+            incidentCount: 3
+        )
     )
 }

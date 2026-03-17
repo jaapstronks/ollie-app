@@ -5,41 +5,44 @@
 //  Main observable object providing contextual atmosphere state
 
 import SwiftUI
-import Combine
 import OtisShared
 
 /// Provides contextual atmosphere based on time, weather, and puppy state
+@Observable
 @MainActor
-final class AtmosphereProvider: ObservableObject {
+final class AtmosphereProvider {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var currentPeriod: TimeOfDayPeriod = .current()
-    @Published private(set) var transitionProgress: Double = 0  // 0-1 progress into next period
-    @Published private(set) var puppyState: PuppyActivityState = .unknown
-    @Published private(set) var weatherAtmosphere: WeatherAtmosphere = .unknown
-    @Published private(set) var currentSeason: Season = .current()
-    @Published private(set) var computedMood: AtmosphereMood = .neutral
+    private(set) var currentPeriod: TimeOfDayPeriod = .current()
+    private(set) var transitionProgress: Double = 0  // 0-1 progress into next period
+    private(set) var puppyState: PuppyActivityState = .unknown
+    private(set) var weatherAtmosphere: WeatherAtmosphere = .unknown
+    private(set) var currentSeason: Season = .current()
+    private(set) var computedMood: AtmosphereMood = .neutral
 
     // MARK: - User Preferences
 
+    @ObservationIgnored
     @AppStorage(UserPreferences.Key.atmosphereTimeOfDay.rawValue)
     private var timeOfDayEnabled: Bool = true
 
+    @ObservationIgnored
     @AppStorage(UserPreferences.Key.atmosphereWeather.rawValue)
     private var weatherEnabled: Bool = true
 
+    @ObservationIgnored
     @AppStorage(UserPreferences.Key.atmosphereState.rawValue)
     private var stateEnabled: Bool = true
 
+    @ObservationIgnored
     @AppStorage(UserPreferences.Key.atmosphereSeasonal.rawValue)
     private var seasonalEnabled: Bool = false
 
     // MARK: - Dependencies
 
-    private weak var weatherService: WeatherService?
-    private var cancellables = Set<AnyCancellable>()
-    nonisolated(unsafe) private var updateTimer: Timer?
+    @ObservationIgnored private weak var weatherService: WeatherService?
+    @ObservationIgnored nonisolated(unsafe) private var updateTimer: Timer?
 
     // Throttling
     private var lastUpdate = Date.distantPast
@@ -89,13 +92,24 @@ final class AtmosphereProvider: ObservableObject {
     func setWeatherService(_ service: WeatherService) {
         self.weatherService = service
 
-        // Observe weather changes
-        service.$forecasts
-            .receive(on: RunLoop.main)
-            .sink { [weak self] forecasts in
-                self?.updateWeatherAtmosphere(from: forecasts)
+        // Initial update
+        updateWeatherAtmosphere(from: service.forecasts)
+
+        // Observe weather changes using Swift Observation
+        observeWeatherChanges(service)
+    }
+
+    /// Observe weather service changes using Swift Observation framework
+    private func observeWeatherChanges(_ service: WeatherService) {
+        withObservationTracking {
+            _ = service.forecasts
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.updateWeatherAtmosphere(from: service.forecasts)
+                self.observeWeatherChanges(service)
             }
-            .store(in: &cancellables)
+        }
     }
 
     /// Update puppy activity state (called from TimelineViewModel)

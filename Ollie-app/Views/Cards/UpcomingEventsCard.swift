@@ -13,18 +13,27 @@ struct ActionableEventCard: View {
     let actionableItem: ActionableItem
     let onLogEvent: (EventType, Date?) -> Void
     var onNavigateToSocialization: (() -> Void)?
+    var poopStatus: PoopStatus?
 
-    @EnvironmentObject private var socializationStore: SocializationStore
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+    @Environment(SocializationStore.self) private var socializationStore
+    @Environment(UnitPreferences.self) var unitPreferences
     @State private var showWalkTips = false
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     /// Suggested items to watch for during walks (max 2)
     private var walkTips: [SocializationItem] {
         socializationStore.suggestedWalkItems(limit: 2)
+    }
+
+    /// Poop expectation subtitle for walk cards
+    private var poopSubtitle: String? {
+        guard actionableItem.item.itemType == .walk,
+              let status = poopStatus,
+              status.hasRemainingExpected else { return nil }
+        return Strings.Actionable.poopsExpectedToday(status.remainingExpected)
     }
 
     var body: some View {
@@ -38,6 +47,20 @@ struct ActionableEventCard: View {
                 subtitle: subtitleText,
                 iconSize: 40
             ) { EmptyView() }
+
+            // Poop expectation for walk cards
+            if let poopText = poopSubtitle {
+                HStack(spacing: 6) {
+                    Image(systemName: "leaf.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(poopText)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 4)
+            }
 
             // Weather + Action row
             if actionableItem.item.itemType == .walk, let weatherIcon = actionableItem.item.weatherIcon {
@@ -209,7 +232,7 @@ struct ActionableEventCard: View {
         switch actionableItem.state {
         case .overdue:
             // Show "Was scheduled at <time>" for overdue items
-            return Strings.Actionable.wasScheduledAt(time: actionableItem.item.timeString)
+            return Strings.Actionable.wasScheduledAt(time: actionableItem.item.displayTimeString)
         default:
             // Show detail like "2/9 walks today" or "110g"
             return actionableItem.item.detail
@@ -261,8 +284,8 @@ struct ActionableEventCard: View {
 /// Wrapper view for actionable and upcoming events
 /// Separates items that need action now vs items coming later
 struct ScheduledEventsSection: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var weatherService: WeatherService
+    @Bindable var viewModel: TimelineViewModel
+    var weatherService: WeatherService
 
     /// Pre-computed separated items (optional, to avoid redundant calculation when passed from parent)
     var precomputedSeparated: (actionable: [ActionableItem], upcoming: [UpcomingItem])?
@@ -286,7 +309,8 @@ struct ScheduledEventsSection: View {
                     onLogEvent: { eventType, suggestedTime in
                         viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
                     },
-                    onNavigateToSocialization: onNavigateToSocialization
+                    onNavigateToSocialization: onNavigateToSocialization,
+                    poopStatus: viewModel.poopStatus
                 )
             }
         }
@@ -307,10 +331,11 @@ struct UpcomingEventsCard: View {
     let isToday: Bool
 
     @State private var isExpanded = false
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     /// Number of items to show by default
@@ -374,8 +399,8 @@ struct UpcomingEventsCard: View {
     @ViewBuilder
     private func upcomingRow(_ item: UpcomingItem) -> some View {
         HStack(spacing: 10) {
-            // Time
-            Text(item.timeString)
+            // Time (rounded to 5 min for walks)
+            Text(item.displayTimeString)
                 .font(.system(.caption, design: .monospaced))
                 .foregroundStyle(.secondary)
                 .frame(minWidth: 40, alignment: .leading)
@@ -464,7 +489,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Actionable - Due (meal)") {
@@ -485,7 +510,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Actionable - Due (walk, cloudy)") {
@@ -508,7 +533,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Actionable - Overdue (rainy)") {
@@ -532,7 +557,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Upcoming List") {

@@ -16,7 +16,7 @@ struct ContactRow: View {
             // Icon
             Image(systemName: contact.contactType.icon)
                 .font(.system(size: 20))
-                .foregroundColor(.otisAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 40, height: 40)
                 .background(Color.otisAccent.opacity(0.1))
                 .clipShape(Circle())
@@ -31,15 +31,15 @@ struct ContactRow: View {
                 HStack(spacing: 8) {
                     Text(contact.contactType.displayName)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     if let phone = contact.phone, !phone.isEmpty {
                         Text("•")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(phone)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }
                 }

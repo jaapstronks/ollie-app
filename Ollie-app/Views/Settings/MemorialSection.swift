@@ -11,7 +11,7 @@ import OtisShared
 /// Section in dog profile for memorial features
 struct MemorialSection: View {
     let profile: PuppyProfile
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     var profileId: UUID? = nil
 
     @State private var showingConfirmation = false
@@ -152,7 +152,8 @@ struct MemorialSection: View {
                         profileStore.updatePassedDate(selectedDate, for: profileId)
                         showingDatePicker = false
                         // Show memory book generator after a brief moment
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.5))
                             showingMemoryBookSheet = true
                         }
                     }

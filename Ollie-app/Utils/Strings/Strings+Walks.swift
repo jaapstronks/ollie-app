@@ -125,11 +125,47 @@ extension Strings {
     // MARK: - Walk Target Nudge
     enum WalkNudge {
         static let title = String(localized: "Walk schedule review", table: table)
-        static func subtitle(actual: String, target: Int) -> String {
-            String(localized: "You're averaging \(actual) walks/day, but your target is \(target). Adjust?", table: table)
+
+        /// Formats the average into natural language like "about 5" or "5 to 6"
+        static func formatAverage(_ average: Double) -> String {
+            let rounded = Int(average.rounded())
+            let decimal = average - Double(Int(average))
+
+            // 4.8-5.2 → "about 5", 5.3-5.8 → "5 to 6"
+            if decimal >= 0.3 && decimal <= 0.8 {
+                return String(localized: "\(rounded) to \(rounded + 1)", table: table, comment: "Range format like '5 to 6'")
+            } else {
+                return String(localized: "about \(rounded)", table: table, comment: "Approximate format like 'about 5'")
+            }
         }
-        static let keepTarget = String(localized: "Keep target", table: table)
-        static let adjustSchedule = String(localized: "Adjust schedule", table: table)
+
+        static func subtitle(actual: String, target: Int) -> String {
+            String(localized: "You log \(actual) walks per day, but your target is \(target). Adjust?", table: table)
+        }
+        static let keepTarget = String(localized: "Keep it", table: table)
+        static let adjustSchedule = String(localized: "Adjust", table: table)
+    }
+
+    // MARK: - Walk Summary Card
+    enum WalkSummary {
+        static let title = String(localized: "This Week", table: table)
+
+        static func minutes(_ count: Int) -> String {
+            String(localized: "\(count) min", table: table)
+        }
+
+        static func hours(_ hours: Double) -> String {
+            let rounded = String(format: "%.1f", hours)
+            return String(localized: "\(rounded) hours", table: table)
+        }
+
+        static func daysProgress(days: Int) -> String {
+            String(localized: "\(days)/7 days", table: table)
+        }
+
+        static func accessibilityLabel(walks: Int, days: Int) -> String {
+            String(localized: "Weekly walk summary: \(walks) walks over \(days) days", table: table)
+        }
     }
 
     // MARK: - Walks Tab
@@ -157,5 +193,13 @@ extension Strings {
         static func totalDuration(_ minutes: Int) -> String {
             String(localized: "\(minutes) min total", table: table)
         }
+    }
+
+    // MARK: - Walk Map (GPS Tracking)
+    enum WalkMap {
+        static let duration = String(localized: "Duration", table: table)
+        static let distance = String(localized: "Distance", table: table)
+        static let endWalk = String(localized: "End Walk", table: table)
+        static let endWalkQuestion = String(localized: "End this walk?", table: table)
     }
 }

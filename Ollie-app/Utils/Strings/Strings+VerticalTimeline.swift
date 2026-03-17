@@ -131,6 +131,14 @@ extension Strings {
             String(localized: "\(name) was with caregiver", table: table)
         }
 
+        // MARK: - Grooming Descriptions
+        static func hadGrooming(name: String) -> String {
+            String(localized: "\(name) had grooming", table: table)
+        }
+        static func hadGroomingType(name: String, type: String) -> String {
+            String(localized: "\(name) had \(type)", table: table)
+        }
+
         // MARK: - Timeline Labels
         static let sleep = String(localized: "Nap", table: table)
         static let walk = String(localized: "Walk", table: table)
@@ -143,6 +151,7 @@ extension Strings {
         static let social = String(localized: "Social", table: table)
         static let weighed = String(localized: "Weighed", table: table)
         static let medication = String(localized: "Medication", table: table)
+        static let grooming = String(localized: "Grooming", table: table)
         static let outdoor = String(localized: "outdoor", table: table)
         static let indoor = String(localized: "indoor", table: table)
 

@@ -38,31 +38,11 @@ struct OtisShortcuts: AppShortcutsProvider {
             systemImageName: "circle.inset.filled"
         )
 
-        // Log pee inside (accident)
-        AppShortcut(
-            intent: LogPeeInsideIntent(),
-            phrases: [
-                "Log pee inside in \(.applicationName)",
-                "My puppy peed inside in \(.applicationName)",
-                "My dog had an accident in \(.applicationName)",
-                "Log indoor pee in \(.applicationName)"
-            ],
-            shortTitle: "Pee Inside",
-            systemImageName: "drop.fill"
-        )
+        // Log pee inside (accident) - removed to stay under 10 shortcut limit
+        // Users can still log accidents via the app
 
-        // Log poop inside (accident)
-        AppShortcut(
-            intent: LogPoopInsideIntent(),
-            phrases: [
-                "Log poop inside in \(.applicationName)",
-                "My puppy pooped inside in \(.applicationName)",
-                "My dog pooped inside in \(.applicationName)",
-                "Log indoor poop in \(.applicationName)"
-            ],
-            shortTitle: "Poop Inside",
-            systemImageName: "circle.inset.filled"
-        )
+        // Log poop inside (accident) - removed to stay under 10 shortcut limit
+        // Users can still log accidents via the app
 
         // Log meal
         AppShortcut(
@@ -77,7 +57,21 @@ struct OtisShortcuts: AppShortcutsProvider {
             systemImageName: "fork.knife"
         )
 
-        // Log walk
+        // Start walk (with GPS tracking)
+        AppShortcut(
+            intent: StartWalkIntent(),
+            phrases: [
+                "Start walk in \(.applicationName)",
+                "Start a walk with my puppy in \(.applicationName)",
+                "Let's go for a walk in \(.applicationName)",
+                "Begin walk in \(.applicationName)",
+                "Going for a walk in \(.applicationName)"
+            ],
+            shortTitle: "Start Walk",
+            systemImageName: "figure.walk"
+        )
+
+        // Log walk (completed walk)
         AppShortcut(
             intent: LogWalkIntent(),
             phrases: [

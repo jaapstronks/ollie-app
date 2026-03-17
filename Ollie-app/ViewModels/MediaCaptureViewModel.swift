@@ -9,15 +9,17 @@ import UIKit
 import Combine
 
 /// ViewModel for handling photo capture and EXIF extraction
+@Observable
 @MainActor
-class MediaCaptureViewModel: ObservableObject {
-    @Published var capturedImage: UIImage?
-    @Published var extractedDate: Date?
-    @Published var extractedLatitude: Double?
-    @Published var extractedLongitude: Double?
-    @Published var note: String = ""
-    @Published var isProcessing = false
+class MediaCaptureViewModel {
+    var capturedImage: UIImage?
+    var extractedDate: Date?
+    var extractedLatitude: Double?
+    var extractedLongitude: Double?
+    var note: String = ""
+    var isProcessing = false
 
+    @ObservationIgnored
     private let mediaStore: MediaStore
 
     init(mediaStore: MediaStore) {
@@ -59,7 +61,7 @@ class MediaCaptureViewModel: ObservableObject {
         return PuppyEvent(
             time: eventTime,
             type: .moment,
-            note: note.isEmpty ? nil : note,
+            note: note.nilIfBlank,
             photo: paths.photoPath,
             latitude: extractedLatitude,
             longitude: extractedLongitude,

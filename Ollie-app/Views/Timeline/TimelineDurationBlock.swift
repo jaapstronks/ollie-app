@@ -94,16 +94,7 @@ struct LiveDurationText: View {
 
     private var durationString: String {
         let minutes = Int(now.timeIntervalSince(startTime) / 60)
-        if minutes < 60 {
-            return "\(minutes)m"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours)h"
-            }
-            return "\(hours)h \(mins)m"
-        }
+        return DurationFormatter.format(minutes, style: .compact)
     }
 
     var body: some View {

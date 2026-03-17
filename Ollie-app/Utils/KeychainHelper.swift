@@ -137,5 +137,6 @@ extension KeychainHelper {
         static let subscriptionStatus = "subscription.status"
         static let participantZoneOwner = "cloudkit.participantZoneOwner"
         static let participantZoneName = "cloudkit.participantZoneName"
+        static let trialStartDate = "trial.startDate"
     }
 }

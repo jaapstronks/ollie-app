@@ -9,13 +9,18 @@ import SwiftUI
 import OtisShared
 
 /// Data structure for displaying a skill with its status
-struct SkillProgressInfo {
+struct SkillProgressInfo: Identifiable {
+    var id: String { skill.id }
     let skill: Skill
     let status: SkillStatus
     let sessionCount: Int
-    let isLocked: Bool
+    /// Whether prerequisites are not yet met (skill shown dimmed but still tappable)
+    let hasUnmetPrerequisites: Bool
     let isNextUp: Bool
     let missingRequirements: [Skill]
+
+    // Legacy compatibility: isLocked maps to hasUnmetPrerequisites
+    var isLocked: Bool { hasUnmetPrerequisites }
 
     // MARK: - Enhanced Training Progress (optional, from SkillProgress)
 
@@ -36,6 +41,20 @@ struct SkillProgressInfo {
         learningPhase == .needsWork
     }
 
+    // MARK: - Enhanced Progress Data (for visualization)
+
+    /// Current proofing levels (Duration, Distance, Distraction)
+    var proofingLevels: ProofingLevels?
+
+    /// Contexts where skill has been practiced
+    var practicedContexts: [TrainingContext] = []
+
+    /// Current maintenance tier (1-6+) for spaced repetition
+    var maintenanceTier: Int?
+
+    /// Next scheduled review date
+    var nextReviewDate: Date?
+
     /// Initialize with basic info only (for backwards compatibility)
     init(
         skill: Skill,
@@ -48,7 +67,7 @@ struct SkillProgressInfo {
         self.skill = skill
         self.status = status
         self.sessionCount = sessionCount
-        self.isLocked = isLocked
+        self.hasUnmetPrerequisites = isLocked
         self.isNextUp = isNextUp
         self.missingRequirements = missingRequirements
     }
@@ -69,13 +88,46 @@ struct SkillProgressInfo {
         self.skill = skill
         self.status = status
         self.sessionCount = sessionCount
-        self.isLocked = isLocked
+        self.hasUnmetPrerequisites = isLocked
         self.isNextUp = isNextUp
         self.missingRequirements = missingRequirements
         self.learningPhase = learningPhase
         self.confidenceScore = confidenceScore
         self.isDueForReview = isDueForReview
         self.daysUntilReview = daysUntilReview
+    }
+
+    /// Initialize with complete progress data including proofing and contexts
+    init(
+        skill: Skill,
+        status: SkillStatus,
+        sessionCount: Int,
+        isLocked: Bool,
+        isNextUp: Bool,
+        missingRequirements: [Skill],
+        learningPhase: SkillLearningPhase?,
+        confidenceScore: Double?,
+        isDueForReview: Bool,
+        daysUntilReview: Int?,
+        proofingLevels: ProofingLevels?,
+        practicedContexts: [TrainingContext],
+        maintenanceTier: Int?,
+        nextReviewDate: Date?
+    ) {
+        self.skill = skill
+        self.status = status
+        self.sessionCount = sessionCount
+        self.hasUnmetPrerequisites = isLocked
+        self.isNextUp = isNextUp
+        self.missingRequirements = missingRequirements
+        self.learningPhase = learningPhase
+        self.confidenceScore = confidenceScore
+        self.isDueForReview = isDueForReview
+        self.daysUntilReview = daysUntilReview
+        self.proofingLevels = proofingLevels
+        self.practicedContexts = practicedContexts
+        self.maintenanceTier = maintenanceTier
+        self.nextReviewDate = nextReviewDate
     }
 }
 
@@ -107,6 +159,18 @@ struct SkillProgressRow: View {
         return nil
     }
 
+    // Whether confidence indicator is currently visible
+    // Confidence only shows for phases where reliability matters (proofing+)
+    private var isConfidenceVisible: Bool {
+        guard let confidence = info.confidenceScore,
+              let phase = info.learningPhase,
+              !info.isLocked,
+              info.status != .mastered else {
+            return false
+        }
+        return phase.shouldShowConfidence && confidence > 0
+    }
+
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
@@ -131,14 +195,7 @@ struct SkillProgressRow: View {
 
                         // Priority badge (regression > due for review > next up)
                         if let badge = priorityBadge {
-                            Text(badge.label)
-                                .font(.caption2)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(badge.color)
-                                .clipShape(Capsule())
+                            CapsuleBadge(badge.label, color: badge.color, style: .filled)
                                 .fixedSize()
                         }
                     }
@@ -149,13 +206,20 @@ struct SkillProgressRow: View {
 
                 Spacer(minLength: 8)
 
-                // Confidence score (if available and in progress)
-                if let confidence = info.confidenceScore, !info.isLocked, info.status != .mastered, info.status != .notStarted {
+                // Confidence score - only show for phases where reliability matters
+                // Early phases (luring, addingCue) are about learning the behavior, not reliability
+                // Showing 100% confidence with 1 rep is misleading
+                if let confidence = info.confidenceScore,
+                   let phase = info.learningPhase,
+                   !info.isLocked,
+                   info.status != .mastered,
+                   phase.shouldShowConfidence {
                     confidenceIndicator(confidence)
                 }
 
-                // Session count badge (if any sessions and not mastered, and no confidence shown)
-                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered && info.confidenceScore == nil {
+                // Session count badge (if any sessions and not mastered, and confidence not visible)
+                // Show session count when: no confidence score OR phase doesn't show confidence
+                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered && !isConfidenceVisible {
                     Text("\(info.sessionCount)")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -175,8 +239,8 @@ struct SkillProgressRow: View {
                         .foregroundStyle(Color.otisSuccess)
                 }
 
-                // Chevron (only for non-mastered, unlocked skills)
-                if !info.isLocked && info.status != .mastered {
+                // Chevron for all non-mastered skills (tappable even with unmet prerequisites)
+                if info.status != .mastered {
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -188,15 +252,38 @@ struct SkillProgressRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .disabled(info.isLocked)
-        .opacity(info.isLocked ? 0.6 : 1.0)
+        .opacity(info.hasUnmetPrerequisites ? 0.6 : 1.0)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(rowBackground)
         )
-        // Swipe actions for unlocked skills
+        // Context menu for mastery toggle (discoverable via long press)
+        .contextMenu {
+            if info.status != .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.markMastered, systemImage: "checkmark.circle.fill")
+                }
+            }
+            if info.status == .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.unmarkMastered, systemImage: "xmark.circle")
+                }
+            }
+            if let onQuickDone = onQuickDone {
+                Button {
+                    onQuickDone()
+                } label: {
+                    Label(Strings.Training.quickDone, systemImage: "plus.circle")
+                }
+            }
+        }
+        // Swipe actions (secondary option for power users)
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            if !info.isLocked, let onQuickDone = onQuickDone {
+            if let onQuickDone = onQuickDone {
                 Button {
                     onQuickDone()
                 } label: {
@@ -206,13 +293,21 @@ struct SkillProgressRow: View {
             }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
-            if !info.isLocked, info.status != .mastered, let onToggleMastered = onToggleMastered {
+            if info.status != .mastered, let onToggleMastered = onToggleMastered {
                 Button {
                     onToggleMastered()
                 } label: {
                     Label(Strings.Training.markMastered, systemImage: "star.fill")
                 }
                 .tint(Color.otisSuccess)
+            }
+            if info.status == .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.unmarkMastered, systemImage: "xmark")
+                }
+                .tint(.secondary)
             }
         }
     }
@@ -268,49 +363,23 @@ struct SkillProgressRow: View {
     }
 
     private var statusIcon: String {
-        if info.isLocked {
-            return "lock.fill"
-        }
-        // Use learning phase icon if available
+        // Use learning phase icon if available (even for skills with unmet prerequisites)
         if let phase = info.learningPhase {
-            return phaseIcon(for: phase)
+            return phase.icon
         }
+        // Show normal status icon (no lock - skills are always accessible)
         return info.status.statusIndicatorIcon
     }
 
-    private func phaseIcon(for phase: SkillLearningPhase) -> String {
-        switch phase {
-        case .notStarted: return "circle"
-        case .luring: return "hand.point.right.fill"
-        case .addingCue: return "speaker.wave.2.fill"
-        case .proofing: return "chart.bar.fill"
-        case .generalizing: return "location.fill"
-        case .maintaining: return "checkmark.seal.fill"
-        case .needsWork: return "exclamationmark.triangle.fill"
-        }
-    }
+    // phaseIcon and phaseColor are now available via SkillLearningPhase.icon and .color
 
     private var statusColor: Color {
-        if info.isLocked {
-            return .secondary
-        }
         // Use learning phase color if available
         if let phase = info.learningPhase {
-            return phaseColor(for: phase)
+            return phase.color
         }
+        // Normal status color (dimmed opacity is applied at row level for unmet prerequisites)
         return info.status.color
-    }
-
-    private func phaseColor(for phase: SkillLearningPhase) -> Color {
-        switch phase {
-        case .notStarted: return .secondary
-        case .luring: return .otisInfo
-        case .addingCue: return .otisPurple
-        case .proofing: return .otisAccent
-        case .generalizing: return .otisSuccess.opacity(0.8)
-        case .maintaining: return .otisSuccess
-        case .needsWork: return .otisDanger
-        }
     }
 
     private var iconColor: Color {
@@ -321,21 +390,20 @@ struct SkillProgressRow: View {
 
     @ViewBuilder
     private var subtitleView: some View {
-        if info.isLocked {
-            if !info.missingRequirements.isEmpty {
-                HStack(spacing: 4) {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 9))
-                    Text(Strings.Training.Progression.masteredSkillsRequired(info.missingRequirements.map { $0.name }.joined(separator: ", ")))
-                        .font(.caption)
-                }
-                .foregroundStyle(.tertiary)
+        if info.hasUnmetPrerequisites && !info.missingRequirements.isEmpty {
+            // Show prerequisites as a soft recommendation (not blocking)
+            HStack(spacing: 4) {
+                Image(systemName: "arrow.turn.up.right")
+                    .font(.system(size: 9))
+                Text(Strings.Training.Progression.masteredSkillsRequired(info.missingRequirements.map { $0.name }.joined(separator: ", ")))
+                    .font(.caption)
             }
+            .foregroundStyle(.tertiary)
         } else {
             HStack(spacing: 6) {
                 // Show learning phase if available, otherwise fall back to simple status
                 if let phase = info.learningPhase {
-                    Text(phaseLabel(for: phase))
+                    Text(phase.label)
                         .font(.caption)
                         .foregroundStyle(statusColor)
                 } else {
@@ -355,20 +423,24 @@ struct SkillProgressRow: View {
                     }
                     .foregroundStyle(method == .operant ? Color.purple : Color.blue)
                 }
-            }
-        }
-    }
 
-    /// Get localized label for learning phase
-    private func phaseLabel(for phase: SkillLearningPhase) -> String {
-        switch phase {
-        case .notStarted: return Strings.Training.statusNotStarted
-        case .luring: return Strings.Training.phaseLuring
-        case .addingCue: return Strings.Training.phaseAddingCue
-        case .proofing: return Strings.Training.phaseProofing
-        case .generalizing: return Strings.Training.phaseGeneralizing
-        case .maintaining: return Strings.Training.statusMastered
-        case .needsWork: return Strings.Training.refresherNeeded
+                // Inline proofing indicator (compact 3-bar)
+                if let levels = info.proofingLevels,
+                   info.learningPhase == .proofing || info.learningPhase == .generalizing {
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    InlineProofingIndicator(levels: levels)
+                }
+
+                // Context count for generalizing
+                if !info.practicedContexts.isEmpty && info.learningPhase == .generalizing {
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    Text("\(info.practicedContexts.count) contexts")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
         }
     }
 

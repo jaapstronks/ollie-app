@@ -10,7 +10,7 @@ import OtisShared
 /// Row displaying a socialization item with progress bar and last exposure info
 struct SocializationItemRow: View {
     let item: SocializationItem
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -68,18 +68,11 @@ struct SocializationItemRow: View {
 
             // Progress bar
             HStack(spacing: 8) {
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(Color.secondary.opacity(0.2))
-                            .frame(height: 6)
-
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(progressColor)
-                            .frame(width: geometry.size.width * progressFraction, height: 6)
-                    }
-                }
-                .frame(height: 6)
+                LinearProgressBar(
+                    progress: progressFraction,
+                    tint: progressColor,
+                    height: 6
+                )
 
                 // Count
                 Text("\(positiveCount)/\(item.targetExposures)")
@@ -128,7 +121,7 @@ struct SocializationItemRow: View {
                 .foregroundStyle(.secondary)
 
             // Date
-            Text(formattedDate(exposure.date))
+            Text(exposure.date.relativeFormatted())
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -158,11 +151,6 @@ struct SocializationItemRow: View {
         }
     }
 
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
-        return formatter.localizedString(for: date, relativeTo: Date())
-    }
 }
 
 // MARK: - Preview
@@ -177,8 +165,8 @@ struct SocializationItemRow: View {
         isWalkable: true
     )
 
-    return List {
+    List {
         SocializationItemRow(item: item)
-            .environmentObject(store)
+            .environment(store)
     }
 }

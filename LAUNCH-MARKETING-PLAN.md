@@ -1,85 +1,115 @@
 # Otis Launch & Marketing Plan
 
-## 2026-03 Strategic Reset (Current Plan of Record)
+## 2026-03 Strategic Reset: Premium AI Model (Current Plan of Record)
 
-This section supersedes conflicting details below.
+This section supersedes ALL conflicting details below.
 Detailed execution plan lives in `ROADMAP-2026-H1.md`.
+
+### The Pivot
+
+**From:** Freemium utility app with optional premium
+**To:** Premium AI-powered puppy assistant with 14-day trial
 
 ### Why this reset
 
-- We are winning on utility, not on content volume.
-- The strongest user pain is chaos/anxiety in the first puppy months.
-- We should optimize for long-term retention across the full dog life cycle.
-- As a solo founder, focus and sequencing matter more than channel breadth.
+- **AI is now core to the product.** It's not a feature — it's the experience.
+- **AI costs ~€1-2/user/month.** Free tier is not sustainable.
+- **Premium positioning attracts better users.** Committed, willing to pay, lower churn.
+- **Competitors can't easily replicate.** Data-driven AI is our moat.
 
 ### Updated positioning
 
-**Category:** Dog life utility app (not a training content store)  
-**Promise:** Your dog's day, memory, plans, and care in one timeline you control.  
-**Tone:** Calm, practical, privacy-first, Apple-native.
+**Category:** AI-powered puppy assistant
+**Promise:** Personalized guidance based on YOUR puppy's actual data — not generic advice.
+**Tone:** Smart, helpful, privacy-first, Apple-native.
+
+**Tagline options:**
+- "Your AI puppy coach"
+- "Guidance that learns your puppy"
+- "The smart puppy assistant"
+
+### New pricing structure
+
+| Plan | Price | Net (after Apple) | AI Cost | Margin |
+|------|-------|-------------------|---------|--------|
+| Monthly | €5.99/mo | €4.19 | ~€1.50 | ~€2.69 |
+| Yearly | €49.99/yr | €35.00/yr | ~€18/yr | ~€17/yr |
+| Trial | 14 days | Full access | — | — |
+
+**No free tier.** Trial converts to paid or app stops working.
 
 ### Scope reduction (immediate)
 
 - Launch/optimize in **EN, NL, DE only** for now.
-- Defer broad localization until funnel metrics validate repeatable growth.
-- Keep existing translated assets in git history and/or a dedicated archive branch for later reuse.
+- Defer broad localization until trial→paid conversion is proven.
+- Focus all effort on the 14-day trial experience.
 
 ### Updated go-to-market priorities
 
-1. **Onboarding + activation first** (first 3 sessions, not traffic volume).
-2. **Founder-led organic** (short-form video + Reddit/Facebook value posts).
-3. **Apple Search Ads first paid channel** after organic proof.
-4. **Meta ads only after CAC and conversion are validated.**
-5. **Do not scale spend** until retention and conversion are healthy.
+1. **Trial conversion excellence** (14-day journey, AI value early, clear conversion moment)
+2. **Founder-led organic** (short-form video + Reddit/Facebook value posts)
+3. **Apple Search Ads first paid channel** after organic validates
+4. **Meta ads only after trial→paid >= 35%**
+5. **Quality over quantity** — fewer downloads, higher conversion
 
 ### Product priorities that support marketing
 
-1. Adaptive experience by phase (new puppy -> routine -> long-term life).
-2. Puppy-blues / owner-anxiety support (lightweight, practical).
-3. Planning and household coordination loop.
-4. AI daily summary + next-best actions from real dog data.
-5. Knowledge bookmarks (link out to trusted external training content).
+1. **Trial onboarding → AI "aha" moment** in first session
+2. **AI quality iteration** — prompts, caching, daily limits optimized
+3. **Trial touchpoints** — Day 1, 3, 7, 12 engagement to show value
+4. **Conversion UX** — Clear, non-annoying upgrade flow at day 14
+5. **Push notification excellence** — AI-timed reminders that feel magical
 
 ### Validation gates before scaling
 
-- App Store rating >= 4.4
-- D7 retention >= 30%
-- D30 retention >= 20%
-- Trial-to-paid >= 4%
-- CAC < EUR 25 on small paid test
+| Metric | Gate | Action if not met |
+|--------|------|-------------------|
+| App Store rating | >= 4.5 | Fix UX, not marketing |
+| Trial start rate | >= 35% | Improve onboarding hook |
+| Trial→paid | >= 35% | Improve AI value demonstration |
+| D14 retention | >= 40% | Product isn't sticky enough |
+| CAC | < €30 | Don't scale paid yet |
 
-If these are not met, fix product/onboarding before increasing acquisition spend.
+If gates are not met, fix product/onboarding before increasing acquisition spend.
 
-## Executive Summary
+## Executive Summary (Updated: Premium AI Model)
 
-**Goal:** Launch Otis as the go-to free puppy tracking app globally, then convert engaged users to Otis+ subscribers — using LLM automation to minimize costs and maximize organic reach.
+**Goal:** Launch Otis as the premium AI-powered puppy assistant. Convert trial users to paying subscribers through exceptional AI-driven value demonstration.
 
 **Launch scope:**
 - iOS app (iPhone)
 - Apple Watch companion app
-- 20+ languages at launch (LLM-translated, ~€0 cost)
-- Freemium model: Free core + Otis+ at €2.99/mo or €24.99/yr
+- 3 languages at launch (EN, NL, DE) — expand after conversion proven
+- **Premium model:** 14-day trial → €5.99/mo or €49.99/yr
 
-**LLM-Powered Advantages:**
-- Translation: 20+ languages in hours, not weeks
+**The AI Advantage:**
+- **For users:** Personalized guidance based on their puppy's actual data
+- **For us:** Moat that competitors can't easily replicate
+- **Cost reality:** ~€1.50/user/month baked into pricing
+
+**LLM-Powered Marketing (unchanged):**
 - Outreach: 500+ personalized emails/DMs with minimal effort
-- Content: SEO blog posts, community responses, localized copy
-- Analysis: Summarize feedback, identify patterns, draft responses
-- Time: ~5 hours/week of marketing effort vs. 20+ hours traditional
+- Content: SEO blog posts, community responses
+- Time: ~5 hours/week of marketing effort
 
 **Budget philosophy:**
 - Maximum upfront investment: €500-750
 - Extended budget (only if proven): €2,000
-- Reinvest 100% of subscription revenue
+- AI costs covered by subscription revenue
 - **Rule: Never go cash-flow negative overall**
 
-**Core strategy:** LLM-powered organic outreach first, prove product-market fit, then scale with small paid tests.
+**Core strategy:** Organic outreach to quality leads, prove trial→paid conversion, then scale with small paid tests.
 
-**Target trajectory:**
-- Launch: 500+ installs, 50+ reviews, 20+ languages
-- Month 3: 3,000+ installs, 50+ subscribers, €150 MRR
-- Month 6: 10,000+ installs, 300+ subscribers, €1,000 MRR
-- Month 12: 30,000+ installs, 1,000+ subscribers, €3,000 MRR
+**Target trajectory (revised for premium model):**
+
+| Milestone | Downloads | Trial Starts | Subscribers | MRR | Net Margin |
+|-----------|-----------|--------------|-------------|-----|------------|
+| Launch | 200+ | 80+ | 10+ | €50 | €20 |
+| Month 3 | 1,500 | 600 | 150 | €750 | €300 |
+| Month 6 | 4,000 | 1,600 | 500 | €2,500 | €1,000 |
+| Month 12 | 10,000 | 4,000 | 1,500 | €7,500 | €3,000 |
+
+**Key difference from old plan:** Fewer downloads, but higher conversion rate and sustainable unit economics.
 
 ---
 
@@ -1245,51 +1275,54 @@ GATE 4: Profit-Taking (future)
 
 ---
 
-## Success Criteria (LLM-Boosted Organic)
+## Success Criteria (Premium AI Model)
 
 ### Launch Week
 
 | Metric | Target | How |
 |--------|--------|-----|
-| Beta testers | 500-1,000 | LLM-powered outreach |
-| Day 1 reviews | 50-100+ | Beta tester asks |
-| Day 1 installs | 500+ | Beta conversion + communities |
-| Languages live | 20+ | LLM translations |
+| Beta testers | 200-400 | LLM-powered outreach (quality focus) |
+| Day 1 reviews | 30-50 | Beta tester asks |
+| Day 1 trial starts | 50+ | Beta conversion + communities |
+| Languages live | 3 (EN, NL, DE) | Focus on conversion first |
 
 ### Month 3 (Validation)
 
 | Metric | Target | Why it matters |
 |--------|--------|----------------|
-| Installs | 3,000-5,000 | LLM outreach compounds |
-| Organic Otis+ subs | 50+ | Proves value without ads |
-| App Store rating | 4.5+ | Strong review push |
-| Trial-to-paid | 4%+ | Conversion works |
-| Blog traffic | 500+ visits/mo | SEO starting |
-| Net cash position | ≥ €0 | Not losing money |
+| Downloads | 1,500 | Quality over quantity |
+| Trial starts | 600 (40%) | Onboarding works |
+| Paying subscribers | 150 | ~35% trial→paid |
+| MRR | €750 | Early revenue |
+| Net margin | €300/mo | After AI costs |
+| App Store rating | 4.6+ | Premium experience |
+| Trial→paid | 35%+ | THE key metric |
 
 ### Month 6 (Sustainable Growth)
 
 | Metric | Target | Why it matters |
 |--------|--------|----------------|
-| Total installs | 10,000+ | Organic + small paid |
-| Active subscribers | 300+ | Solid revenue base |
-| MRR | €1,000+ | Self-funding growth |
-| Paid CAC | < €25 | Unit economics work |
-| Organic % | > 50% | Not dependent on ads |
-| Cumulative profit | > €0 | Never went negative |
+| Total downloads | 4,000 | Steady growth |
+| Trial starts | 1,600 | 40% trial rate maintained |
+| Active subscribers | 500 | Real revenue base |
+| MRR | €2,500 | Growing |
+| Net margin | €1,000/mo | Sustainable |
+| Trial→paid | 35%+ | Consistent conversion |
+| Churn | < 8% | Sticky product |
 
-### Month 12 (Side Income Potential)
+### Month 12 (Indie Business)
 
 | Metric | Target | Why it matters |
 |--------|--------|----------------|
-| Total installs | 30,000+ | Compounding organic + paid |
-| Active subscribers | 1,000+ | Real business |
-| MRR | €3,000+ | ~€36K ARR |
-| Monthly profit | €500+ | After reinvesting 80% |
-| Churn rate | < 10% | Healthy retention |
-| Breeder partnerships | 50+ | Distribution channel |
+| Total downloads | 10,000 | Quality funnel |
+| Active subscribers | 1,500 | Core revenue base |
+| MRR | €7,500 | ~€90K ARR gross |
+| Net margin | €3,000/mo | ~€36K ARR net |
+| Trial→paid | 40%+ | Conversion excellence |
+| Churn rate | < 7% | High retention |
+| Annual plan % | 50%+ | Predictable revenue |
 
-**Philosophy:** LLM automation makes these targets achievable with ~5 hours/week of marketing effort. The key is consistency over months, not intensity.
+**Philosophy:** Premium model means fewer downloads but better unit economics. Every subscriber is profitable after AI costs. The key metrics are trial→paid conversion and churn, not download volume.
 
 ---
 
@@ -1297,14 +1330,14 @@ GATE 4: Profit-Taking (future)
 
 | Risk | Mitigation |
 |------|------------|
-| **Losing money overall** | Gate system prevents spending before validation; kill criteria stop bad bets early |
-| Low trial conversion | Test pricing, improve value demo during trial; don't scale until 4%+ |
-| High CAC | Focus on organic channels first; only scale paid when CAC < €30 proven |
-| No organic traction | Indicates product/market fit issue — fix product, not marketing |
-| Negative reviews | Rapid response, fix bugs fast; don't scale with < 4.0 rating |
-| Competitor launch | Differentiate on "free forever" + design quality |
-| iOS policy changes | Don't over-rely on Meta; Apple Search Ads less affected |
-| Localization issues | Start with fewer languages, quality over quantity |
+| **AI costs exceed margin** | Monitor usage closely; optimize prompts and caching; raise prices if needed |
+| **Low trial→paid** | Focus all effort on first 14 days; show AI value early and often |
+| **Users don't see AI value** | Better prompts, more visible AI moments, clearer "what AI did for you" messaging |
+| **High CAC** | Focus on organic first; only scale paid when CAC < €30 proven |
+| **High churn** | AI quality drives retention; iterate prompts based on feedback |
+| **Competitor adds AI** | Their AI is generic; ours operates on user data — different moat |
+| **Negative reviews** | Rapid response, fix bugs fast; premium users expect premium support |
+| **Trial abuse** | Monitor for patterns; implement device-based trial limits if needed |
 
 ---
 
@@ -1386,23 +1419,39 @@ If NOT → Keep doing organic, fix product
 ## Worst/Best/Likely Scenarios
 
 **Worst case:**
-- Organic doesn't work, ads don't work
-- You've spent €500-750, learned what doesn't work
-- Total loss: < €1,000 and some time
-- **Lesson is cheap**
+- Trial→paid conversion is < 20%
+- AI costs eat into margin more than expected
+- You've spent €500-750, have 100 subscribers paying €5.99
+- MRR €500-600, net margin ~€100/mo
+- **Lesson:** Premium positioning is right, but AI value proposition needs work. Iterate prompts, improve trial experience.
 
 **Best case:**
-- Organic explodes, you barely need ads
-- 1,000 subscribers by Month 6, €3,000 MRR
-- Profitable from Month 1
-- **Side income becomes real income**
+- Trial→paid is 50%+ (AI moments are magic)
+- Word-of-mouth from premium users drives organic
+- 800 subscribers by Month 6, €4,000 MRR, €1,600 net margin
+- AI costs stay at €1.50/user or less
+- **Side income becomes real income by Month 9**
 
 **Most likely case:**
-- Organic gives you 50% of growth
-- Small paid spend (€200-400/month) gives you 50%
-- 300 subscribers by Month 6, €1,000 MRR
-- Self-sustaining growth, slowly scaling profit
-- **Exactly what you wanted: slow burn to profitability**
+- Trial→paid is 35-40%
+- Organic gives you 60% of growth, small paid gives 40%
+- 500 subscribers by Month 6, €2,500 MRR, €1,000 net margin
+- Steady path to 1,500 subscribers by Month 12
+- **Sustainable indie business with €3,000/mo net margin**
+
+---
+
+## The Bet We're Making
+
+> "AI-powered personalization beats generic content libraries."
+
+We're betting that users will pay €5.99/mo for an app that actually learns their puppy, instead of €9.99/mo for an app that shows them the same videos as everyone else.
+
+If we're right, we've built a moat that's hard to replicate. If we're wrong, we'll know within 90 days based on trial→paid conversion.
+
+The downside is capped. The upside is a sustainable business.
+
+Let's ship it.
 
 ---
 

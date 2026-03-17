@@ -9,12 +9,12 @@ import OtisShared
 
 /// Pure action view: a checklist to work through, with logging
 struct SocializationJourneyView: View {
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var isQuickCheckMode = false
+    @State private var isEditMode = false
     @State private var showingInfoSheet = false
     @State private var showingQuickInventory = false
 
@@ -40,41 +40,52 @@ struct SocializationJourneyView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Compact status header with link to sheet
-                statusHeader
-                    .padding(.horizontal)
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Compact status header with link to sheet
+                    statusHeader
+                        .padding(.horizontal)
 
-                // First visit prompt
-                if isFirstVisit && currentPhase != .settlingIn {
-                    firstVisitCard
+                    // AI Socialization Guidance
+                    AISocializationGuidanceCard()
+                        .padding(.horizontal)
+
+                    // First visit prompt
+                    if isFirstVisit && currentPhase != .settlingIn {
+                        firstVisitCard
+                    }
+
+                    // Current phase content
+                    currentPhaseSection
+
+                    // Later phases (collapsed)
+                    laterPhasesSection
                 }
-
-                // Current phase content
-                currentPhaseSection
-
-                // Later phases (collapsed)
-                laterPhasesSection
+                .padding(.vertical)
+                // Extra padding at bottom when edit mode toolbar is visible
+                .padding(.bottom, isEditMode ? 60 : 0)
             }
-            .padding(.vertical)
+
+            // Edit mode bottom toolbar
+            if isEditMode {
+                editModeToolbar
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
         .navigationTitle(Strings.Socialization.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                HStack(spacing: 12) {
-                    // Quick check toggle
-                    if currentPhase != .settlingIn {
-                        Button {
-                            withAnimation {
-                                isQuickCheckMode.toggle()
-                            }
-                            HapticFeedback.selection()
-                        } label: {
-                            Image(systemName: isQuickCheckMode ? "checkmark.circle.fill" : "checkmark.circle")
-                                .foregroundStyle(isQuickCheckMode ? Color.otisAccent : .secondary)
+                if currentPhase != .settlingIn {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            isEditMode.toggle()
                         }
+                        HapticFeedback.selection()
+                    } label: {
+                        Text(isEditMode ? Strings.Common.done : Strings.Common.edit)
+                            .fontWeight(isEditMode ? .semibold : .regular)
                     }
                 }
             }
@@ -85,6 +96,38 @@ struct SocializationJourneyView: View {
         .sheet(isPresented: $showingQuickInventory) {
             QuickInventorySheet()
         }
+    }
+
+    // MARK: - Edit Mode Toolbar
+
+    @ViewBuilder
+    private var editModeToolbar: some View {
+        HStack {
+            Text(Strings.Socialization.editModeHint)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    isEditMode = false
+                }
+                HapticFeedback.selection()
+            } label: {
+                Text(Strings.Common.done)
+                    .fontWeight(.semibold)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .background(.ultraThinMaterial)
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundStyle(Color(.separator)),
+            alignment: .top
+        )
     }
 
     // MARK: - Status Header
@@ -196,23 +239,6 @@ struct SocializationJourneyView: View {
                 }
             }
 
-            // Quick check mode indicator
-            if isQuickCheckMode {
-                HStack(spacing: 6) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.caption)
-                    Text(Strings.Socialization.quickCheckModeDesc)
-                        .font(.caption)
-                }
-                .foregroundStyle(Color.otisAccent)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(
-                    Capsule()
-                        .fill(Color.otisAccent.opacity(0.15))
-                )
-            }
-
             // Content based on phase
             if currentPhase == .settlingIn {
                 earlyMilestonesSection
@@ -299,7 +325,7 @@ struct SocializationJourneyView: View {
             ForEach(sortedItems, id: \.id) { item in
                 PhaseItemRow(
                     item: item,
-                    isQuickCheckMode: isQuickCheckMode
+                    isEditMode: $isEditMode
                 )
             }
         }
@@ -389,9 +415,9 @@ struct SocializationJourneyView: View {
 
 private struct PhaseItemRow: View {
     let item: SocializationItem
-    let isQuickCheckMode: Bool
+    @Binding var isEditMode: Bool
 
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var showingLogSheet = false
@@ -406,13 +432,19 @@ private struct PhaseItemRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Status indicator
-            if isQuickCheckMode {
+            // Edit mode checkbox (slides in from left)
+            if isEditMode {
                 Image(systemName: isComfortable ? "checkmark.circle.fill" : "circle")
                     .foregroundStyle(isComfortable ? Color.otisSuccess : .secondary)
                     .font(.title3)
-            } else {
-                // Progress ring
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .leading).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+            }
+
+            // Progress ring (only in normal mode)
+            if !isEditMode {
                 ZStack {
                     Circle()
                         .stroke(Color.secondary.opacity(0.2), lineWidth: 3)
@@ -422,6 +454,10 @@ private struct PhaseItemRow: View {
                         .rotationEffect(.degrees(-90))
                 }
                 .frame(width: 28, height: 28)
+                .transition(.asymmetric(
+                    insertion: .scale.combined(with: .opacity),
+                    removal: .scale.combined(with: .opacity)
+                ))
             }
 
             // Item name
@@ -429,9 +465,9 @@ private struct PhaseItemRow: View {
                 Text(item.localizedDisplayName)
                     .font(.subheadline)
                     .foregroundStyle(isComfortable ? .secondary : .primary)
-                    .strikethrough(isComfortable && isQuickCheckMode)
+                    .strikethrough(isComfortable && isEditMode)
 
-                if let description = item.description, !isQuickCheckMode {
+                if let description = item.description, !isEditMode {
                     Text(description)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
@@ -440,8 +476,8 @@ private struct PhaseItemRow: View {
 
             Spacer()
 
-            // Exposures count (non-quick mode)
-            if !isQuickCheckMode && !isComfortable {
+            // Exposures count (normal mode only)
+            if !isEditMode && !isComfortable {
                 let exposures = socializationStore.getExposures(for: item.id)
                 let positiveCount = exposures.filter { $0.reaction.isPositive }.count
                 Text("\(positiveCount)/\(item.targetExposures)")
@@ -449,8 +485,8 @@ private struct PhaseItemRow: View {
                     .foregroundStyle(.secondary)
             }
 
-            // Comfortable badge
-            if isComfortable && !isQuickCheckMode {
+            // Comfortable badge (normal mode only)
+            if isComfortable && !isEditMode {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(Color.otisSuccess)
                     .font(.subheadline)
@@ -464,7 +500,7 @@ private struct PhaseItemRow: View {
         )
         .contentShape(Rectangle())
         .onTapGesture {
-            if isQuickCheckMode {
+            if isEditMode {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     socializationStore.toggleComfortable(item.id)
                     HapticFeedback.selection()
@@ -472,6 +508,13 @@ private struct PhaseItemRow: View {
             } else {
                 showingLogSheet = true
             }
+        }
+        .onLongPressGesture {
+            // Long-press enters edit mode
+            withAnimation(.easeInOut(duration: 0.25)) {
+                isEditMode = true
+            }
+            HapticFeedback.medium()
         }
         .sheet(isPresented: $showingLogSheet) {
             LogExposureSheet(item: item)
@@ -493,7 +536,7 @@ private struct PhaseItemRow: View {
 #Preview {
     NavigationStack {
         SocializationJourneyView()
-            .environmentObject(SocializationStore())
-            .environmentObject(ProfileStore())
+            .environment(SocializationStore())
+            .environment(ProfileStore())
     }
 }

@@ -10,8 +10,8 @@ import OtisShared
 /// Detail view for a socialization category, showing all items
 struct SocializationCategoryDetailView: View {
     let category: SocializationCategory
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     @State private var selectedItem: SocializationItem?
     @State private var showFearProtocol = false
@@ -45,7 +45,8 @@ struct SocializationCategoryDetailView: View {
                 lastLoggedReaction = reaction
                 if reaction.needsFearProtocol {
                     // Show fear protocol after a short delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.5))
                         showFearProtocol = true
                     }
                 }
@@ -76,21 +77,11 @@ struct SocializationCategoryDetailView: View {
                 .font(.headline)
 
                 // Progress bar
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.secondary.opacity(0.2))
-                            .frame(height: 6)
-
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(progressColor(for: progress))
-                            .frame(
-                                width: geometry.size.width * progressFraction(for: progress),
-                                height: 6
-                            )
-                    }
-                }
-                .frame(height: 6)
+                LinearProgressBar(
+                    progress: progressFraction(for: progress),
+                    tint: progressColor(for: progress),
+                    height: 6
+                )
             }
         }
         .padding(.vertical, 8)
@@ -110,7 +101,8 @@ struct SocializationCategoryDetailView: View {
     private func itemSortScore(_ item: SocializationItem) -> Int {
         let exposures = socializationStore.getExposures(for: item.id)
         let positiveCount = exposures.filter { $0.reaction.isPositive }.count
-        let lastExposure = exposures.sorted { $0.date > $1.date }.first
+        // PERF: Use max(by:) O(n) instead of sorted().first O(n log n)
+        let lastExposure = exposures.max(by: { $0.date < $1.date })
 
         var score = 0
 
@@ -168,7 +160,7 @@ struct SocializationCategoryDetailView: View {
                 ]
             )
         )
-        .environmentObject(SocializationStore())
-        .environmentObject(ProfileStore())
+        .environment(SocializationStore())
+        .environment(ProfileStore())
     }
 }

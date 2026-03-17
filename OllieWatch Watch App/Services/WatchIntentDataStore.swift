@@ -64,7 +64,7 @@ final class WatchIntentDataStore: @unchecked Sendable {
         // Inject loggedBy from current user member ID if available
         var eventToSave = event
         if eventToSave.loggedBy == nil, let memberId = currentUserMemberId {
-            eventToSave.loggedBy = memberId
+            eventToSave.loggedBy = memberId.uuidString
         }
 
         guard let dataDir = dataDirectoryURL else {

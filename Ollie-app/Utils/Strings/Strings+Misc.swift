@@ -99,66 +99,61 @@ extension Strings {
         static let percentOfGoal = String(localized: "percent of goal", table: table)
     }
 
-    // MARK: - Tips (nonisolated for TipKit protocol conformance - hardcoded table name)
+    // MARK: - Tips (nonisolated for TipKit protocol conformance)
     enum Tips {
-        nonisolated static let swipeToDeleteTitle = String(localized: "Swipe to delete", table: "Localizable")
-        nonisolated static let swipeToDeleteMessage = String(localized: "Swipe an event left to delete it.", table: "Localizable")
+        nonisolated static let swipeToDeleteTitle = String(localized: "Swipe to delete", table: table)
+        nonisolated static let swipeToDeleteMessage = String(localized: "Swipe an event left to delete it.", table: table)
 
-        nonisolated static let longPressTitle = String(localized: "Hold for options", table: "Localizable")
-        nonisolated static let longPressMessage = String(localized: "Hold an event for extra options like edit.", table: "Localizable")
+        nonisolated static let longPressTitle = String(localized: "Hold for options", table: table)
+        nonisolated static let longPressMessage = String(localized: "Hold an event for extra options like edit.", table: table)
 
-        nonisolated static let mealRemindersTitle = String(localized: "Set up meal reminders", table: "Localizable")
-        nonisolated static let mealRemindersMessage = String(localized: "Get notified when it's time for the next meal.", table: "Localizable")
+        nonisolated static let mealRemindersTitle = String(localized: "Set up meal reminders", table: table)
+        nonisolated static let mealRemindersMessage = String(localized: "Get notified when it's time for the next meal.", table: table)
 
-        nonisolated static let quickLogTitle = String(localized: "Quick log", table: "Localizable")
-        nonisolated static let quickLogMessage = String(localized: "Use the bar at the bottom to quickly log events with one tap.", table: "Localizable")
+        nonisolated static let quickLogTitle = String(localized: "Quick log", table: table)
+        nonisolated static let quickLogMessage = String(localized: "Use the bar at the bottom to quickly log events with one tap.", table: table)
 
-        nonisolated static let patternsTitle = String(localized: "Discover patterns", table: "Localizable")
-        nonisolated static let patternsMessage = String(localized: "Check statistics to discover patterns in your puppy's behavior.", table: "Localizable")
+        nonisolated static let patternsTitle = String(localized: "Discover patterns", table: table)
+        nonisolated static let patternsMessage = String(localized: "Check statistics to discover patterns in your puppy's behavior.", table: table)
 
-        nonisolated static let predictionTitle = String(localized: "Prediction", table: "Localizable")
-        nonisolated static let predictionMessage = String(localized: "The app learns from patterns and predicts when your puppy needs to pee.", table: "Localizable")
+        nonisolated static let predictionTitle = String(localized: "Prediction", table: table)
+        nonisolated static let predictionMessage = String(localized: "The app learns from patterns and predicts when your puppy needs to pee.", table: table)
     }
 
     // MARK: - Errors
     enum Errors {
         static let title = String(localized: "Error", table: table)
-        // nonisolated for use in LocalizedError conformance - hardcoded table name
-        nonisolated static let networkError = String(localized: "Network error", table: "Localizable")
-        nonisolated static let fileError = String(localized: "File error", table: "Localizable")
-        nonisolated static let dataCorrupted = String(localized: "Data corrupted", table: "Localizable")
-        nonisolated static let unknownError = String(localized: "Unknown error", table: "Localizable")
+        // nonisolated for use in LocalizedError conformance
+        nonisolated static let networkError = String(localized: "Network error", table: table)
+        nonisolated static let fileError = String(localized: "File error", table: table)
+        nonisolated static let dataCorrupted = String(localized: "Data corrupted", table: table)
+        nonisolated static let unknownError = String(localized: "Unknown error", table: table)
 
-        nonisolated static let networkRecovery = String(localized: "Check your internet connection and try again.", table: "Localizable")
-        nonisolated static let fileRecovery = String(localized: "Something went wrong while saving. Please try again.", table: "Localizable")
-        nonisolated static let dataRecovery = String(localized: "The data could not be read. Try restarting the app.", table: "Localizable")
-        nonisolated static let unknownRecovery = String(localized: "Please try again later.", table: "Localizable")
+        nonisolated static let networkRecovery = String(localized: "Check your internet connection and try again.", table: table)
+        nonisolated static let fileRecovery = String(localized: "Something went wrong while saving. Please try again.", table: table)
+        nonisolated static let dataRecovery = String(localized: "The data could not be read. Try restarting the app.", table: table)
+        nonisolated static let unknownRecovery = String(localized: "Please try again later.", table: table)
 
         static let cloudKitNotConfigured = String(localized: "CloudKit not configured", table: table)
         static let cloudKitNotAvailable = String(localized: "CloudKit not available", table: table)
         static let cloudKitSimulator = String(localized: "CloudKit not available on simulator", table: table)
         static let couldNotShare = String(localized: "Could not share", table: table)
         static let couldNotStopSharing = String(localized: "Could not stop sharing", table: table)
-        nonisolated static let couldNotProcessWeather = String(localized: "Could not process weather data", table: "Localizable")
+        nonisolated static let couldNotProcessWeather = String(localized: "Could not process weather data", table: table)
 
-        // Weather errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
-        nonisolated static let invalidURL = String(localized: "Invalid URL", table: "Localizable")
+        // Weather errors (nonisolated for use in LocalizedError conformance)
+        nonisolated static let invalidURL = String(localized: "Invalid URL", table: table)
 
-        // Import errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
-        nonisolated static let invalidFile = String(localized: "Invalid file format", table: "Localizable")
-        nonisolated static let invalidContent = String(localized: "Invalid file content", table: "Localizable")
-        nonisolated static let contentTooLarge = String(localized: "File too large", table: "Localizable")
-        nonisolated static let maliciousContent = String(localized: "Suspicious content detected", table: "Localizable")
-        nonisolated static let noProfileFound = String(localized: "No profile found. Please create a profile first.", table: "Localizable")
+        // Import errors (nonisolated for use in LocalizedError conformance)
+        nonisolated static let invalidFile = String(localized: "Invalid file format", table: table)
+        nonisolated static let invalidContent = String(localized: "Invalid file content", table: table)
+        nonisolated static let contentTooLarge = String(localized: "File too large", table: table)
+        nonisolated static let maliciousContent = String(localized: "Suspicious content detected", table: table)
+        nonisolated static let noProfileFound = String(localized: "No profile found. Please create a profile first.", table: table)
 
         // Other errors
-        nonisolated static let couldNotProcessData = String(localized: "Could not process data", table: "Localizable")
-        nonisolated static let parseError = String(localized: "Could not parse data", table: "Localizable")
-    }
-
-    // MARK: - Streaks
-    enum StreakMessages {
-        static let startAgain = String(localized: "Start again!", table: table)
+        nonisolated static let couldNotProcessData = String(localized: "Could not process data", table: table)
+        nonisolated static let parseError = String(localized: "Could not parse data", table: table)
     }
 
     // MARK: - Celebration Messages
@@ -171,44 +166,13 @@ extension Strings {
         }
         static let perfectDaySoFar = String(localized: "Perfect day so far!", table: table)
         static let keepItUp = String(localized: "Keep it up!", table: table)
-    }
 
-    // MARK: - Potty Progress Summary Card
-    enum PottyProgress {
-        static func streakCount(_ count: Int) -> String {
+        /// Celebration headline showing streak count (e.g., "5 in a row!")
+        static func streakInARow(_ count: Int) -> String {
             if count == 1 {
-                return String(localized: "1 in a row", table: table)
+                return String(localized: "Great job!", table: table)
             } else {
-                return String(localized: "\(count) in a row", table: table)
-            }
-        }
-
-        static func poopCountWithExpected(count: Int, lower: Int, upper: Int) -> String {
-            if lower == upper {
-                return String(localized: "\(count) poops (\(lower) expected)", table: table)
-            } else {
-                return String(localized: "\(count) poops (\(lower)-\(upper) expected)", table: table)
-            }
-        }
-
-        static func poopCountSimple(_ count: Int) -> String {
-            if count == 1 {
-                return String(localized: "1 poop", table: table)
-            } else {
-                return String(localized: "\(count) poops", table: table)
-            }
-        }
-
-        // Accessibility
-        static func streakAccessibility(_ count: Int) -> String {
-            String(localized: "\(count) outdoor pees in a row", table: table)
-        }
-
-        static func poopAccessibility(count: Int, hasPattern: Bool, lower: Int, upper: Int) -> String {
-            if hasPattern {
-                return String(localized: "\(count) poops today, \(lower) to \(upper) expected", table: table)
-            } else {
-                return String(localized: "\(count) poops today", table: table)
+                return String(localized: "\(count) in a row!", table: table)
             }
         }
     }
@@ -230,5 +194,26 @@ extension Strings {
         static let categoryMeal = String(localized: "meal", table: table)
         static let categoryTraining = String(localized: "training", table: table)
         static let categorySocialization = String(localized: "socialization", table: table)
+
+        // MARK: AI Cards
+        static let trainingSuggestion = String(localized: "Training suggestion", table: table)
+        static let pottySuggestion = String(localized: "Potty insight", table: table)
+        static let socializationSuggestion = String(localized: "Socialization tip", table: table)
+        static let healthInsight = String(localized: "Health insight", table: table)
+
+        static let focusOn = String(localized: "Focus on", table: table)
+        static let warmUpWith = String(localized: "Warm up with", table: table)
+        static let aiUnavailable = String(localized: "AI suggestions will appear here", table: table)
+
+        static let priorityCategory = String(localized: "Priority", table: table)
+        static let windowStatus = String(localized: "Window status", table: table)
+        static let wellness = String(localized: "Wellness", table: table)
+        static let recommendations = String(localized: "Recommendations", table: table)
+        static let riskFactors = String(localized: "Watch for", table: table)
+
+        // Morning briefing
+        static let loadingBriefing = String(localized: "Loading your morning briefing...", table: table)
+        static let quickWins = String(localized: "Quick wins for today:", table: table)
+        static let morningBriefing = String(localized: "Good morning", table: table)
     }
 }

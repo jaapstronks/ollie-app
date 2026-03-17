@@ -8,7 +8,7 @@ import SwiftUI
 import WatchKit
 
 struct QuickLogView: View {
-    @ObservedObject var dataProvider: WatchDataProvider
+    var dataProvider: WatchDataProvider
 
     let columns = [
         GridItem(.flexible()),

@@ -65,5 +65,10 @@ extension Strings {
         // Delete confirmation
         static let deleteConfirmTitle = String(localized: "Delete medication?", table: table)
         static let deleteConfirmMessage = String(localized: "This will remove the medication from your schedule.", table: table)
+
+        // Adherence
+        static let adherence = String(localized: "Adherence", table: table)
+        static let thisWeek = String(localized: "This Week", table: table)
+        static let settingsFooter = String(localized: "Tap a medication to view details and adherence history.", table: table)
     }
 }

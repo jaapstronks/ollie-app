@@ -16,10 +16,10 @@
             "value": "%lld días, %lld eventos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld dagen, %lld events"
+            "value": "%lld jours, %lld événements"
           }
         },
         "it": {
@@ -28,10 +28,10 @@
             "value": "%lld giorni, %lld eventi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld jours, %lld événements"
+            "value": "%lld dagen, %lld events"
           }
         }
       }
@@ -51,10 +51,10 @@
             "value": "%lld min antes"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld min van tevoren"
+            "value": "%lld min avant"
           }
         },
         "it": {
@@ -63,10 +63,10 @@
             "value": "%lld min prima"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld min avant"
+            "value": "%lld min van tevoren"
           }
         }
       }
@@ -86,10 +86,10 @@
             "value": "%lld omitidos (ya existían)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld overgeslagen (bestond al)"
+            "value": "%lld ignorés (existaient déjà)"
           }
         },
         "it": {
@@ -98,10 +98,10 @@
             "value": "%lld saltati (esistevano già)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld ignorés (existaient déjà)"
+            "value": "%lld overgeslagen (bestond al)"
           }
         }
       }
@@ -121,10 +121,10 @@
             "value": "%lldx al día"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lldx per dag"
+            "value": "%lldx par jour"
           }
         },
         "it": {
@@ -133,10 +133,10 @@
             "value": "%lldx al giorno"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lldx par jour"
+            "value": "%lldx per dag"
           }
         }
       }
@@ -162,16 +162,16 @@
             "value": "Actif"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actief"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Attivo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actief"
           }
         }
       }
@@ -191,10 +191,10 @@
             "value": "Añadir cita"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afspraak toevoegen"
+            "value": "Ajouter un rendez-vous"
           }
         },
         "it": {
@@ -203,45 +203,10 @@
             "value": "Aggiungi appuntamento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter un rendez-vous"
-          }
-        }
-      }
-    },
-    "Add meal": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mahlzeit hinzufügen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Añadir comida"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijd toevoegen"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiungi pasto"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter un repas"
+            "value": "Afspraak toevoegen"
           }
         }
       }
@@ -261,10 +226,10 @@
             "value": "Añadir foto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Foto toevoegen"
+            "value": "Ajouter une photo"
           }
         },
         "it": {
@@ -273,10 +238,45 @@
             "value": "Aggiungi foto"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto toevoegen"
+          }
+        }
+      }
+    },
+    "Add meal": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mahlzeit hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir comida"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter une photo"
+            "value": "Ajouter un repas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi pasto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijd toevoegen"
           }
         }
       }
@@ -296,10 +296,10 @@
             "value": "Añadir al calendario"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toevoegen aan agenda"
+            "value": "Ajouter au calendrier"
           }
         },
         "it": {
@@ -308,10 +308,10 @@
             "value": "Aggiungi al calendario"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter au calendrier"
+            "value": "Toevoegen aan agenda"
           }
         }
       }
@@ -331,10 +331,10 @@
             "value": "Añadir paseo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandeling toevoegen"
+            "value": "Ajouter une promenade"
           }
         },
         "it": {
@@ -343,10 +343,10 @@
             "value": "Aggiungi passeggiata"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter une promenade"
+            "value": "Wandeling toevoegen"
           }
         }
       }
@@ -366,10 +366,10 @@
             "value": "Dirección o nombre del lugar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Adres of locatienaam"
+            "value": "Adresse ou nom du lieu"
           }
         },
         "it": {
@@ -378,10 +378,10 @@
             "value": "Indirizzo o nome del luogo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Adresse ou nom du lieu"
+            "value": "Adres of locatienaam"
           }
         }
       }
@@ -401,10 +401,10 @@
             "value": "Ajustar foto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Foto aanpassen"
+            "value": "Ajuster la photo"
           }
         },
         "it": {
@@ -413,10 +413,10 @@
             "value": "Regola foto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajuster la photo"
+            "value": "Foto aanpassen"
           }
         }
       }
@@ -442,16 +442,16 @@
             "value": "Avancé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geavanceerd"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Avanzate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geavanceerd"
           }
         }
       }
@@ -471,10 +471,10 @@
             "value": "Después"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Na"
+            "value": "Après"
           }
         },
         "it": {
@@ -483,10 +483,10 @@
             "value": "Dopo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Après"
+            "value": "Na"
           }
         }
       }
@@ -506,10 +506,10 @@
             "value": "Después de %lld min despierto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Na %lld min wakker"
+            "value": "Après %lld min éveillé"
           }
         },
         "it": {
@@ -518,10 +518,10 @@
             "value": "Dopo %lld min sveglio"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Après %lld min éveillé"
+            "value": "Na %lld min wakker"
           }
         }
       }
@@ -547,16 +547,16 @@
             "value": "Après-midi"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Middag"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Pomeriggio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middag"
           }
         }
       }
@@ -582,16 +582,16 @@
             "value": "Âge"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leeftijd"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Età"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeftijd"
           }
         }
       }
@@ -611,10 +611,10 @@
             "value": "Todo el día"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hele dag"
+            "value": "Toute la journée"
           }
         },
         "it": {
@@ -623,10 +623,10 @@
             "value": "Tutto il giorno"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toute la journée"
+            "value": "Hele dag"
           }
         }
       }
@@ -652,16 +652,16 @@
             "value": "Quantité"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoeveelheid"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Quantità"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoeveelheid"
           }
         }
       }
@@ -681,10 +681,10 @@
             "value": "Cantidad para %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoeveelheid voor %@"
+            "value": "Quantité pour %@"
           }
         },
         "it": {
@@ -693,10 +693,10 @@
             "value": "Quantità per %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quantité pour %@"
+            "value": "Hoeveelheid voor %@"
           }
         }
       }
@@ -716,10 +716,10 @@
             "value": "Ajustes de la app"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-instellingen"
+            "value": "Paramètres de l'app"
           }
         },
         "it": {
@@ -728,10 +728,10 @@
             "value": "Impostazioni app"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Paramètres de l'app"
+            "value": "App-instellingen"
           }
         }
       }
@@ -757,16 +757,16 @@
             "value": "Apparence"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weergave"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Aspetto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weergave"
           }
         }
       }
@@ -786,10 +786,10 @@
             "value": "Título de la cita"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afspraaktitel"
+            "value": "Titre du rendez-vous"
           }
         },
         "it": {
@@ -798,10 +798,10 @@
             "value": "Titolo appuntamento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Titre du rendez-vous"
+            "value": "Afspraaktitel"
           }
         }
       }
@@ -827,16 +827,16 @@
             "value": "Rendez-vous"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afspraken"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Appuntamenti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afspraken"
           }
         }
       }
@@ -856,10 +856,10 @@
             "value": "¿Estás seguro de que quieres dejar de compartir? La otra persona perderá el acceso."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weet je zeker dat je wilt stoppen met delen? De andere persoon verliest dan toegang."
+            "value": "Voulez-vous vraiment arrêter le partage ? L'autre personne perdra l'accès."
           }
         },
         "it": {
@@ -868,10 +868,10 @@
             "value": "Sei sicuro di voler smettere di condividere? L'altra persona perderà l'accesso."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voulez-vous vraiment arrêter le partage ? L'autre personne perdra l'accès."
+            "value": "Weet je zeker dat je wilt stoppen met delen? De andere persoon verliest dan toegang."
           }
         }
       }
@@ -891,10 +891,10 @@
             "value": "A los %lld meses: máx. %lld minutos por paseo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op %lld maanden oud: max %lld minuten per wandeling"
+            "value": "À %lld mois : max %lld minutes par promenade"
           }
         },
         "it": {
@@ -903,10 +903,10 @@
             "value": "A %lld mesi: max %lld minuti per passeggiata"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "À %lld mois : max %lld minutes par promenade"
+            "value": "Op %lld maanden oud: max %lld minuten per wandeling"
           }
         }
       }
@@ -926,10 +926,10 @@
             "value": "Atmósfera"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sfeer"
+            "value": "Atmosphère"
           }
         },
         "it": {
@@ -938,10 +938,10 @@
             "value": "Atmosfera"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atmosphère"
+            "value": "Sfeer"
           }
         }
       }
@@ -961,10 +961,10 @@
             "value": "El fondo cambia de mañanas frescas a tardes cálidas."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Achtergrond verandert van koele ochtenden naar warme avonden."
+            "value": "L'arrière-plan passe des matins frais aux soirées chaudes."
           }
         },
         "it": {
@@ -973,10 +973,10 @@
             "value": "Lo sfondo cambia da mattine fresche a sere calde."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'arrière-plan passe des matins frais aux soirées chaudes."
+            "value": "Achtergrond verandert van koele ochtenden naar warme avonden."
           }
         }
       }
@@ -1002,16 +1002,16 @@
             "value": "Petit-déjeuner"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontbijt"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Colazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontbijt"
           }
         }
       }
@@ -1037,16 +1037,16 @@
             "value": "Race"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ras"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Razza"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ras"
           }
         }
       }
@@ -1066,10 +1066,10 @@
             "value": "Se requiere acceso al calendario para sincronizar las citas."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agendatoegang is vereist om afspraken te synchroniseren."
+            "value": "L'accès au calendrier est requis pour synchroniser les rendez-vous."
           }
         },
         "it": {
@@ -1078,10 +1078,10 @@
             "value": "L'accesso al calendario è necessario per sincronizzare gli appuntamenti."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'accès au calendrier est requis pour synchroniser les rendez-vous."
+            "value": "Agendatoegang is vereist om afspraken te synchroniseren."
           }
         }
       }
@@ -1101,10 +1101,10 @@
             "value": "Visuales más tranquilos al dormir, más brillantes al despertar."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rustiger beeld tijdens het slapen, levendiger wanneer wakker."
+            "value": "Visuels plus calmes pendant le sommeil, plus vifs quand éveillé."
           }
         },
         "it": {
@@ -1113,10 +1113,92 @@
             "value": "Visuale più calma durante il sonno, più luminosa da sveglio."
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rustiger beeld tijdens het slapen, levendiger wanneer wakker."
+          }
+        }
+      }
+    },
+    "Caregiver": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Betreuer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuidador"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Visuels plus calmes pendant le sommeil, plus vifs quand éveillé."
+            "value": "Responsable"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Responsabile"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verzorger"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vårdare"
+          }
+        }
+      }
+    },
+    "Celebrations and achievements": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feiern und Erfolge"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celebraciones y logros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Célébrations et réussites"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celebrazioni e traguardi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vieringen en prestaties"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firanden och prestationer"
           }
         }
       }
@@ -1136,7 +1218,7 @@
             "value": "Celsius (°C)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Celsius (°C)"
@@ -1148,45 +1230,10 @@
             "value": "Celsius (°C)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Celsius (°C)"
-          }
-        }
-      }
-    },
-    "Change name": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name ändern"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cambiar nombre"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naam wijzigen"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cambia nome"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Changer le nom"
+            "value": "Celsius (°C)"
           }
         }
       }
@@ -1206,10 +1253,10 @@
             "value": "Cambiar foto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Foto wijzigen"
+            "value": "Changer la photo"
           }
         },
         "it": {
@@ -1218,10 +1265,86 @@
             "value": "Cambia foto"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto wijzigen"
+          }
+        }
+      }
+    },
+    "Change name": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name ändern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar nombre"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Changer la photo"
+            "value": "Changer le nom"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia nome"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam wijzigen"
+          }
+        }
+      }
+    },
+    "Choose your role with %@. This affects which reminders you'll see.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle deine Rolle mit %@. Das beeinflusst, welche Erinnerungen du siehst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige tu rol con %@. Esto afecta qué recordatorios verás."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis ton rôle avec %@. Cela affecte les rappels que tu verras."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il tuo ruolo con %@. Questo influenza quali promemoria vedrai."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies je rol met %@. Dit bepaalt welke herinneringen je ziet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj din roll med %@. Detta påverkar vilka påminnelser du ser."
           }
         }
       }
@@ -1241,10 +1364,10 @@
             "value": "CloudKit no está disponible"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "CloudKit is niet beschikbaar"
+            "value": "CloudKit n'est pas disponible"
           }
         },
         "it": {
@@ -1253,10 +1376,10 @@
             "value": "CloudKit non è disponibile"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "CloudKit n'est pas disponible"
+            "value": "CloudKit is niet beschikbaar"
           }
         }
       }
@@ -1276,10 +1399,10 @@
             "value": "Los colores reflejan las condiciones climáticas actuales."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kleuren weerspiegelen de huidige weersomstandigheden."
+            "value": "Les couleurs reflètent les conditions météo actuelles."
           }
         },
         "it": {
@@ -1288,10 +1411,10 @@
             "value": "I colori riflettono le condizioni meteo attuali."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les couleurs reflètent les conditions météo actuelles."
+            "value": "Kleuren weerspiegelen de huidige weersomstandigheden."
           }
         }
       }
@@ -1317,16 +1440,16 @@
             "value": "Terminé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voltooid"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Completato"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltooid"
           }
         }
       }
@@ -1346,7 +1469,7 @@
             "value": "Contacto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Contact"
@@ -1358,7 +1481,7 @@
             "value": "Contatto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Contact"
@@ -1381,10 +1504,10 @@
             "value": "No se pudo verificar el estado de iCloud"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kon iCloud-status niet controleren"
+            "value": "Impossible de vérifier le statut iCloud"
           }
         },
         "it": {
@@ -1393,10 +1516,10 @@
             "value": "Impossibile verificare lo stato di iCloud"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de vérifier le statut iCloud"
+            "value": "Kon iCloud-status niet controleren"
           }
         }
       }
@@ -1417,16 +1540,22 @@
             "value": "No se pudieron crear los archivos de exportación."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer les fichiers d'export."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Impossibile creare i file di esportazione."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de créer les fichiers d'export."
+            "value": "Kon exportbestanden niet aanmaken."
           }
         }
       }
@@ -1447,16 +1576,22 @@
             "value": "No se pudieron codificar los datos de %@."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'encoder les données %@."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Impossibile codificare i dati %@."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible d'encoder les données %@."
+            "value": "Kon %@ gegevens niet coderen."
           }
         }
       }
@@ -1476,10 +1611,10 @@
             "value": "No se pudo cargar el contenido compartido"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kon gedeelde data niet laden"
+            "value": "Impossible de charger le partage"
           }
         },
         "it": {
@@ -1488,10 +1623,10 @@
             "value": "Impossibile caricare la condivisione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de charger le partage"
+            "value": "Kon gedeelde data niet laden"
           }
         }
       }
@@ -1511,10 +1646,10 @@
             "value": "No se pudo conectar con la API de GitHub"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kon GitHub API niet bereiken"
+            "value": "Impossible d'atteindre l'API GitHub"
           }
         },
         "it": {
@@ -1523,10 +1658,51 @@
             "value": "Impossibile raggiungere l'API di GitHub"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kon GitHub API niet bereiken"
+          }
+        }
+      }
+    },
+    "Daily care": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Pflege"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuidado diario"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible d'atteindre l'API GitHub"
+            "value": "Soins quotidiens"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cura quotidiana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dagelijkse zorg"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daglig vård"
           }
         }
       }
@@ -1552,16 +1728,16 @@
             "value": "Données"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gegevens"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Dati"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gegevens"
           }
         }
       }
@@ -1581,10 +1757,10 @@
             "value": "Los datos se sincronizan automáticamente entre todos tus dispositivos a través de iCloud."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gegevens worden automatisch gesynchroniseerd tussen al je apparaten via iCloud."
+            "value": "Les données sont automatiquement synchronisées entre tous vos appareils via iCloud."
           }
         },
         "it": {
@@ -1593,10 +1769,10 @@
             "value": "I dati vengono sincronizzati automaticamente tra tutti i tuoi dispositivi tramite iCloud."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les données sont automatiquement synchronisées entre tous vos appareils via iCloud."
+            "value": "Gegevens worden automatisch gesynchroniseerd tussen al je apparaten via iCloud."
           }
         }
       }
@@ -1622,16 +1798,16 @@
             "value": "Date"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datum"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Data"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum"
           }
         }
       }
@@ -1651,10 +1827,10 @@
             "value": "Días en casa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dagen thuis"
+            "value": "Jours à la maison"
           }
         },
         "it": {
@@ -1663,10 +1839,10 @@
             "value": "Giorni a casa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jours à la maison"
+            "value": "Dagen thuis"
           }
         }
       }
@@ -1686,10 +1862,10 @@
             "value": "¿Eliminar cita?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afspraak verwijderen?"
+            "value": "Supprimer le rendez-vous ?"
           }
         },
         "it": {
@@ -1698,10 +1874,10 @@
             "value": "Eliminare l'appuntamento?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprimer le rendez-vous ?"
+            "value": "Afspraak verwijderen?"
           }
         }
       }
@@ -1721,10 +1897,10 @@
             "value": "Error al eliminar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verwijderen mislukt"
+            "value": "Échec de la suppression"
           }
         },
         "it": {
@@ -1733,10 +1909,10 @@
             "value": "Eliminazione fallita"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec de la suppression"
+            "value": "Verwijderen mislukt"
           }
         }
       }
@@ -1756,10 +1932,10 @@
             "value": "Error al eliminar: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verwijderen mislukt: %@"
+            "value": "Échec de la suppression : %@"
           }
         },
         "it": {
@@ -1768,10 +1944,45 @@
             "value": "Eliminazione fallita: %@"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwijderen mislukt: %@"
+          }
+        }
+      }
+    },
+    "Deleting your only profile will return you to the start screen.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn du dein einziges Profil löschst, kehrst du zum Startbildschirm zurück."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar tu único perfil te devolverá a la pantalla de inicio."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec de la suppression : %@"
+            "value": "Supprimer votre seul profil vous ramènera à l'écran d'accueil."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'eliminazione del tuo unico profilo ti riporterà alla schermata iniziale."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als je je enige profiel verwijdert, keer je terug naar het startscherm."
           }
         }
       }
@@ -1797,16 +2008,16 @@
             "value": "Dîner"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avondeten"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Cena"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avondeten"
           }
         }
       }
@@ -1826,10 +2037,10 @@
             "value": "¿Quieres importar datos de GitHub? Esto descargará todos los días disponibles."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wil je gegevens importeren van GitHub? Dit haalt alle beschikbare dagen op."
+            "value": "Voulez-vous importer des données depuis GitHub ? Cela récupérera tous les jours disponibles."
           }
         },
         "it": {
@@ -1838,10 +2049,10 @@
             "value": "Vuoi importare i dati da GitHub? Verranno scaricati tutti i giorni disponibili."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voulez-vous importer des données depuis GitHub ? Cela récupérera tous les jours disponibles."
+            "value": "Wil je gegevens importeren van GitHub? Dit haalt alle beschikbare dagen op."
           }
         }
       }
@@ -1861,10 +2072,10 @@
             "value": "No se repite"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herhaalt niet"
+            "value": "Ne se répète pas"
           }
         },
         "it": {
@@ -1873,10 +2084,10 @@
             "value": "Non si ripete"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne se répète pas"
+            "value": "Herhaalt niet"
           }
         }
       }
@@ -1896,10 +2107,10 @@
             "value": "Perfil del perro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hondenprofiel"
+            "value": "Profil du chien"
           }
         },
         "it": {
@@ -1908,10 +2119,10 @@
             "value": "Profilo cane"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profil du chien"
+            "value": "Hondenprofiel"
           }
         }
       }
@@ -1931,10 +2142,10 @@
             "value": "¡Listo!"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Klaar!"
+            "value": "Terminé !"
           }
         },
         "it": {
@@ -1943,10 +2154,10 @@
             "value": "Fatto!"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terminé !"
+            "value": "Klaar!"
           }
         }
       }
@@ -1966,10 +2177,10 @@
             "value": "Error de descarga"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Download mislukt"
+            "value": "Échec du téléchargement"
           }
         },
         "it": {
@@ -1978,10 +2189,10 @@
             "value": "Download fallito"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec du téléchargement"
+            "value": "Download mislukt"
           }
         }
       }
@@ -2001,10 +2212,10 @@
             "value": "Descargando: %lld/%lld"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Downloaden: %lld/%lld"
+            "value": "Téléchargement : %lld/%lld"
           }
         },
         "it": {
@@ -2013,80 +2224,10 @@
             "value": "Scaricamento: %lld/%lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Téléchargement : %lld/%lld"
-          }
-        }
-      }
-    },
-    "e.g. 80g": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "z.B. 80g"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ej. 80g"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "bijv. 80g"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "es. 80g"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ex. 80g"
-          }
-        }
-      }
-    },
-    "e.g. Breakfast": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "z.B. Frühstück"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ej. Desayuno"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bijv. Ontbijt"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "es. Colazione"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ex. Petit-déjeuner"
+            "value": "Downloaden: %lld/%lld"
           }
         }
       }
@@ -2106,10 +2247,10 @@
             "value": "Temprano (~20 min)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vroeg (~20 min)"
+            "value": "Tôt (~20 min)"
           }
         },
         "it": {
@@ -2118,10 +2259,10 @@
             "value": "Presto (~20 min)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tôt (~20 min)"
+            "value": "Vroeg (~20 min)"
           }
         }
       }
@@ -2141,10 +2282,10 @@
             "value": "Editar cita"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afspraak bewerken"
+            "value": "Modifier le rendez-vous"
           }
         },
         "it": {
@@ -2153,10 +2294,10 @@
             "value": "Modifica appuntamento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifier le rendez-vous"
+            "value": "Afspraak bewerken"
           }
         }
       }
@@ -2176,10 +2317,10 @@
             "value": "Editar límite de ejercicio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bewegingslimiet aanpassen"
+            "value": "Modifier la limite d'exercice"
           }
         },
         "it": {
@@ -2188,10 +2329,10 @@
             "value": "Modifica limite esercizio"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifier la limite d'exercice"
+            "value": "Bewegingslimiet aanpassen"
           }
         }
       }
@@ -2211,10 +2352,10 @@
             "value": "Editar comida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijd bewerken"
+            "value": "Modifier le repas"
           }
         },
         "it": {
@@ -2223,10 +2364,10 @@
             "value": "Modifica pasto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifier le repas"
+            "value": "Maaltijd bewerken"
           }
         }
       }
@@ -2246,10 +2387,10 @@
             "value": "Editar comidas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijden aanpassen"
+            "value": "Modifier les repas"
           }
         },
         "it": {
@@ -2258,10 +2399,10 @@
             "value": "Modifica pasti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifier les repas"
+            "value": "Maaltijden aanpassen"
           }
         }
       }
@@ -2281,10 +2422,10 @@
             "value": "Activa las notificaciones en Ajustes para recibir recordatorios."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schakel meldingen in via Instellingen om herinneringen te ontvangen."
+            "value": "Activez les notifications dans Réglages pour recevoir des rappels."
           }
         },
         "it": {
@@ -2293,10 +2434,10 @@
             "value": "Attiva le notifiche nelle Impostazioni per ricevere promemoria."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Activez les notifications dans Réglages pour recevoir des rappels."
+            "value": "Schakel meldingen in via Instellingen om herinneringen te ontvangen."
           }
         }
       }
@@ -2316,10 +2457,10 @@
             "value": "Activa las notificaciones para recibir recordatorios"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schakel meldingen in om herinneringen te ontvangen"
+            "value": "Activez les notifications pour recevoir des rappels"
           }
         },
         "it": {
@@ -2328,10 +2469,10 @@
             "value": "Attiva le notifiche per ricevere promemoria"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Activez les notifications pour recevoir des rappels"
+            "value": "Schakel meldingen in om herinneringen te ontvangen"
           }
         }
       }
@@ -2351,10 +2492,10 @@
             "value": "Hora de fin"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eindtijd"
+            "value": "Heure de fin"
           }
         },
         "it": {
@@ -2363,10 +2504,10 @@
             "value": "Ora di fine"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Heure de fin"
+            "value": "Eindtijd"
           }
         }
       }
@@ -2386,10 +2527,10 @@
             "value": "Termina"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eindigt"
+            "value": "Fin"
           }
         },
         "it": {
@@ -2398,10 +2539,10 @@
             "value": "Termina"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fin"
+            "value": "Eindigt"
           }
         }
       }
@@ -2421,10 +2562,10 @@
             "value": "Introduce el nombre de esta comida, como Desayuno o Cena"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voer de naam voor deze maaltijd in, zoals Ontbijt of Avondeten"
+            "value": "Entrez le nom de ce repas, comme Petit-déjeuner ou Dîner"
           }
         },
         "it": {
@@ -2433,10 +2574,10 @@
             "value": "Inserisci il nome per questo pasto, come Colazione o Cena"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entrez le nom de ce repas, comme Petit-déjeuner ou Dîner"
+            "value": "Voer de naam voor deze maaltijd in, zoals Ontbijt of Avondeten"
           }
         }
       }
@@ -2456,10 +2597,10 @@
             "value": "Introduce el tamaño de la porción, como 80g"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voer de portiegrootte in, zoals 80g"
+            "value": "Entrez la taille de la portion, comme 80g"
           }
         },
         "it": {
@@ -2468,10 +2609,10 @@
             "value": "Inserisci la porzione, come 80g"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entrez la taille de la portion, comme 80g"
+            "value": "Voer de portiegrootte in, zoals 80g"
           }
         }
       }
@@ -2497,16 +2638,16 @@
             "value": "Soir"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avond"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Sera"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avond"
           }
         }
       }
@@ -2526,10 +2667,10 @@
             "value": "Cada"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Elke"
+            "value": "Tous les"
           }
         },
         "it": {
@@ -2538,10 +2679,10 @@
             "value": "Ogni"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tous les"
+            "value": "Elke"
           }
         }
       }
@@ -2567,16 +2708,16 @@
             "value": "Exercice"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beweging"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esercizio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beweging"
           }
         }
       }
@@ -2596,10 +2737,10 @@
             "value": "Límite de ejercicio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bewegingslimiet"
+            "value": "Limite d'exercice"
           }
         },
         "it": {
@@ -2608,10 +2749,10 @@
             "value": "Limite esercizio"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Limite d'exercice"
+            "value": "Bewegingslimiet"
           }
         }
       }
@@ -2632,16 +2773,22 @@
             "value": "Error de exportación: %@"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de l'export : %@"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione fallita: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec de l'export : %@"
+            "value": "Export mislukt: %@"
           }
         }
       }
@@ -2662,16 +2809,22 @@
             "value": "Exportando citas..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des rendez-vous..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione appuntamenti..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des rendez-vous..."
+            "value": "Afspraken exporteren..."
           }
         }
       }
@@ -2692,16 +2845,22 @@
             "value": "Exportando contactos..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des contacts..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione contatti..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des contacts..."
+            "value": "Contacten exporteren..."
           }
         }
       }
@@ -2722,16 +2881,22 @@
             "value": "Exportando documentos..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des documents..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione documenti..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des documents..."
+            "value": "Documenten exporteren..."
           }
         }
       }
@@ -2752,16 +2917,22 @@
             "value": "Exportando eventos..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des événements..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione eventi..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des événements..."
+            "value": "Gebeurtenissen exporteren..."
           }
         }
       }
@@ -2782,16 +2953,22 @@
             "value": "Exportando hitos..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des étapes..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione traguardi..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des étapes..."
+            "value": "Mijlpalen exporteren..."
           }
         }
       }
@@ -2812,16 +2989,22 @@
             "value": "Exportando fotos..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des photos..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione foto..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des photos..."
+            "value": "Foto's exporteren..."
           }
         }
       }
@@ -2842,16 +3025,22 @@
             "value": "Exportando lugares..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des lieux..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione luoghi..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export des lieux..."
+            "value": "Plekken exporteren..."
           }
         }
       }
@@ -2872,16 +3061,22 @@
             "value": "Exportando foto de perfil..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export de la photo de profil..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione foto profilo..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export de la photo de profil..."
+            "value": "Profielfoto exporteren..."
           }
         }
       }
@@ -2902,16 +3097,22 @@
             "value": "Exportando perfil..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export du profil..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione profilo..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export du profil..."
+            "value": "Profiel exporteren..."
           }
         }
       }
@@ -2932,16 +3133,22 @@
             "value": "Exportando socialización..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export de la socialisation..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione socializzazione..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export de la socialisation..."
+            "value": "Socialisatie exporteren..."
           }
         }
       }
@@ -2961,7 +3168,7 @@
             "value": "Fahrenheit (°F)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Fahrenheit (°F)"
@@ -2973,7 +3180,7 @@
             "value": "Fahrenheit (°F)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Fahrenheit (°F)"
@@ -2996,10 +3203,10 @@
             "value": "Obteniendo archivos..."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bestanden ophalen..."
+            "value": "Récupération des fichiers..."
           }
         },
         "it": {
@@ -3008,10 +3215,10 @@
             "value": "Recupero file..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Récupération des fichiers..."
+            "value": "Bestanden ophalen..."
           }
         }
       }
@@ -3031,10 +3238,10 @@
             "value": "Contenido del archivo inválido"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bestandsinhoud ongeldig"
+            "value": "Contenu du fichier invalide"
           }
         },
         "it": {
@@ -3043,10 +3250,10 @@
             "value": "Contenuto file non valido"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contenu du fichier invalide"
+            "value": "Bestandsinhoud ongeldig"
           }
         }
       }
@@ -3067,16 +3274,22 @@
             "value": "Finalizando exportación..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalisation de l'export..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Completamento esportazione..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Finalisation de l'export..."
+            "value": "Export afronden..."
           }
         }
       }
@@ -3096,10 +3309,10 @@
             "value": "Encontrados: %lld días"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gevonden: %lld dagen"
+            "value": "Trouvé : %lld jours"
           }
         },
         "it": {
@@ -3108,10 +3321,10 @@
             "value": "Trovati: %lld giorni"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trouvé : %lld jours"
+            "value": "Gevonden: %lld dagen"
           }
         }
       }
@@ -3131,10 +3344,10 @@
             "value": "Frecuencia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Frequentie"
+            "value": "Fréquence"
           }
         },
         "it": {
@@ -3143,10 +3356,23 @@
             "value": "Frequenza"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fréquence"
+            "value": "Frequentie"
+          }
+        }
+      }
+    },
+    "Great start. You can edit these details later in Settings.": {
+      "comment": "Confirmation subtitle in the onboarding flow, indicating that the user can edit their details later.",
+      "extractionState": "manual",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goede start. Je kunt deze details later bewerken in Instellingen."
           }
         }
       }
@@ -3166,10 +3392,10 @@
             "value": "Salud y documentos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gezondheid & Documenten"
+            "value": "Santé et documents"
           }
         },
         "it": {
@@ -3178,220 +3404,174 @@
             "value": "Salute e documenti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Santé et documents"
+            "value": "Gezondheid & Documenten"
           }
         }
       }
     },
-    "iCloud is restricted": {
+    "Helper": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud ist eingeschränkt"
+            "value": "Helfer"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud está restringido"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud is beperkt"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud è limitato"
+            "value": "Ayudante"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud est restreint"
+            "value": "Assistant"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aiutante"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Helper"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hjälpare"
           }
         }
       }
     },
-    "iCloud not available": {
+    "Helps with walks, feeding, potty breaks, and training": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud nicht verfügbar"
+            "value": "Hilft bei Spaziergängen, Fütterung, Toilettenpausen und Training"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud no disponible"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud niet beschikbaar"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud non disponibile"
+            "value": "Ayuda con paseos, alimentación, necesidades y entrenamiento"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud non disponible"
+            "value": "Aide avec les promenades, repas, besoins et entraînement"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aiuta con passeggiate, pasti, bisogni e addestramento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Helpt met wandelingen, voeding, plasjes en training"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hjälper till med promenader, matning, rastning och träning"
           }
         }
       }
     },
-    "iCloud status unknown": {
+    "Home grooming schedule": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud-Status unbekannt"
+            "value": "Pflegeplan zu Hause"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Estado de iCloud desconocido"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud-status onbekend"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stato iCloud sconosciuto"
+            "value": "Horario de aseo en casa"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Statut iCloud inconnu"
+            "value": "Planning de toilettage maison"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma toelettatura a casa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verzorgingsschema thuis"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pälsvårdsschema hemma"
           }
         }
       }
     },
-    "iCloud Sync active": {
-      "extractionState": "stale",
+    "How involved are you?": {
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud-Sync aktiv"
+            "value": "Wie stark bist du involviert?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sincronización de iCloud activa"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud-synchronisatie actief"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sincronizzazione iCloud attiva"
+            "value": "¿Qué tan involucrado estás?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisation iCloud active"
-          }
-        }
-      }
-    },
-    "iCloud temporarily unavailable": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud vorübergehend nicht verfügbar"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud temporalmente no disponible"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud tijdelijk niet beschikbaar"
+            "value": "À quel point es-tu impliqué ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud temporaneamente non disponibile"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud temporairement indisponible"
-          }
-        }
-      }
-    },
-    "iCloud unavailable": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud nicht verfügbar"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud no disponible"
+            "value": "Quanto sei coinvolto?"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud niet beschikbaar"
+            "value": "Hoe betrokken ben je?"
           }
         },
-        "it": {
+        "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud non disponibile"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud indisponible"
+            "value": "Hur involverad är du?"
           }
         }
       }
@@ -3417,16 +3597,16 @@
             "value": "Importer"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importeren"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Importa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importeren"
           }
         }
       }
@@ -3446,10 +3626,10 @@
             "value": "Importar desde GitHub"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Importeren van GitHub"
+            "value": "Importer depuis GitHub"
           }
         },
         "it": {
@@ -3458,10 +3638,10 @@
             "value": "Importa da GitHub"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Importer depuis GitHub"
+            "value": "Importeren van GitHub"
           }
         }
       }
@@ -3481,10 +3661,10 @@
             "value": "En el calendario"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "In agenda"
+            "value": "Dans le calendrier"
           }
         },
         "it": {
@@ -3493,10 +3673,10 @@
             "value": "Nel calendario"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dans le calendrier"
+            "value": "In agenda"
           }
         }
       }
@@ -3516,10 +3696,10 @@
             "value": "Respuesta inválida de GitHub"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ongeldige respons van GitHub"
+            "value": "Réponse invalide de GitHub"
           }
         },
         "it": {
@@ -3528,10 +3708,10 @@
             "value": "Risposta non valida da GitHub"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réponse invalide de GitHub"
+            "value": "Ongeldige respons van GitHub"
           }
         }
       }
@@ -3551,10 +3731,10 @@
             "value": "Invitar a otra persona"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog iemand uitnodigen"
+            "value": "Inviter une autre personne"
           }
         },
         "it": {
@@ -3563,10 +3743,10 @@
             "value": "Invita un'altra persona"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Inviter une autre personne"
+            "value": "Nog iemand uitnodigen"
           }
         }
       }
@@ -3586,10 +3766,10 @@
             "value": "Invitado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uitgenodigd"
+            "value": "Invité"
           }
         },
         "it": {
@@ -3598,10 +3778,10 @@
             "value": "Invitato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invité"
+            "value": "Uitgenodigd"
           }
         }
       }
@@ -3621,10 +3801,10 @@
             "value": "Kilogramos (kg)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kilogram (kg)"
+            "value": "Kilogrammes (kg)"
           }
         },
         "it": {
@@ -3633,10 +3813,10 @@
             "value": "Chilogrammi (kg)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kilogrammes (kg)"
+            "value": "Kilogram (kg)"
           }
         }
       }
@@ -3656,10 +3836,10 @@
             "value": "Etiqueta"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Label"
+            "value": "Libellé"
           }
         },
         "it": {
@@ -3668,10 +3848,10 @@
             "value": "Etichetta"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Libellé"
+            "value": "Label"
           }
         }
       }
@@ -3691,10 +3871,10 @@
             "value": "Última importación: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laatste import: %@"
+            "value": "Dernier import : %@"
           }
         },
         "it": {
@@ -3703,10 +3883,10 @@
             "value": "Ultima importazione: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dernier import : %@"
+            "value": "Laatste import: %@"
           }
         }
       }
@@ -3726,10 +3906,10 @@
             "value": "Último: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laatst: %@"
+            "value": "Dernière : %@"
           }
         },
         "it": {
@@ -3738,10 +3918,10 @@
             "value": "Ultimo: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dernière : %@"
+            "value": "Laatst: %@"
           }
         }
       }
@@ -3761,10 +3941,10 @@
             "value": "Ajustes de color sutiles para la temporada actual."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lichte kleuraanpassingen voor het huidige seizoen."
+            "value": "Ajustements légers des couleurs pour la saison actuelle."
           }
         },
         "it": {
@@ -3773,10 +3953,10 @@
             "value": "Leggeri adattamenti di colore per la stagione corrente."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajustements légers des couleurs pour la saison actuelle."
+            "value": "Lichte kleuraanpassingen voor het huidige seizoen."
           }
         }
       }
@@ -3796,10 +3976,10 @@
             "value": "Vincular contacto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contact koppelen"
+            "value": "Lier un contact"
           }
         },
         "it": {
@@ -3808,10 +3988,10 @@
             "value": "Collega contatto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lier un contact"
+            "value": "Contact koppelen"
           }
         }
       }
@@ -3831,10 +4011,10 @@
             "value": "Vincular hito"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mijlpaal koppelen"
+            "value": "Lier une étape"
           }
         },
         "it": {
@@ -3843,10 +4023,10 @@
             "value": "Collega traguardo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lier une étape"
+            "value": "Mijlpaal koppelen"
           }
         }
       }
@@ -3872,16 +4052,16 @@
             "value": "Lieu"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Locatie"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Posizione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locatie"
           }
         }
       }
@@ -3907,16 +4087,16 @@
             "value": "Déjeuner"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lunch"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Pranzo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lunch"
           }
         }
       }
@@ -3936,10 +4116,10 @@
             "value": "Gestionar uso compartido"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delen beheren"
+            "value": "Gérer le partage"
           }
         },
         "it": {
@@ -3948,10 +4128,51 @@
             "value": "Gestisci condivisione"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delen beheren"
+          }
+        }
+      }
+    },
+    "Manages vet appointments, medications, and grooming schedules": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwaltet Tierarzttermine, Medikamente und Pflegepläne"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestiona citas veterinarias, medicamentos y horarios de aseo"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gérer le partage"
+            "value": "Gère les rendez-vous vétérinaires, médicaments et soins"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestisce appuntamenti veterinari, farmaci e toelettatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beheert dierenarts afspraken, medicatie en verzorgingsschema's"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hanterar veterinärbesök, mediciner och pälsvårdsscheman"
           }
         }
       }
@@ -3971,10 +4192,10 @@
             "value": "Marcar como completado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Markeer als voltooid"
+            "value": "Marquer comme terminé"
           }
         },
         "it": {
@@ -3983,10 +4204,10 @@
             "value": "Segna come completato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Marquer comme terminé"
+            "value": "Markeer als voltooid"
           }
         }
       }
@@ -4006,10 +4227,10 @@
             "value": "Ejercicio máx."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Max beweging"
+            "value": "Exercice max"
           }
         },
         "it": {
@@ -4018,10 +4239,10 @@
             "value": "Esercizio max"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Exercice max"
+            "value": "Max beweging"
           }
         }
       }
@@ -4041,10 +4262,10 @@
             "value": "Comida %lld"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijd %lld"
+            "value": "Repas %lld"
           }
         },
         "it": {
@@ -4053,10 +4274,10 @@
             "value": "Pasto %lld"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repas %lld"
+            "value": "Maaltijd %lld"
           }
         }
       }
@@ -4076,10 +4297,10 @@
             "value": "Nombre de la comida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naam van maaltijd"
+            "value": "Nom du repas"
           }
         },
         "it": {
@@ -4088,10 +4309,10 @@
             "value": "Nome pasto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nom du repas"
+            "value": "Naam van maaltijd"
           }
         }
       }
@@ -4111,10 +4332,10 @@
             "value": "Recordatorio de comida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijdherinnering"
+            "value": "Rappel de repas"
           }
         },
         "it": {
@@ -4123,10 +4344,10 @@
             "value": "Promemoria pasto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappel de repas"
+            "value": "Maaltijdherinnering"
           }
         }
       }
@@ -4152,16 +4373,16 @@
             "value": "Repas"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijden"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Pasti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijden"
           }
         }
       }
@@ -4181,10 +4402,10 @@
             "value": "Comidas (%lldx al día)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijden (%lldx per dag)"
+            "value": "Repas (%lldx par jour)"
           }
         },
         "it": {
@@ -4193,10 +4414,10 @@
             "value": "Pasti (%lldx al giorno)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repas (%lldx par jour)"
+            "value": "Maaltijden (%lldx per dag)"
           }
         }
       }
@@ -4216,10 +4437,10 @@
             "value": "Comidas por día"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maaltijden per dag"
+            "value": "Repas par jour"
           }
         },
         "it": {
@@ -4228,10 +4449,51 @@
             "value": "Pasti al giorno"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maaltijden per dag"
+          }
+        }
+      }
+    },
+    "Medication doses and refill reminders": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medikamentendosen und Nachfüll-Erinnerungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosis de medicamentos y recordatorios de recarga"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repas par jour"
+            "value": "Doses de médicaments et rappels de renouvellement"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosi farmaci e promemoria ricariche"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicijndoses en bijvul-herinneringen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicindoser och påfyllningspåminnelser"
           }
         }
       }
@@ -4251,10 +4513,10 @@
             "value": "Medicamentos, documentos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Medicijnen, documenten"
+            "value": "Médicaments, documents"
           }
         },
         "it": {
@@ -4263,10 +4525,10 @@
             "value": "Medicinali, documenti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Médicaments, documents"
+            "value": "Medicijnen, documenten"
           }
         }
       }
@@ -4286,10 +4548,10 @@
             "value": "Error de migración: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Migratie mislukt: %@"
+            "value": "Migration échouée : %@"
           }
         },
         "it": {
@@ -4298,10 +4560,10 @@
             "value": "Migrazione fallita: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Migration échouée : %@"
+            "value": "Migratie mislukt: %@"
           }
         }
       }
@@ -4327,86 +4589,16 @@
             "value": "Jalon"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mijlpaal"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Traguardo"
           }
-        }
-      }
-    },
-    "min/month": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Min/Monat"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/mes"
-          }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "min/maand"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/mese"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/mois"
-          }
-        }
-      }
-    },
-    "min/walk": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Min/Spaziergang"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/paseo"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/wandeling"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/passeggiata"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/promenade"
+            "value": "Mijlpaal"
           }
         }
       }
@@ -4426,10 +4618,10 @@
             "value": "Minutos por mes de edad"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minuten per maand leeftijd"
+            "value": "Minutes par mois d'âge"
           }
         },
         "it": {
@@ -4438,10 +4630,10 @@
             "value": "Minuti per mese di età"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minutes par mois d'âge"
+            "value": "Minuten per maand leeftijd"
           }
         }
       }
@@ -4467,16 +4659,16 @@
             "value": "Matin"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ochtend"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Mattina"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ochtend"
           }
         }
       }
@@ -4502,16 +4694,16 @@
             "value": "Nom"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Nome"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam"
           }
         }
       }
@@ -4531,10 +4723,10 @@
             "value": "Nombre, raza, tamaño, foto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naam, ras, grootte, foto"
+            "value": "Nom, race, taille, photo"
           }
         },
         "it": {
@@ -4543,10 +4735,10 @@
             "value": "Nome, razza, taglia, foto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nom, race, taille, photo"
+            "value": "Naam, ras, grootte, foto"
           }
         }
       }
@@ -4566,10 +4758,10 @@
             "value": "Necesita siesta"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dutje nodig"
+            "value": "Sieste nécessaire"
           }
         },
         "it": {
@@ -4578,10 +4770,10 @@
             "value": "Sonnellino necessario"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sieste nécessaire"
+            "value": "Dutje nodig"
           }
         }
       }
@@ -4601,10 +4793,10 @@
             "value": "Siestas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dutjes"
+            "value": "Siestes"
           }
         },
         "it": {
@@ -4613,10 +4805,10 @@
             "value": "Sonnellini"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Siestes"
+            "value": "Dutjes"
           }
         }
       }
@@ -4642,16 +4834,16 @@
             "value": "Jamais"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nooit"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Mai"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nooit"
           }
         }
       }
@@ -4671,10 +4863,10 @@
             "value": "Sin citas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen afspraken"
+            "value": "Pas de rendez-vous"
           }
         },
         "it": {
@@ -4683,10 +4875,10 @@
             "value": "Nessun appuntamento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas de rendez-vous"
+            "value": "Geen afspraken"
           }
         }
       }
@@ -4706,10 +4898,10 @@
             "value": "Sin citas hoy"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen afspraken vandaag"
+            "value": "Pas de rendez-vous aujourd'hui"
           }
         },
         "it": {
@@ -4718,10 +4910,10 @@
             "value": "Nessun appuntamento oggi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas de rendez-vous aujourd'hui"
+            "value": "Geen afspraken vandaag"
           }
         }
       }
@@ -4741,10 +4933,10 @@
             "value": "No hay cuenta de iCloud configurada"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen iCloud-account geconfigureerd"
+            "value": "Aucun compte iCloud configuré"
           }
         },
         "it": {
@@ -4753,10 +4945,10 @@
             "value": "Nessun account iCloud configurato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun compte iCloud configuré"
+            "value": "Geen iCloud-account geconfigureerd"
           }
         }
       }
@@ -4776,10 +4968,10 @@
             "value": "Aún no hay participantes"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog geen deelnemers"
+            "value": "Pas encore de participants"
           }
         },
         "it": {
@@ -4788,10 +4980,10 @@
             "value": "Ancora nessun partecipante"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas encore de participants"
+            "value": "Nog geen deelnemers"
           }
         }
       }
@@ -4811,10 +5003,10 @@
             "value": "Sin citas pasadas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen afgelopen afspraken"
+            "value": "Pas de rendez-vous passés"
           }
         },
         "it": {
@@ -4823,16 +5015,29 @@
             "value": "Nessun appuntamento passato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas de rendez-vous passés"
+            "value": "Geen afgelopen afspraken"
+          }
+        }
+      }
+    },
+    "No profile found. Please create a profile first.": {
+      "comment": "Error message displayed when there is no user profile to export.",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen profiel gevonden. Maak eerst een profiel aan."
           }
         }
       }
     },
     "No puppy profile found. Please create a profile first.": {
       "comment": "Error message displayed when there is no puppy profile to export.",
+      "extractionState": "stale",
       "isCommentAutoGenerated": true,
       "localizations": {
         "de": {
@@ -4847,16 +5052,22 @@
             "value": "No se encontró perfil de cachorro. Por favor, crea un perfil primero."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun profil de chiot trouvé. Veuillez d'abord créer un profil."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Nessun profilo cucciolo trovato. Crea prima un profilo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun profil de chiot trouvé. Veuillez d'abord créer un profil."
+            "value": "Geen puppyprofiel gevonden. Maak eerst een profiel aan."
           }
         }
       }
@@ -4876,10 +5087,10 @@
             "value": "Sin citas próximas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen aankomende afspraken"
+            "value": "Pas de rendez-vous à venir"
           }
         },
         "it": {
@@ -4888,10 +5099,10 @@
             "value": "Nessun appuntamento in programma"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas de rendez-vous à venir"
+            "value": "Geen aankomende afspraken"
           }
         }
       }
@@ -4917,16 +5128,16 @@
             "value": "Aucun"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Nessuno"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen"
           }
         }
       }
@@ -4952,16 +5163,16 @@
             "value": "Notes"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notities"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Note"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notities"
           }
         }
       }
@@ -4981,10 +5192,10 @@
             "value": "Notas de la cita"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notities van afspraak"
+            "value": "Notes du rendez-vous"
           }
         },
         "it": {
@@ -4993,10 +5204,23 @@
             "value": "Note dall'appuntamento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes du rendez-vous"
+            "value": "Notities van afspraak"
+          }
+        }
+      }
+    },
+    "Notification Preferences": {
+      "comment": "A section header for adjusting notification preferences.",
+      "extractionState": "manual",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meldingsvoorkeuren"
           }
         }
       }
@@ -5022,16 +5246,16 @@
             "value": "Notifications"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meldingen"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Notifiche"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meldingen"
           }
         }
       }
@@ -5057,16 +5281,16 @@
             "value": "Notifications désactivées"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meldingen uitgeschakeld"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Notifiche disattivate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meldingen uitgeschakeld"
           }
         }
       }
@@ -5086,10 +5310,10 @@
             "value": "Número de comidas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aantal maaltijden"
+            "value": "Nombre de repas"
           }
         },
         "it": {
@@ -5098,45 +5322,10 @@
             "value": "Numero di pasti"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nombre de repas"
-          }
-        }
-      }
-    },
-    "occurrences": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mal"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "repeticiones"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "keer"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "volte"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "occurrences"
+            "value": "Aantal maaltijden"
           }
         }
       }
@@ -5156,10 +5345,10 @@
             "value": "En fecha"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op datum"
+            "value": "À la date"
           }
         },
         "it": {
@@ -5168,10 +5357,10 @@
             "value": "Alla data"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "À la date"
+            "value": "Op datum"
           }
         }
       }
@@ -5191,10 +5380,10 @@
             "value": "A tiempo (0 min)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op tijd (0 min)"
+            "value": "À l'heure (0 min)"
           }
         },
         "it": {
@@ -5203,10 +5392,10 @@
             "value": "In orario (0 min)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "À l'heure (0 min)"
+            "value": "Op tijd (0 min)"
           }
         }
       }
@@ -5226,10 +5415,10 @@
             "value": "Notas opcionales sobre esta cita..."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Optionele notities over deze afspraak..."
+            "value": "Notes facultatives sur ce rendez-vous..."
           }
         },
         "it": {
@@ -5238,10 +5427,10 @@
             "value": "Note facoltative su questo appuntamento..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes facultatives sur ce rendez-vous..."
+            "value": "Optionele notities over deze afspraak..."
           }
         }
       }
@@ -5261,10 +5450,10 @@
             "value": "Sobrescribir datos existentes"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bestaande gegevens overschrijven"
+            "value": "Écraser les données existantes"
           }
         },
         "it": {
@@ -5273,10 +5462,10 @@
             "value": "Sovrascrivi dati esistenti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Écraser les données existantes"
+            "value": "Bestaande gegevens overschrijven"
           }
         }
       }
@@ -5302,16 +5491,16 @@
             "value": "Passé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afgelopen"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Passati"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afgelopen"
           }
         }
       }
@@ -5331,10 +5520,10 @@
             "value": "Pellizca para hacer zoom, arrastra para posicionar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Knijp om te zoomen, sleep om te positioneren"
+            "value": "Pincez pour zoomer, faites glisser pour positionner"
           }
         },
         "it": {
@@ -5343,10 +5532,10 @@
             "value": "Pizzica per ingrandire, trascina per posizionare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pincez pour zoomer, faites glisser pour positionner"
+            "value": "Knijp om te zoomen, sleep om te positioneren"
           }
         }
       }
@@ -5366,10 +5555,10 @@
             "value": "Alarma de baño"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasalarm"
+            "value": "Alarme besoins"
           }
         },
         "it": {
@@ -5378,10 +5567,51 @@
             "value": "Allarme pipì"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plasalarm"
+          }
+        }
+      }
+    },
+    "Potty breaks, feeding times, nap reminders": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toilettenpausen, Fütterungszeiten, Schlaf-Erinnerungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Necesidades, horarios de comida, recordatorios de siesta"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alarme besoins"
+            "value": "Besoins, heures de repas, rappels de sieste"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bisogni, orari pasti, promemoria pisolini"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plasjes, voedingstijden, dutje-herinneringen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rastning, mattider, sovpåminnelser"
           }
         }
       }
@@ -5401,10 +5631,10 @@
             "value": "Recordatorios de baño"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasherinneringen"
+            "value": "Rappels besoins"
           }
         },
         "it": {
@@ -5413,10 +5643,10 @@
             "value": "Promemoria pipì"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappels besoins"
+            "value": "Plasherinneringen"
           }
         }
       }
@@ -5436,10 +5666,10 @@
             "value": "Libras (lbs)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ponden (lbs)"
+            "value": "Livres (lbs)"
           }
         },
         "it": {
@@ -5448,10 +5678,10 @@
             "value": "Libbre (lbs)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Livres (lbs)"
+            "value": "Ponden (lbs)"
           }
         }
       }
@@ -5472,16 +5702,22 @@
             "value": "Preparando exportación..."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préparation de l'export..."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Preparazione esportazione..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Préparation de l'export..."
+            "value": "Export voorbereiden..."
           }
         }
       }
@@ -5507,16 +5743,16 @@
             "value": "Profil"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profiel"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Profilo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profiel"
           }
         }
       }
@@ -5536,10 +5772,10 @@
             "value": "Foto de perfil"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profielfoto"
+            "value": "Photo de profil"
           }
         },
         "it": {
@@ -5548,10 +5784,10 @@
             "value": "Foto profilo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photo de profil"
+            "value": "Profielfoto"
           }
         }
       }
@@ -5571,10 +5807,10 @@
             "value": "Estado del cachorro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puppystatus"
+            "value": "État du chiot"
           }
         },
         "it": {
@@ -5583,10 +5819,10 @@
             "value": "Stato cucciolo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "État du chiot"
+            "value": "Puppystatus"
           }
         }
       }
@@ -5606,10 +5842,10 @@
             "value": "Recibe recordatorios inteligentes para baño, comidas, siestas y paseos."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ontvang slimme herinneringen voor plasjes, maaltijden, dutjes en wandelingen."
+            "value": "Recevez des rappels intelligents pour les besoins, repas, siestes et promenades."
           }
         },
         "it": {
@@ -5618,10 +5854,10 @@
             "value": "Ricevi promemoria intelligenti per pipì, pasti, sonnellini e passeggiate."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recevez des rappels intelligents pour les besoins, repas, siestes et promenades."
+            "value": "Ontvang slimme herinneringen voor plasjes, maaltijden, dutjes en wandelingen."
           }
         }
       }
@@ -5641,10 +5877,10 @@
             "value": "Recordatorio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinnering"
+            "value": "Rappel"
           }
         },
         "it": {
@@ -5653,10 +5889,10 @@
             "value": "Promemoria"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappel"
+            "value": "Herinnering"
           }
         }
       }
@@ -5676,10 +5912,10 @@
             "value": "Recordatorio antes de que sea hora de pasear."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinnering voordat het tijd is voor een wandeling."
+            "value": "Rappel avant l'heure de la promenade."
           }
         },
         "it": {
@@ -5688,10 +5924,10 @@
             "value": "Promemoria prima che sia ora della passeggiata."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappel avant l'heure de la promenade."
+            "value": "Herinnering voordat het tijd is voor een wandeling."
           }
         }
       }
@@ -5711,10 +5947,10 @@
             "value": "Recordatorio antes de que sea hora de la próxima comida."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinnering voordat het tijd is voor de volgende maaltijd."
+            "value": "Rappel avant l'heure du prochain repas."
           }
         },
         "it": {
@@ -5723,10 +5959,23 @@
             "value": "Promemoria prima che sia ora del prossimo pasto."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappel avant l'heure du prochain repas."
+            "value": "Herinnering voordat het tijd is voor de volgende maaltijd."
+          }
+        }
+      }
+    },
+    "Reminder settings updated": {
+      "comment": "Confirmation message displayed when the user updates their reminder settings.",
+      "extractionState": "manual",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringsinstellingen bijgewerkt"
           }
         }
       }
@@ -5746,10 +5995,10 @@
             "value": "Recordatorio cuando %@ ha estado despierto demasiado tiempo."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinnering als %@ te lang wakker is geweest."
+            "value": "Rappel quand %@ est éveillé depuis trop longtemps."
           }
         },
         "it": {
@@ -5758,80 +6007,10 @@
             "value": "Promemoria quando %@ è sveglio da troppo tempo."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rappel quand %@ est éveillé depuis trop longtemps."
-          }
-        }
-      }
-    },
-    "Reminder when ~10 minutes remaining": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erinnerung wenn ~10 Minuten verbleiben"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recordatorio cuando quedan ~10 minutos"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinnering wanneer ~10 minuten resterend"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Promemoria quando mancano ~10 minuti"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rappel quand il reste ~10 minutes"
-          }
-        }
-      }
-    },
-    "Reminder when ~20 minutes remaining": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erinnerung wenn ~20 Minuten verbleiben"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recordatorio cuando quedan ~20 minutos"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering wanneer ~20 minuten resterend"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Promemoria quando mancano ~20 minuti"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rappel quand il reste ~20 minutes"
+            "value": "Herinnering als %@ te lang wakker is geweest."
           }
         }
       }
@@ -5851,10 +6030,10 @@
             "value": "Recordatorio cuando sea la hora"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinnering wanneer het tijd is"
+            "value": "Rappel quand c'est l'heure"
           }
         },
         "it": {
@@ -5863,10 +6042,80 @@
             "value": "Promemoria quando è ora"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering wanneer het tijd is"
+          }
+        }
+      }
+    },
+    "Reminder when ~10 minutes remaining": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung wenn ~10 Minuten verbleiben"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio cuando quedan ~10 minutos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappel quand c'est l'heure"
+            "value": "Rappel quand il reste ~10 minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria quando mancano ~10 minuti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering wanneer ~10 minuten resterend"
+          }
+        }
+      }
+    },
+    "Reminder when ~20 minutes remaining": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung wenn ~20 Minuten verbleiben"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio cuando quedan ~20 minutos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel quand il reste ~20 minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria quando mancano ~20 minuti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering wanneer ~20 minuten resterend"
           }
         }
       }
@@ -5886,10 +6135,10 @@
             "value": "Recordatorios"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinneringen"
+            "value": "Rappels"
           }
         },
         "it": {
@@ -5898,80 +6147,51 @@
             "value": "Promemoria"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappels"
+            "value": "Herinneringen"
           }
         }
       }
     },
-    "Remove from Calendar": {
+    "Reminders & nudges": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aus Kalender entfernen"
+            "value": "Erinnerungen & Hinweise"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eliminar del calendario"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uit agenda verwijderen"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rimuovi dal calendario"
+            "value": "Recordatorios y avisos"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retirer du calendrier"
-          }
-        }
-      }
-    },
-    "Remove last": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letztes entfernen"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminar último"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatste verwijderen"
+            "value": "Rappels et suggestions"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rimuovi ultimo"
+            "value": "Promemoria e suggerimenti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprimer le dernier"
+            "value": "Herinneringen & tips"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Påminnelser och tips"
           }
         }
       }
@@ -5991,10 +6211,10 @@
             "value": "Eliminar foto"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Foto verwijderen"
+            "value": "Supprimer la photo"
           }
         },
         "it": {
@@ -6003,10 +6223,80 @@
             "value": "Rimuovi foto"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto verwijderen"
+          }
+        }
+      }
+    },
+    "Remove from Calendar": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus Kalender entfernen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar del calendario"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprimer la photo"
+            "value": "Retirer du calendrier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi dal calendario"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uit agenda verwijderen"
+          }
+        }
+      }
+    },
+    "Remove last": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letztes entfernen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar último"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le dernier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi ultimo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste verwijderen"
           }
         }
       }
@@ -6026,10 +6316,10 @@
             "value": "Eliminado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verwijderd"
+            "value": "Supprimé"
           }
         },
         "it": {
@@ -6038,10 +6328,10 @@
             "value": "Rimosso"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprimé"
+            "value": "Verwijderd"
           }
         }
       }
@@ -6061,10 +6351,10 @@
             "value": "Repetir horario"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herhalingsschema"
+            "value": "Planification de répétition"
           }
         },
         "it": {
@@ -6073,10 +6363,10 @@
             "value": "Ripeti programma"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Planification de répétition"
+            "value": "Herhalingsschema"
           }
         }
       }
@@ -6096,10 +6386,10 @@
             "value": "Se repite"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herhaalt"
+            "value": "Répétitions"
           }
         },
         "it": {
@@ -6108,10 +6398,10 @@
             "value": "Si ripete"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Répétitions"
+            "value": "Herhaalt"
           }
         }
       }
@@ -6131,10 +6421,10 @@
             "value": "Restablecer perfil"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiel resetten"
+            "value": "Réinitialiser le profil"
           }
         },
         "it": {
@@ -6143,10 +6433,92 @@
             "value": "Reimposta profilo"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profiel resetten"
+          }
+        }
+      }
+    },
+    "Reset to defaults": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf Standard zurücksetzen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablecer valores"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réinitialiser le profil"
+            "value": "Réinitialiser"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina predefiniti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herstel standaard"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Återställ standard"
+          }
+        }
+      }
+    },
+    "Restore the default settings for your role (%@).": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standardeinstellungen für deine Rolle (%@) wiederherstellen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar la configuración predeterminada para tu rol (%@)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer les paramètres par défaut pour ton rôle (%@)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina le impostazioni predefinite per il tuo ruolo (%@)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herstel de standaardinstellingen voor jouw rol (%@)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Återställ standardinställningarna för din roll (%@)."
           }
         }
       }
@@ -6166,10 +6538,10 @@
             "value": "Error al guardar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opslaan mislukt"
+            "value": "Échec de l'enregistrement"
           }
         },
         "it": {
@@ -6178,10 +6550,10 @@
             "value": "Salvataggio fallito"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec de l'enregistrement"
+            "value": "Opslaan mislukt"
           }
         }
       }
@@ -6201,10 +6573,10 @@
             "value": "Error al guardar: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opslaan mislukt: %@"
+            "value": "Échec de l'enregistrement : %@"
           }
         },
         "it": {
@@ -6213,10 +6585,10 @@
             "value": "Salvataggio fallito: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec de l'enregistrement : %@"
+            "value": "Opslaan mislukt: %@"
           }
         }
       }
@@ -6236,10 +6608,10 @@
             "value": "Horario y preferencias"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schema & Voorkeuren"
+            "value": "Horaires et préférences"
           }
         },
         "it": {
@@ -6248,10 +6620,10 @@
             "value": "Programma e preferenze"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Horaires et préférences"
+            "value": "Schema & Voorkeuren"
           }
         }
       }
@@ -6271,10 +6643,10 @@
             "value": "Programa visitas al veterinario, clases de adiestramiento, peluquería y más."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plan dierenartsconsulten, trainingen, trimsessies en meer."
+            "value": "Planifiez les visites vétérinaires, cours d'éducation, toilettage, et plus."
           }
         },
         "it": {
@@ -6283,10 +6655,10 @@
             "value": "Programma visite veterinarie, lezioni di addestramento, toelettatura e altro."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Planifiez les visites vétérinaires, cours d'éducation, toilettage, et plus."
+            "value": "Plan dierenartsconsulten, trainingen, trimsessies en meer."
           }
         }
       }
@@ -6306,10 +6678,10 @@
             "value": "Toques de temporada"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seizoensaccenten"
+            "value": "Touches saisonnières"
           }
         },
         "it": {
@@ -6318,10 +6690,10 @@
             "value": "Tocchi stagionali"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touches saisonnières"
+            "value": "Seizoensaccenten"
           }
         }
       }
@@ -6347,16 +6719,16 @@
             "value": "Réglages"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instellingen"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Impostazioni"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instellingen"
           }
         }
       }
@@ -6376,10 +6748,10 @@
             "value": "Error de configuración: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Configuratie mislukt: %@"
+            "value": "Configuration échouée : %@"
           }
         },
         "it": {
@@ -6388,10 +6760,10 @@
             "value": "Configurazione fallita: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Configuration échouée : %@"
+            "value": "Configuratie mislukt: %@"
           }
         }
       }
@@ -6411,10 +6783,10 @@
             "value": "Compartir con pareja"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delen met partner"
+            "value": "Partager avec un partenaire"
           }
         },
         "it": {
@@ -6423,10 +6795,10 @@
             "value": "Condividi con il partner"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partager avec un partenaire"
+            "value": "Delen met partner"
           }
         }
       }
@@ -6446,10 +6818,10 @@
             "value": "Comparte los datos de tu cachorro con tu pareja para que ambos puedan registrar eventos."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deel de gegevens van je pup met je partner zodat jullie allebei kunnen bijhouden en loggen."
+            "value": "Partagez les données de votre chiot avec votre partenaire pour que vous puissiez tous les deux suivre et enregistrer les événements."
           }
         },
         "it": {
@@ -6458,10 +6830,10 @@
             "value": "Condividi i dati del tuo cucciolo con il partner così potete entrambi tracciare e registrare eventi."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partagez les données de votre chiot avec votre partenaire pour que vous puissiez tous les deux suivre et enregistrer les événements."
+            "value": "Deel de gegevens van je pup met je partner zodat jullie allebei kunnen bijhouden en loggen."
           }
         }
       }
@@ -6487,16 +6859,16 @@
             "value": "Partagé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gedeeld"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Condiviso"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedeeld"
           }
         }
       }
@@ -6516,10 +6888,10 @@
             "value": "Datos compartidos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gedeelde gegevens"
+            "value": "Données partagées"
           }
         },
         "it": {
@@ -6528,10 +6900,10 @@
             "value": "Dati condivisi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Données partagées"
+            "value": "Gedeelde gegevens"
           }
         }
       }
@@ -6551,10 +6923,10 @@
             "value": "Compartir"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delen"
+            "value": "Partage"
           }
         },
         "it": {
@@ -6563,10 +6935,10 @@
             "value": "Condivisione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partage"
+            "value": "Delen"
           }
         }
       }
@@ -6586,10 +6958,10 @@
             "value": "Compartir, apariencia, sincronización"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delen, weergave, synchronisatie"
+            "value": "Partage, apparence, synchronisation"
           }
         },
         "it": {
@@ -6598,10 +6970,10 @@
             "value": "Condivisione, aspetto, sincronizzazione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partage, apparence, synchronisation"
+            "value": "Delen, weergave, synchronisatie"
           }
         }
       }
@@ -6627,16 +6999,57 @@
             "value": "Taille"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taglia"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Grootte"
           }
+        }
+      }
+    },
+    "Skill practice and training tips": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übungstipps und Trainingshinweise"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Práctica de habilidades y consejos de entrenamiento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pratique et conseils d'entraînement"
+          }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Taglia"
+            "value": "Pratica abilità e consigli di addestramento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oefeningen en trainingstips"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Övningstips och träningstips"
           }
         }
       }
@@ -6656,10 +7069,10 @@
             "value": "Pronto (~10 min)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bijna (~10 min)"
+            "value": "Bientôt (~10 min)"
           }
         },
         "it": {
@@ -6668,10 +7081,10 @@
             "value": "Presto (~10 min)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bientôt (~10 min)"
+            "value": "Bijna (~10 min)"
           }
         }
       }
@@ -6691,10 +7104,10 @@
             "value": "Sonidos de respuesta"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geluidsfeedback"
+            "value": "Retour sonore"
           }
         },
         "it": {
@@ -6703,10 +7116,10 @@
             "value": "Feedback sonoro"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retour sonore"
+            "value": "Geluidsfeedback"
           }
         }
       }
@@ -6726,10 +7139,10 @@
             "value": "Hora de inicio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Starttijd"
+            "value": "Heure de début"
           }
         },
         "it": {
@@ -6738,10 +7151,10 @@
             "value": "Ora di inizio"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Heure de début"
+            "value": "Starttijd"
           }
         }
       }
@@ -6767,16 +7180,16 @@
             "value": "Stats"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statistieken"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Statistiche"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statistieken"
           }
         }
       }
@@ -6796,10 +7209,10 @@
             "value": "Dejar de compartir"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stoppen met delen"
+            "value": "Arrêter le partage"
           }
         },
         "it": {
@@ -6808,10 +7221,10 @@
             "value": "Smetti di condividere"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Arrêter le partage"
+            "value": "Stoppen met delen"
           }
         }
       }
@@ -6831,10 +7244,10 @@
             "value": "Suscripción, notificaciones, sincronización"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abonnement, meldingen, synchronisatie"
+            "value": "Abonnement, notifications, synchronisation"
           }
         },
         "it": {
@@ -6843,10 +7256,10 @@
             "value": "Abbonamento, notifiche, sincronizzazione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abonnement, notifications, synchronisation"
+            "value": "Abonnement, meldingen, synchronisatie"
           }
         }
       }
@@ -6866,10 +7279,10 @@
             "value": "Cambios visuales sutiles basados en la hora, el clima y la actividad de tu cachorro."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Subtiele visuele aanpassingen op basis van tijd, weer en de activiteit van je pup."
+            "value": "Changements visuels subtils basés sur l'heure, la météo et l'activité de votre chiot."
           }
         },
         "it": {
@@ -6878,10 +7291,10 @@
             "value": "Sottili cambiamenti visivi basati su ora, meteo e attività del tuo cucciolo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Changements visuels subtils basés sur l'heure, la météo et l'activité de votre chiot."
+            "value": "Subtiele visuele aanpassingen op basis van tijd, weer en de activiteit van je pup."
           }
         }
       }
@@ -6907,16 +7320,16 @@
             "value": "Synchroniser"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchronisatie"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Sincronizzazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchronisatie"
           }
         }
       }
@@ -6936,10 +7349,10 @@
             "value": "Error de sincronización: %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisatie mislukt: %@"
+            "value": "Échec de synchronisation : %@"
           }
         },
         "it": {
@@ -6948,10 +7361,10 @@
             "value": "Sincronizzazione fallita: %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échec de synchronisation : %@"
+            "value": "Synchronisatie mislukt: %@"
           }
         }
       }
@@ -6971,10 +7384,10 @@
             "value": "Sincronizar ahora"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nu synchroniseren"
+            "value": "Synchroniser maintenant"
           }
         },
         "it": {
@@ -6983,10 +7396,10 @@
             "value": "Sincronizza ora"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchroniser maintenant"
+            "value": "Nu synchroniseren"
           }
         }
       }
@@ -7006,10 +7419,10 @@
             "value": "Sincronizado %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gesynchroniseerd %@"
+            "value": "Synchronisé %@"
           }
         },
         "it": {
@@ -7018,10 +7431,10 @@
             "value": "Sincronizzato %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisé %@"
+            "value": "Gesynchroniseerd %@"
           }
         }
       }
@@ -7041,10 +7454,10 @@
             "value": "Sincronizando..."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchroniseren..."
+            "value": "Synchronisation..."
           }
         },
         "it": {
@@ -7053,10 +7466,10 @@
             "value": "Sincronizzazione..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Synchronisation..."
+            "value": "Synchroniseren..."
           }
         }
       }
@@ -7076,10 +7489,10 @@
             "value": "Toca una comida para editar. Desliza para eliminar."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tik op een maaltijd om te bewerken. Veeg om te verwijderen."
+            "value": "Appuyez sur un repas pour modifier. Balayez pour supprimer."
           }
         },
         "it": {
@@ -7088,10 +7501,10 @@
             "value": "Tocca un pasto per modificarlo. Scorri per eliminare."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appuyez sur un repas pour modifier. Balayez pour supprimer."
+            "value": "Tik op een maaltijd om te bewerken. Veeg om te verwijderen."
           }
         }
       }
@@ -7117,16 +7530,16 @@
             "value": "Température"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temperatuur"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Temperatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperatuur"
           }
         }
       }
@@ -7146,10 +7559,10 @@
             "value": "La conocida 'regla de los 5 minutos' — ajusta según el nivel de energía de tu cachorro."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De bekende '5-minutenregel' — pas aan op basis van het energieniveau van je pup."
+            "value": "La règle bien connue des « 5 minutes » — ajustez selon le niveau d'énergie de votre chiot."
           }
         },
         "it": {
@@ -7158,10 +7571,10 @@
             "value": "La nota 'regola dei 5 minuti' — adatta in base al livello di energia del tuo cucciolo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "La règle bien connue des « 5 minutes » — ajustez selon le niveau d'énergie de votre chiot."
+            "value": "De bekende '5-minutenregel' — pas aan op basis van het energieniveau van je pup."
           }
         }
       }
@@ -7181,10 +7594,10 @@
             "value": "La conocida 'regla de los 5 minutos' — los cachorros pueden pasear un máximo de 5 minutos por mes de edad por sesión. Ajusta según el nivel de energía de tu cachorro."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De bekende '5-minutenregel' — puppy's kunnen maximaal 5 minuten per maand leeftijd per sessie wandelen. Pas aan op basis van het energieniveau van je pup."
+            "value": "La règle bien connue des « 5 minutes » — les chiots peuvent marcher maximum 5 minutes par mois d'âge par session. Ajustez selon le niveau d'énergie de votre chiot."
           }
         },
         "it": {
@@ -7193,10 +7606,10 @@
             "value": "La nota 'regola dei 5 minuti' — i cuccioli possono camminare per un massimo di 5 minuti per mese di età a sessione. Adatta in base al livello di energia del tuo cucciolo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "La règle bien connue des « 5 minutes » — les chiots peuvent marcher maximum 5 minutes par mois d'âge par session. Ajustez selon le niveau d'énergie de votre chiot."
+            "value": "De bekende '5-minutenregel' — puppy's kunnen maximaal 5 minuten per maand leeftijd per sessie wandelen. Pas aan op basis van het energieniveau van je pup."
           }
         }
       }
@@ -7222,16 +7635,57 @@
             "value": "Thème"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tema"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Thema"
           }
+        }
+      }
+    },
+    "These settings control which reminders and suggestions you see in the app and as notifications.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Einstellungen steuern, welche Erinnerungen und Vorschläge du in der App und als Benachrichtigungen siehst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estos ajustes controlan qué recordatorios y sugerencias ves en la app y como notificaciones."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ces paramètres contrôlent quels rappels et suggestions tu vois dans l'app et comme notifications."
+          }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tema"
+            "value": "Queste impostazioni controllano quali promemoria e suggerimenti vedi nell'app e come notifiche."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze instellingen bepalen welke herinneringen en suggesties je ziet in de app en als meldingen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessa inställningar styr vilka påminnelser och förslag du ser i appen och som notiser."
           }
         }
       }
@@ -7251,10 +7705,10 @@
             "value": "Esta cita se eliminará permanentemente."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deze afspraak wordt permanent verwijderd."
+            "value": "Ce rendez-vous sera définitivement supprimé."
           }
         },
         "it": {
@@ -7263,10 +7717,51 @@
             "value": "Questo appuntamento verrà eliminato definitivamente."
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze afspraak wordt permanent verwijderd."
+          }
+        }
+      }
+    },
+    "This sets sensible defaults for what you'll see. You can customize further below.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dies legt sinnvolle Standardeinstellungen fest. Du kannst unten weiter anpassen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esto establece valores predeterminados. Puedes personalizar más abajo."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ce rendez-vous sera définitivement supprimé."
+            "value": "Ceci définit des valeurs par défaut. Tu peux personnaliser ci-dessous."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo imposta valori predefiniti. Puoi personalizzare ulteriormente sotto."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit stelt standaardwaarden in. Je kunt hieronder verder aanpassen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detta ställer in standardvärden. Du kan anpassa ytterligare nedan."
           }
         }
       }
@@ -7292,16 +7787,16 @@
             "value": "Heure"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tijd"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Ora"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijd"
           }
         }
       }
@@ -7321,10 +7816,10 @@
             "value": "Hora de %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd voor %@"
+            "value": "L'heure de %@"
           }
         },
         "it": {
@@ -7333,10 +7828,10 @@
             "value": "Ora di %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'heure de %@"
+            "value": "Tijd voor %@"
           }
         }
       }
@@ -7356,10 +7851,10 @@
             "value": "Momento del día"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd van de dag"
+            "value": "Moment de la journée"
           }
         },
         "it": {
@@ -7368,10 +7863,10 @@
             "value": "Momento della giornata"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Moment de la journée"
+            "value": "Tijd van de dag"
           }
         }
       }
@@ -7391,10 +7886,10 @@
             "value": "Título"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Titel"
+            "value": "Titre"
           }
         },
         "it": {
@@ -7403,10 +7898,10 @@
             "value": "Titolo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Titre"
+            "value": "Titel"
           }
         }
       }
@@ -7426,10 +7921,10 @@
             "value": "Horario de hoy"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schema van vandaag"
+            "value": "Programme du jour"
           }
         },
         "it": {
@@ -7438,10 +7933,10 @@
             "value": "Programma di oggi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Programme du jour"
+            "value": "Schema van vandaag"
           }
         }
       }
@@ -7467,16 +7962,16 @@
             "value": "Type"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Type"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Tipo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
           }
         }
       }
@@ -7502,16 +7997,16 @@
             "value": "Unités"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eenheden"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Unità"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eenheden"
           }
         }
       }
@@ -7537,16 +8032,57 @@
             "value": "À venir"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Aankomend"
           }
+        }
+      }
+    },
+    "Upcoming vet and groomer visits": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bevorstehende Tierarzt- und Pflegetermine"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximas visitas al veterinario y peluquero"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochains rendez-vous vétérinaire et toiletteur"
+          }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "In arrivo"
+            "value": "Prossime visite veterinarie e toelettatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankomende dierenarts- en trimsalonbezoeken"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kommande veterinär- och hundtrimbesök"
           }
         }
       }
@@ -7566,10 +8102,10 @@
             "value": "Paseo %lld"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandeling %lld"
+            "value": "Promenade %lld"
           }
         },
         "it": {
@@ -7578,10 +8114,10 @@
             "value": "Passeggiata %lld"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promenade %lld"
+            "value": "Wandeling %lld"
           }
         }
       }
@@ -7601,10 +8137,10 @@
             "value": "Recordatorios de paseo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandelherinneringen"
+            "value": "Rappels de promenade"
           }
         },
         "it": {
@@ -7613,10 +8149,51 @@
             "value": "Promemoria passeggiate"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelherinneringen"
+          }
+        }
+      }
+    },
+    "Walk suggestions and reminders": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spaziergang-Vorschläge und -Erinnerungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sugerencias y recordatorios de paseos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappels de promenade"
+            "value": "Suggestions et rappels de promenade"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggerimenti e promemoria passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelsuggesties en herinneringen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenadförslag och påminnelser"
           }
         }
       }
@@ -7642,16 +8219,16 @@
             "value": "Promenades"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelingen"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelingen"
           }
         }
       }
@@ -7671,10 +8248,10 @@
             "value": "Paseos por día"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandelingen per dag"
+            "value": "Promenades par jour"
           }
         },
         "it": {
@@ -7683,10 +8260,10 @@
             "value": "Passeggiate al giorno"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promenades par jour"
+            "value": "Wandelingen per dag"
           }
         }
       }
@@ -7706,10 +8283,10 @@
             "value": "Paseos, comidas, medicamentos, lugares"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandelingen, maaltijden, medicijnen, plekjes"
+            "value": "Promenades, repas, médicaments, lieux"
           }
         },
         "it": {
@@ -7718,10 +8295,10 @@
             "value": "Passeggiate, pasti, medicinali, luoghi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promenades, repas, médicaments, lieux"
+            "value": "Wandelingen, maaltijden, medicijnen, plekjes"
           }
         }
       }
@@ -7741,10 +8318,10 @@
             "value": "Paseos, comidas, recordatorios"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandelingen, maaltijden, herinneringen"
+            "value": "Promenades, repas, rappels"
           }
         },
         "it": {
@@ -7753,45 +8330,10 @@
             "value": "Passeggiate, pasti, promemoria"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Promenades, repas, rappels"
-          }
-        }
-      }
-    },
-    "walks/day": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spaziergänge/Tag"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "paseos/día"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "wandelingen/dag"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "passeggiate/giorno"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "promenades/jour"
+            "value": "Wandelingen, maaltijden, herinneringen"
           }
         }
       }
@@ -7817,16 +8359,16 @@
             "value": "Météo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weer"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Meteo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weer"
           }
         }
       }
@@ -7852,16 +8394,57 @@
             "value": "Poids"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Gewicht"
           }
+        }
+      }
+    },
+    "What You See": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Was du siehst"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo que ves"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que tu vois"
+          }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peso"
+            "value": "Cosa vedi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wat je ziet"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vad du ser"
           }
         }
       }
@@ -7881,10 +8464,10 @@
             "value": "¿Qué pasó en esta cita?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wat is er gebeurd bij deze afspraak?"
+            "value": "Que s'est-il passé à ce rendez-vous ?"
           }
         },
         "it": {
@@ -7893,10 +8476,10 @@
             "value": "Cos'è successo a questo appuntamento?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Que s'est-il passé à ce rendez-vous ?"
+            "value": "Wat is er gebeurd bij deze afspraak?"
           }
         }
       }
@@ -7916,10 +8499,10 @@
             "value": "Cuándo notificar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wanneer melden"
+            "value": "Quand notifier"
           }
         },
         "it": {
@@ -7928,10 +8511,10 @@
             "value": "Quando notificare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quand notifier"
+            "value": "Wanneer melden"
           }
         }
       }
@@ -7951,10 +8534,10 @@
             "value": "No puedes compartir como participante"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je kunt niet delen als deelnemer"
+            "value": "Vous ne pouvez pas partager en tant que participant"
           }
         },
         "it": {
@@ -7963,10 +8546,23 @@
             "value": "Non puoi condividere come partecipante"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous ne pouvez pas partager en tant que participant"
+            "value": "Je kunt niet delen als deelnemer"
+          }
+        }
+      }
+    },
+    "You're now viewing %@. You can switch dogs anytime in Settings.": {
+      "comment": "A message shown when a user accepts a share invitation from another user, indicating that their profile has been updated to include the shared dog. The argument is the name of the shared dog.",
+      "extractionState": "manual",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bekijkt nu %@. Je kunt op elk moment van hond wisselen in Instellingen."
           }
         }
       }
@@ -7986,10 +8582,10 @@
             "value": "Estás viendo los datos de otra persona"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je bekijkt de gegevens van iemand anders"
+            "value": "Vous consultez les données de quelqu'un d'autre"
           }
         },
         "it": {
@@ -7998,10 +8594,471 @@
             "value": "Stai visualizzando i dati di qualcun altro"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bekijkt de gegevens van iemand anders"
+          }
+        }
+      }
+    },
+    "Your role": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Rolle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rol"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous consultez les données de quelqu'un d'autre"
+            "value": "Ton rôle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo ruolo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jouw rol"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din roll"
+          }
+        }
+      }
+    },
+    "e.g. 80g": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z.B. 80g"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ej. 80g"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. 80g"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "es. 80g"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bijv. 80g"
+          }
+        }
+      }
+    },
+    "e.g. Breakfast": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z.B. Frühstück"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ej. Desayuno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Petit-déjeuner"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "es. Colazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bijv. Ontbijt"
+          }
+        }
+      }
+    },
+    "iCloud Sync active": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-Sync aktiv"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sincronización de iCloud activa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchronisation iCloud active"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sincronizzazione iCloud attiva"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-synchronisatie actief"
+          }
+        }
+      }
+    },
+    "iCloud is restricted": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud ist eingeschränkt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud está restringido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud est restreint"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud è limitato"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud is beperkt"
+          }
+        }
+      }
+    },
+    "iCloud not available": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud nicht verfügbar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud no disponible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud non disponible"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud non disponibile"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud niet beschikbaar"
+          }
+        }
+      }
+    },
+    "iCloud status unknown": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-Status unbekannt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado de iCloud desconocido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut iCloud inconnu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato iCloud sconosciuto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-status onbekend"
+          }
+        }
+      }
+    },
+    "iCloud temporarily unavailable": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud vorübergehend nicht verfügbar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud temporalmente no disponible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud temporairement indisponible"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud temporaneamente non disponibile"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud tijdelijk niet beschikbaar"
+          }
+        }
+      }
+    },
+    "iCloud unavailable": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud nicht verfügbar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud no disponible"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud indisponible"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud non disponibile"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud niet beschikbaar"
+          }
+        }
+      }
+    },
+    "min/month": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Min/Monat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/mes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/mois"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/mese"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/maand"
+          }
+        }
+      }
+    },
+    "min/walk": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Min/Spaziergang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/paseo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/promenade"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/wandeling"
+          }
+        }
+      }
+    },
+    "occurrences": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mal"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "repeticiones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "occurrences"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "volte"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "keer"
+          }
+        }
+      }
+    },
+    "walks/day": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spaziergänge/Tag"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "paseos/día"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "promenades/jour"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "passeggiate/giorno"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "wandelingen/dag"
           }
         }
       }

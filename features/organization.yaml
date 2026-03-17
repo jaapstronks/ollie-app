@@ -1,0 +1,242 @@
+# Organization Features: Calendar, Places, Moments, Walks
+# Part of Ollie Feature Registry - see ../FEATURES.yaml for meta
+
+# =============================================================================
+# CALENDAR & SCHEDULING
+# =============================================================================
+calendar:
+
+  - id: calendar-view
+    name: Calendar View
+    description: Grid/month and week views of events
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [calendar-tab]
+    key_files:
+      - Views/Calendar/CalendarTabView.swift
+      - Views/Calendar/CalendarGridView.swift
+    tested: false
+    docs: false
+
+  - id: appointments
+    name: Appointments Management
+    description: Create, edit, and track vet appointments with reminders
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [calendar-tab]
+    key_files:
+      - Views/Appointments/AppointmentsView.swift
+      - Views/Appointments/AddEditAppointmentSheet.swift
+      - Views/Appointments/AppointmentDetailView.swift
+    tested: false
+    docs: false
+
+  - id: milestones
+    name: Milestone Tracking
+    description: Track age-based and custom milestones with photos
+    tier: premium
+    premium_feature: customMilestones
+    status: shipped
+    platforms: [ios]
+    entry_points: [calendar-tab]
+    key_files:
+      - Views/Calendar/MilestoneCompletionSheet.swift
+      - Views/Calendar/AddMilestoneSheet.swift
+    tested: false
+    docs: false
+
+  - id: contacts
+    name: Contacts Directory
+    description: Store vet, trainer, and dog contact information
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [calendar-tab, settings]
+    key_files:
+      - Views/Contacts/ContactsView.swift
+      - Views/Contacts/AddEditContactSheet.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# PLACES & MAPS
+# =============================================================================
+places:
+
+  - id: places-map
+    name: Places Map View
+    description: Interactive map showing walk spots and saved locations
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [places-tab]
+    key_files:
+      - Views/Places/PlacesTabView.swift
+      - Views/Places/PlacesMapComponents.swift
+    tested: false
+    docs: false
+
+  - id: spot-management
+    name: Spot Management
+    description: Save, edit, and delete favorite walk spots
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [places-tab]
+    key_files:
+      - Views/Places/AddSpotSheet.swift
+      - Views/Places/SpotDetailView.swift
+      - Views/Places/FavoriteSpotsView.swift
+    tested: false
+    docs: false
+
+  - id: discovered-locations
+    name: Discovered Dog Parks
+    description: Auto-discovered dog parks via Overpass API
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [places-tab]
+    key_files:
+      - Views/Places/DiscoveredSpotDetailSheet.swift
+      - Services/DogParkDiscoveryService.swift
+      - Services/OverpassAPIClient.swift
+    tested: false
+    docs: false
+
+  - id: photo-map-pins
+    name: Photo Moments on Map
+    description: View photo pins at locations with clustering
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [places-tab]
+    key_files:
+      - Views/Places/PhotoPinDetailCard.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# MOMENTS & MEDIA
+# =============================================================================
+moments:
+
+  - id: photo-gallery
+    name: Photo Gallery
+    description: Grid and diary views of all photos
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [moments-tab]
+    key_files:
+      - Views/Media/MomentsGalleryView.swift
+      - Views/Media/DiaryCardView.swift
+    tested: false
+    docs: false
+
+  - id: photo-management
+    name: Photo Management
+    description: View, delete, and browse photo metadata
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [moments-tab]
+    key_files:
+      - Views/Media/MediaPreviewView.swift
+      - Views/Media/PolaroidThumbnail.swift
+    tested: false
+    docs: false
+
+  - id: on-this-day
+    name: "On This Day" Memories
+    description: Surface historical moments from past years
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Cards/MemoriesCard.swift
+      - ViewModels/MemoriesViewModel.swift
+    tested: false
+    docs: false
+
+  - id: month-recap
+    name: Monthly Recap
+    description: Monthly summary with stats, photos, and shareable cards
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab, moments-tab]
+    key_files:
+      - Views/Recap/MonthRecapSheet.swift
+      - Views/Recap/MonthRecapShareView.swift
+      - Views/Cards/MonthRecapTeaseCard.swift
+      - ViewModels/MonthRecapViewModel.swift
+      - OtisShared/Sources/OtisShared/Calculations/MonthCalculations.swift
+    tested: false
+    docs: false
+
+  - id: year-recap
+    name: Year in Review
+    description: Annual recap with yearly stats, monthly highlights, growth journey, and shareable cards
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Recap/YearRecapView.swift
+      - Views/Recap/YearRecapTeaseCard.swift
+      - Views/Recap/YearRecapShareView.swift
+      - ViewModels/YearRecapViewModel.swift
+      - OtisShared/Sources/OtisShared/Models/YearRecap.swift
+      - OtisShared/Sources/OtisShared/Calculations/YearCalculations.swift
+    visibility_window: Dec 15 - Jan 15
+    tested: false
+    docs: false
+
+# =============================================================================
+# WALK MANAGEMENT
+# =============================================================================
+walks:
+
+  - id: walk-suggestions
+    name: Walk Suggestions
+    description: Activity-based walk recommendations
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Cards/WalkSuggestionsCard.swift
+      - OtisShared/Sources/OtisShared/Calculations/WalkSuggestionCalculations.swift
+    tested: false
+    docs: false
+
+  - id: walk-schedule
+    name: Walk Schedule Management
+    description: Configure ideal walk times and frequency targets
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings]
+    key_files:
+      - Views/Settings/WalkScheduleEditor.swift
+      - Views/Settings/WalkSection.swift
+    tested: false
+    docs: false
+
+  - id: walk-target-nudges
+    name: Walk Target Nudges
+    description: Daily walk quota tracking with reminder nudges
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Cards/WalkTargetNudgeCard.swift
+    tested: false
+    docs: false

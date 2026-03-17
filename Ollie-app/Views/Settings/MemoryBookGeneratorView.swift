@@ -13,7 +13,7 @@ struct MemoryBookGeneratorView: View {
     let profile: PuppyProfile
     @Binding var isPresented: Bool
 
-    @StateObject private var service = MemoryBookService()
+    @State private var service = MemoryBookService()
     @State private var showingShareSheet = false
     @State private var errorMessage: String?
 

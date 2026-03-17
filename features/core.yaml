@@ -1,0 +1,241 @@
+# Core Features: Onboarding, Daily Logging, Timeline
+# Part of Ollie Feature Registry - see ../FEATURES.yaml for meta
+
+# =============================================================================
+# ONBOARDING & SETUP
+# =============================================================================
+onboarding:
+
+  - id: profile-creation
+    name: Puppy Profile Creation
+    description: Create a profile with name, breed, birth date, home date, and size category
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [first-launch]
+    key_files:
+      - Views/Onboarding/OnboardingNameStep.swift
+      - Views/Onboarding/OnboardingBreedStep.swift
+      - Views/Onboarding/OnboardingDateStep.swift
+      - Views/Onboarding/OnboardingSizeStep.swift
+    tested: false
+    docs: false
+
+  - id: profile-photo
+    name: Profile Photo Upload
+    description: Add a photo during onboarding or later in settings
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [onboarding, settings]
+    key_files:
+      - Views/Onboarding/OnboardingPhotoStep.swift
+      - Views/Onboarding/ArrivalPhotoPromptSheet.swift
+    tested: false
+    docs: false
+
+  - id: location-setup
+    name: Location & Timezone Setup
+    description: Set home location for weather and timezone accuracy
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [onboarding]
+    key_files:
+      - Views/Onboarding/OnboardingLocationStep.swift
+    tested: false
+    docs: false
+
+  - id: notification-permissions
+    name: Notification Permissions
+    description: Request push notification access during onboarding
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [onboarding]
+    key_files:
+      - Views/Onboarding/OnboardingNotificationsStep.swift
+    tested: false
+    docs: false
+
+  - id: meal-schedule-setup
+    name: Meal Schedule Configuration
+    description: Set meal times and frequency during onboarding
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [onboarding, settings]
+    key_files:
+      - Views/Settings/MealSettingsView.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# DAILY LOGGING (Core Loop)
+# =============================================================================
+daily_logging:
+
+  - id: quick-log
+    name: Quick Event Logging
+    description: Log common events in 2 taps from persistent bottom bar
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Components/QuickLogBar.swift
+      - Views/Components/QuickLogIconButton.swift
+      - Views/Logging/PottyQuickLogSheet.swift
+    tested: false
+    docs: false
+
+  - id: event-logging
+    name: Detailed Event Logging
+    description: Log events with location, time adjustment, and notes
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [quick-log-bar, timeline]
+    key_files:
+      - Views/Logging/LogEventSheet.swift
+      - Views/Logging/LogSheetComponents.swift
+      - Views/Logging/EditEventSheet.swift
+    tested: false
+    docs: false
+
+  - id: walk-logging
+    name: Walk Session Logging
+    description: Log walks with start/end times and automatic outdoor potty detection
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [quick-log-bar, today-tab]
+    key_files:
+      - Views/Walk/WalkLogSheet.swift
+      - Views/Walk/WalkSessionRow.swift
+    depends_on: [event-logging]
+    tested: false
+    docs: false
+
+  - id: sleep-logging
+    name: Sleep & Nap Tracking
+    description: Track sleep sessions with duration, distinguish naps from overnight
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [quick-log-bar]
+    key_files:
+      - Views/Logging/StartActivitySheet.swift
+      - Views/Logging/EndSleepSheet.swift
+    tested: false
+    docs: false
+
+  - id: training-logging
+    name: Training Session Logging
+    description: Log training sessions with exercise type and duration
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [quick-log-bar, training-tab]
+    key_files:
+      - Views/Logging/ActivityEndSheet.swift
+    tested: false
+    docs: false
+
+  - id: coverage-gaps
+    name: Coverage Gap Tracking
+    description: Track when puppy is with others (handoff to partner/sitter)
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/CatchUp/StartCoverageGapSheet.swift
+      - Views/CatchUp/EndCoverageGapSheet.swift
+      - Views/CatchUp/GapDetectionSheet.swift
+    tested: false
+    docs: false
+
+  - id: moment-logging
+    name: Photo Moment Logging
+    description: Log moments with optional photos and videos
+    tier: premium
+    premium_feature: photoVideoAttachments
+    status: shipped
+    platforms: [ios]
+    entry_points: [quick-log-bar, timeline]
+    key_files:
+      - Views/Logging/LogMomentSheet.swift
+      - Views/Media/MediaPicker.swift
+      - Views/Media/MediaPreviewView.swift
+    tested: false
+    docs: false
+
+  - id: weight-logging
+    name: Weight Logging
+    description: Log puppy weight for growth tracking
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab, settings]
+    key_files:
+      - Views/Health/WeightLogSheet.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# TIMELINE & HISTORY
+# =============================================================================
+timeline:
+
+  - id: daily-timeline
+    name: Daily Timeline View
+    description: Chronological view of today's events with icons and times
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Timeline/TimelineEventMarker.swift
+      - Views/Timeline/EventRow.swift
+      - Views/Timeline/VerticalTimelineView.swift
+    tested: false
+    docs: false
+
+  - id: recent-activity-preview
+    name: Recent Activity Preview
+    description: Quick preview of latest events on Today tab
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Timeline/RecentActivityPreview.swift
+      - Views/Timeline/FullTimelineSheet.swift
+    tested: false
+    docs: false
+
+  - id: event-editing
+    name: Event Editing & Deletion
+    description: Edit event times, locations, notes; delete with undo
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [timeline]
+    key_files:
+      - Views/Logging/EditEventSheet.swift
+      - Views/Timeline/AllEventsSheet.swift
+    tested: false
+    docs: false
+
+  - id: day-navigation
+    name: Day Navigation
+    description: Navigate to any date to view historical events
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab, calendar-tab]
+    key_files:
+      - ViewModels/TimelineViewModel+Navigation.swift
+    tested: false
+    docs: false

@@ -9,9 +9,21 @@ import Combine
 import OtisShared
 import SwiftUI
 
+// MARK: - Appointment Prefill
+
+/// Data for pre-filling appointment form from nudge cards
+struct AppointmentPrefill: Equatable {
+    var appointmentType: AppointmentType
+    var title: String
+    var notes: String?
+    var linkedMilestoneID: UUID?
+    var suggestedDate: Date?
+}
+
 /// Manages sheet presentation state for the timeline view
+@Observable
 @MainActor
-final class SheetCoordinator: ObservableObject {
+final class SheetCoordinator {
 
     // MARK: - Active Sheet Enum
 
@@ -54,6 +66,27 @@ final class SheetCoordinator: ObservableObject {
         case fullTimeline
         // Walk schedule editor (from adaptive walk nudge)
         case walkScheduleEditor
+        // Guide sheets (from sentiment tips)
+        case crateTrainingGuide
+        case pottyTrainingGuide
+        // Appointment nudge pre-filled sheet
+        case addAppointmentWithPrefill(AppointmentPrefill)
+        // Medication quick log sheet
+        case medicationLog
+        // Health symptom log sheet (Brief 04)
+        case symptomLog(conditionId: UUID? = nil)
+        // Senior wellness sheets (Brief 05)
+        case seniorMobility
+        // Grooming/care settings sheet (Brief 09)
+        case groomingSettings
+        // Grooming quick log sheet (Brief 09)
+        case groomingQuickLog(preselectedType: GroomingType? = nil)
+        // Behavior incident log sheet
+        case behaviorLog
+        // Moments lightbox (swipeable photo gallery)
+        case momentsLightbox(events: [PuppyEvent], startIndex: Int)
+        // Walk map (full-screen GPS tracking view)
+        case walkMap
 
         var id: String {
             switch self {
@@ -88,32 +121,57 @@ final class SheetCoordinator: ObservableObject {
             case .medicalCare: return "medicalCare"
             case .fullTimeline: return "fullTimeline"
             case .walkScheduleEditor: return "walkScheduleEditor"
+            case .crateTrainingGuide: return "crateTrainingGuide"
+            case .pottyTrainingGuide: return "pottyTrainingGuide"
+            case .addAppointmentWithPrefill(let prefill): return "addAppointmentWithPrefill-\(prefill.appointmentType.rawValue)"
+            case .medicationLog: return "medicationLog"
+            case .symptomLog(let conditionId): return "symptomLog-\(conditionId?.uuidString ?? "general")"
+            case .seniorMobility: return "seniorMobility"
+            case .groomingSettings: return "groomingSettings"
+            case .groomingQuickLog(let type): return "groomingQuickLog-\(type?.rawValue ?? "any")"
+            case .behaviorLog: return "behaviorLog"
+            case .momentsLightbox(_, let startIndex): return "momentsLightbox-\(startIndex)"
+            case .walkMap: return "walkMap"
             }
         }
     }
 
-    // MARK: - Published State
+    // MARK: - Moments Lightbox
+
+    /// Present the moments lightbox at a specific photo
+    func presentMomentsLightbox(events: [PuppyEvent], startIndex: Int) {
+        presentSheet(.momentsLightbox(events: events, startIndex: startIndex))
+    }
+
+    // MARK: - State
 
     /// Current active sheet (nil when no sheet is shown)
-    @Published var activeSheet: ActiveSheet?
+    var activeSheet: ActiveSheet? {
+        didSet {
+            // Notify when sheet is dismissed (for celebration flush)
+            if activeSheet == nil && oldValue != nil {
+                NotificationCenter.default.post(name: .sheetDismissed, object: self)
+            }
+        }
+    }
 
     /// Delete confirmation state (separate from sheets - uses confirmation dialog)
-    @Published var showingDeleteConfirmation: Bool = false
-    @Published var eventToDelete: PuppyEvent?
+    var showingDeleteConfirmation: Bool = false
+    var eventToDelete: PuppyEvent?
 
     /// Undo banner state (separate from sheets - uses overlay)
-    @Published var showingUndoBanner: Bool = false
-    @Published var lastDeletedEvent: PuppyEvent?
+    var showingUndoBanner: Bool = false
+    var lastDeletedEvent: PuppyEvent?
 
     /// Celebration banner state (separate from sheets - uses overlay)
-    @Published var showingCelebrationBanner: Bool = false
-    @Published var celebrationMessage: String = ""
+    var showingCelebrationBanner: Bool = false
+    var celebrationMessage: String = ""
 
     /// Undo task for auto-dismiss
-    private var undoTask: Task<Void, Never>?
+    @ObservationIgnored private var undoTask: Task<Void, Never>?
 
     /// Celebration banner task for auto-dismiss
-    private var celebrationTask: Task<Void, Never>?
+    @ObservationIgnored private var celebrationTask: Task<Void, Never>?
 
     // MARK: - Sheet Data Accessors
 
@@ -234,4 +292,10 @@ final class SheetCoordinator: ObservableObject {
         showingCelebrationBanner = false
         celebrationMessage = ""
     }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let sheetDismissed = Notification.Name("sheetDismissed")
 }

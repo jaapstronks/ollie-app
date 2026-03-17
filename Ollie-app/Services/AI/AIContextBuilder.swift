@@ -25,6 +25,8 @@ final class AIContextBuilder {
     private var skillProgressProvider: (() -> [SkillProgress])?
     private var regressionLogProvider: (() -> [RegressionLogEntry])?
     private var socializationProgressProvider: ((PuppyProfile) -> SocializationProgress?)?
+    private var behaviorInterventionProvider: (() -> [BehaviorIntervention])?
+    private var sentimentStateProvider: (() -> SentimentState?)?
 
     /// Initialize with optional stores.
     /// If stores are not provided, context building will return empty/default components.
@@ -51,6 +53,16 @@ final class AIContextBuilder {
     /// Register a provider for socialization progress data
     func registerSocializationProgressProvider(_ provider: @escaping (PuppyProfile) -> SocializationProgress?) {
         self.socializationProgressProvider = provider
+    }
+
+    /// Register a provider for behavior intervention data
+    func registerBehaviorInterventionProvider(_ provider: @escaping () -> [BehaviorIntervention]) {
+        self.behaviorInterventionProvider = provider
+    }
+
+    /// Register a provider for sentiment state data
+    func registerSentimentStateProvider(_ provider: @escaping () -> SentimentState?) {
+        self.sentimentStateProvider = provider
     }
 
     // MARK: - Build Context
@@ -97,10 +109,14 @@ final class AIContextBuilder {
             }
         }
 
+        // Use profile's preferred locale for consistent caching across household members
+        // Falls back to device locale for legacy profiles without preferredLocale set
+        let locale = profile.preferredLocale ?? Locale.current.identifier
+
         return AIContextPayload(
             surface: surface,
             profileId: profile.id,
-            locale: Locale.current.identifier,
+            locale: locale,
             promptVersion: surface.promptVersion,
             components: components
         )
@@ -121,7 +137,12 @@ final class AIContextBuilder {
             return AnyCodable(DogIdentityContext(profile: profile))
 
         case .household:
-            let context = HouseholdContext(profile: profile)
+            // Access current user record ID on main actor for HouseholdContext
+            // Use nonisolated read from cached value
+            let context = HouseholdContext(
+                profile: profile,
+                currentUserRecordID: UserIdentityStore.cachedCurrentUserRecordID
+            )
             // Only include if there are household members
             return context.memberCount > 0 ? AnyCodable(context) : nil
 
@@ -163,6 +184,17 @@ final class AIContextBuilder {
 
         case .health:
             return AnyCodable(HealthContext(profile: profile, events: events))
+
+        case .sentiment:
+            // Build sentiment context from provider if available
+            if let state = sentimentStateProvider?() {
+                return AnyCodable(UserSentimentContext(state: state))
+            }
+            return nil
+
+        case .behavior:
+            let interventions = behaviorInterventionProvider?() ?? []
+            return AnyCodable(BehaviorChallengesContext(events: events, interventions: interventions))
         }
     }
 
@@ -242,97 +274,118 @@ struct AIContextPayload: Codable, Sendable {
 
 // MARK: - Type Erasure for Codable
 
-/// Type-erased Codable wrapper for heterogeneous component storage.
-/// Stores the JSON-encoded data for reliable encoding/decoding.
+/// Type-erased Codable wrapper using a recursive enum to preserve JSON structure.
+/// This avoids the decode-reencode cycle that can corrupt data.
 struct AnyCodable: Codable, Sendable {
-    private let encodedData: Data
+    private let jsonValue: JSONValue
 
-    /// Access the decoded value (for compatibility with existing code)
+    /// Access the decoded value as a Foundation object (for compatibility with existing code)
     var value: Any? {
-        try? JSONSerialization.jsonObject(with: encodedData)
+        jsonValue.toFoundation()
     }
 
     init<T: Codable & Sendable>(_ value: T) {
-        // Encode the value to JSON data for storage
-        self.encodedData = (try? JSONEncoder().encode(value)) ?? Data()
+        // Encode to JSON and decode back as JSONValue to normalize
+        if let data = try? JSONEncoder().encode(value),
+           let decoded = try? JSONDecoder().decode(JSONValue.self, from: data) {
+            self.jsonValue = decoded
+        } else {
+            self.jsonValue = .null
+        }
     }
 
-    /// Initialize directly from pre-encoded data
+    /// Initialize directly from a JSONValue
+    init(jsonValue: JSONValue) {
+        self.jsonValue = jsonValue
+    }
+
+    /// Initialize from pre-encoded JSON data
     init(data: Data) {
-        self.encodedData = data
+        if let decoded = try? JSONDecoder().decode(JSONValue.self, from: data) {
+            self.jsonValue = decoded
+        } else {
+            self.jsonValue = .null
+        }
     }
 
     init(from decoder: Decoder) throws {
-        // When decoding, re-encode the container to get raw data
-        let container = try decoder.singleValueContainer()
-
-        // Try to decode as various types and re-encode
-        if let dict = try? container.decode([String: AnyCodable].self) {
-            self.encodedData = (try? JSONEncoder().encode(dict)) ?? Data()
-        } else if let array = try? container.decode([AnyCodable].self) {
-            self.encodedData = (try? JSONEncoder().encode(array)) ?? Data()
-        } else if let string = try? container.decode(String.self) {
-            self.encodedData = (try? JSONEncoder().encode(string)) ?? Data()
-        } else if let int = try? container.decode(Int.self) {
-            self.encodedData = (try? JSONEncoder().encode(int)) ?? Data()
-        } else if let double = try? container.decode(Double.self) {
-            self.encodedData = (try? JSONEncoder().encode(double)) ?? Data()
-        } else if let bool = try? container.decode(Bool.self) {
-            self.encodedData = (try? JSONEncoder().encode(bool)) ?? Data()
-        } else {
-            self.encodedData = Data()
-        }
+        self.jsonValue = try JSONValue(from: decoder)
     }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-
-        // Decode the stored JSON data and re-encode it
-        if let jsonObject = try? JSONSerialization.jsonObject(with: encodedData) {
-            if let dict = jsonObject as? [String: Any] {
-                // Encode dictionary manually
-                let reEncoded = try JSONSerialization.data(withJSONObject: dict)
-                if let jsonString = String(data: reEncoded, encoding: .utf8) {
-                    // Write as raw JSON using JSONDecoder trick
-                    try container.encode(RawJSON(json: jsonString))
-                } else {
-                    try container.encodeNil()
-                }
-            } else if let array = jsonObject as? [Any] {
-                let reEncoded = try JSONSerialization.data(withJSONObject: array)
-                if let jsonString = String(data: reEncoded, encoding: .utf8) {
-                    try container.encode(RawJSON(json: jsonString))
-                } else {
-                    try container.encodeNil()
-                }
-            } else if let string = jsonObject as? String {
-                try container.encode(string)
-            } else if let number = jsonObject as? NSNumber {
-                // Check if it's a boolean
-                if CFGetTypeID(number) == CFBooleanGetTypeID() {
-                    try container.encode(number.boolValue)
-                } else if number.doubleValue == Double(number.intValue) {
-                    try container.encode(number.intValue)
-                } else {
-                    try container.encode(number.doubleValue)
-                }
-            } else {
-                try container.encodeNil()
-            }
-        } else {
-            try container.encodeNil()
-        }
+        try jsonValue.encode(to: encoder)
     }
 }
 
-/// Helper for encoding raw JSON strings
-private struct RawJSON: Encodable {
-    let json: String
+/// Recursive enum representing any valid JSON value
+enum JSONValue: Codable, Sendable {
+    case null
+    case bool(Bool)
+    case int(Int)
+    case double(Double)
+    case string(String)
+    case array([JSONValue])
+    case object([String: JSONValue])
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if container.decodeNil() {
+            self = .null
+        } else if let bool = try? container.decode(Bool.self) {
+            self = .bool(bool)
+        } else if let int = try? container.decode(Int.self) {
+            self = .int(int)
+        } else if let double = try? container.decode(Double.self) {
+            self = .double(double)
+        } else if let string = try? container.decode(String.self) {
+            self = .string(string)
+        } else if let array = try? container.decode([JSONValue].self) {
+            self = .array(array)
+        } else if let object = try? container.decode([String: JSONValue].self) {
+            self = .object(object)
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unable to decode JSON value")
+        }
+    }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        // This is a workaround - ideally we'd write raw JSON
-        // For now, just encode the string representation
-        try container.encode(json)
+        switch self {
+        case .null:
+            try container.encodeNil()
+        case .bool(let value):
+            try container.encode(value)
+        case .int(let value):
+            try container.encode(value)
+        case .double(let value):
+            try container.encode(value)
+        case .string(let value):
+            try container.encode(value)
+        case .array(let value):
+            try container.encode(value)
+        case .object(let value):
+            try container.encode(value)
+        }
+    }
+
+    /// Convert to Foundation types for compatibility with JSONSerialization-based code
+    func toFoundation() -> Any {
+        switch self {
+        case .null:
+            return NSNull()
+        case .bool(let value):
+            return value
+        case .int(let value):
+            return value
+        case .double(let value):
+            return value
+        case .string(let value):
+            return value
+        case .array(let value):
+            return value.map { $0.toFoundation() }
+        case .object(let value):
+            return value.mapValues { $0.toFoundation() }
+        }
     }
 }

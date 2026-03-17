@@ -8,8 +8,8 @@ import SwiftUI
 import OtisShared
 
 struct WebhookSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
-    @StateObject private var webhookService = WebhookService.shared
+    var profileStore: ProfileStore
+    @State private var webhookService = WebhookService.shared
 
     @State private var isEnabled: Bool = false
     @State private var webhookURL: String = ""
@@ -201,7 +201,7 @@ struct WebhookSettingsView: View {
     private func saveConfig() {
         let config = WebhookConfig(
             isEnabled: isEnabled,
-            webhookURL: webhookURL.isEmpty ? nil : webhookURL,
+            webhookURL: webhookURL.nilIfBlank,
             enabledEventTypes: useAllEvents ? nil : (selectedEventTypes.isEmpty ? nil : selectedEventTypes),
             includeEventDetails: includeDetails,
             includePuppyName: includePuppyName

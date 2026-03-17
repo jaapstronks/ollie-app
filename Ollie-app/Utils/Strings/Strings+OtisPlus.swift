@@ -126,5 +126,20 @@ extension Strings {
         // Settings section
         static let settingsTitle = String(localized: "Otis+", table: table)
         static let settingsStatus = String(localized: "Status", table: table)
+
+        // Trial-aware paywall messaging
+        static func trialHeroTitle(dogName: String) -> String {
+            String(localized: "You and \(dogName) are loving Otis+", table: table)
+        }
+        static func trialHeroSubtitle(dogName: String, daysLeft: Int) -> String {
+            if daysLeft == 1 {
+                return String(localized: "Your trial ends tomorrow. Subscribe now to keep \(dogName)'s personalized insights.", table: table)
+            }
+            return String(localized: "Your trial ends in \(daysLeft) days. Subscribe to keep \(dogName)'s insights.", table: table)
+        }
+        static let expiredHeroTitle = String(localized: "Your Trial Has Ended", table: table)
+        static func expiredHeroSubtitle(dogName: String) -> String {
+            String(localized: "Subscribe now to restore \(dogName)'s AI-powered insights and predictions.", table: table)
+        }
     }
 }

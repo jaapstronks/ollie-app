@@ -82,6 +82,11 @@ extension Strings {
         static let comfortableState = String(localized: "Comfortable", table: table)
         static let needsPractice = String(localized: "Needs practice", table: table)
 
+        // Week detail
+        static let positiveRate = String(localized: "positive", table: table)
+        static let weeklyGoal = String(localized: "Weekly Goal", table: table)
+        static let categoryBreakdown = String(localized: "Category Breakdown", table: table)
+
         // Walk suggestions
         static let walkSuggestionsTitle = String(localized: "Watch for during walk", table: table)
         static let walkSuggestionsTip = String(localized: "Tap to log exposure", table: table)
@@ -172,6 +177,7 @@ extension Strings {
         static let viewFullProgress = String(localized: "View full progress", table: table)
         static let quickCheckMode = String(localized: "Quick Check", table: table)
         static let quickCheckModeDesc = String(localized: "Tap items to mark comfortable", table: table)
+        static let editModeHint = String(localized: "Tap items to mark as comfortable", table: table)
         static func phaseProgress(comfortable: Int, total: Int) -> String {
             String(localized: "\(comfortable) of \(total) comfortable", table: table)
         }

@@ -8,7 +8,7 @@ import SwiftUI
 import OtisShared
 
 struct StatusView: View {
-    @ObservedObject var dataProvider: WatchDataProvider
+    var dataProvider: WatchDataProvider
 
     // Timer for periodic refresh
     let refreshTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
@@ -19,17 +19,17 @@ struct StatusView: View {
                 // Puppy name header
                 Text(dataProvider.puppyName)
                     .font(.headline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 // Potty Timer
                 VStack(spacing: 4) {
                     Text(dataProvider.timeSinceLastPee())
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                        .foregroundColor(urgencyColor)
+                        .foregroundStyle(urgencyColor)
 
                     Text("since last pee")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Divider()
@@ -39,14 +39,14 @@ struct StatusView: View {
                 HStack(spacing: 8) {
                     Image(systemName: streakIcon)
                         .font(.title2)
-                        .foregroundColor(streakColor)
+                        .foregroundStyle(streakColor)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(dataProvider.currentStreak)")
                             .font(.title2.bold())
                         Text("outdoor streak")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
@@ -61,11 +61,11 @@ struct StatusView: View {
                             if let sleepStart = dataProvider.sleepStartTime {
                                 Text(sleepDuration(since: sleepStart))
                                     .font(.caption2)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                             }
                         }
                     }
-                    .foregroundColor(.purple)
+                    .foregroundStyle(.purple)
                     .padding(.top, 8)
                 }
             }

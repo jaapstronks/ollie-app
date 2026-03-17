@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var dataProvider: WatchDataProvider
+    @Environment(WatchDataProvider.self) private var dataProvider
 
     var body: some View {
         TabView {
@@ -28,5 +28,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(WatchDataProvider.shared)
+        .environment(WatchDataProvider.shared)
 }

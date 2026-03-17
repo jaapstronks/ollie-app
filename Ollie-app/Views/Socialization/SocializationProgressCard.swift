@@ -9,8 +9,8 @@ import OtisShared
 
 /// Card showing overall socialization progress and window status
 struct SocializationProgressCard: View {
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -53,18 +53,11 @@ struct SocializationProgressCard: View {
                 }
 
                 // Progress bar
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.secondary.opacity(0.2))
-                            .frame(height: 8)
-
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(progressColor)
-                            .frame(width: geometry.size.width * progressPercentage, height: 8)
-                    }
-                }
-                .frame(height: 8)
+                LinearProgressBar(
+                    progress: progressPercentage,
+                    tint: progressColor,
+                    height: 8
+                )
             }
 
             // Window status banner
@@ -158,7 +151,7 @@ struct SocializationProgressCard: View {
 
 #Preview {
     SocializationProgressCard()
-        .environmentObject(SocializationStore())
-        .environmentObject(ProfileStore())
+        .environment(SocializationStore())
+        .environment(ProfileStore())
         .padding()
 }

@@ -60,6 +60,9 @@ public enum DiscoveredSpotSource: String, Codable, CaseIterable, Sendable {
     case governmentUS = "gov_us"
     case governmentAU = "gov_au"
     case governmentUK = "gov_uk"
+    case governmentCA = "gov_ca"
+    case governmentAT = "gov_at"
+    case governmentBE = "gov_be"
 
     public var displayName: String {
         switch self {
@@ -69,6 +72,9 @@ public enum DiscoveredSpotSource: String, Codable, CaseIterable, Sendable {
         case .governmentUS: return "Data.gov"
         case .governmentAU: return "data.gov.au"
         case .governmentUK: return "data.gov.uk"
+        case .governmentCA: return "open.canada.ca"
+        case .governmentAT: return "data.gv.at"
+        case .governmentBE: return "opendata.brussels"
         }
     }
 
@@ -86,6 +92,12 @@ public enum DiscoveredSpotSource: String, Codable, CaseIterable, Sendable {
             return "Data: data.gov.au"
         case .governmentUK:
             return "Data: data.gov.uk"
+        case .governmentCA:
+            return "Data: Open Government Canada"
+        case .governmentAT:
+            return "Data: data.gv.at (CC BY 4.0)"
+        case .governmentBE:
+            return "Data: opendata.brussels"
         }
     }
 }

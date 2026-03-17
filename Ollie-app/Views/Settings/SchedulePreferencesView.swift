@@ -10,8 +10,8 @@ import OtisShared
 
 /// Settings screen for schedules and preferences
 struct SchedulePreferencesView: View {
-    @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var notificationService: NotificationService
+    var profileStore: ProfileStore
+    var notificationService: NotificationService
     let profileId: UUID
 
     @State private var showingMealEdit = false
@@ -94,17 +94,17 @@ struct SchedulePreferencesView: View {
                         Text(Strings.Settings.notifications)
                     } icon: {
                         Image(systemName: "bell.fill")
-                            .foregroundColor(.otisAccent)
+                            .foregroundStyle(Color.otisAccent)
                     }
                     Spacer()
                     Text(profile.notificationSettings.isEnabled ? Strings.Common.on : Strings.Common.off)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         }
     }
 }

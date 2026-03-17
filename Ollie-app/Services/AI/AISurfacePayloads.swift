@@ -161,8 +161,8 @@ extension NotificationPolicyPayload {
         if recent.pee().isEmpty { stale.append("potty") }
         if recent.walks().isEmpty { stale.append("walk") }
         if recent.meals().isEmpty { stale.append("meal") }
-        if recent.filter({ $0.type == .training }).isEmpty { stale.append("training") }
-        if recent.filter({ $0.type == .sociaal }).isEmpty { stale.append("socialization") }
+        if !recent.contains(where: { $0.type == .training }) { stale.append("training") }
+        if !recent.contains(where: { $0.type == .sociaal }) { stale.append("socialization") }
 
         return NotificationPolicyPayload(
             baselinePottyMinutesDelta: 0,
@@ -183,7 +183,7 @@ extension InsightBundleResponse {
         confidenceThreshold: Double = 0.65,
         shadowMode: Bool
     ) -> (title: String, subtitle: String?) {
-        guard let status = dailyStatus,
+        guard let status = dailyStatusDecision,
               !shadowMode,
               status.confidence >= confidenceThreshold else {
             return (baselineTitle, baselineSubtitle)
@@ -198,7 +198,7 @@ extension InsightBundleResponse {
         confidenceThreshold: Double = 0.65,
         shadowMode: Bool
     ) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
-        guard let ordering = activityOrdering,
+        guard let ordering = walkOrderingDecision,
               !shadowMode,
               ordering.confidence >= confidenceThreshold else {
             return (actionable, upcoming)

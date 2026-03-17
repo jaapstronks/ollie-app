@@ -101,5 +101,111 @@ extension Strings {
             localized: "Tap to collapse",
             table: table
         )
+
+        // MARK: - Photo Prompt
+
+        static var photoPromptTitle: String {
+            String(localized: "Capture this moment", table: table)
+        }
+
+        static func photoPromptSubtitle(name: String) -> String {
+            String(localized: "Add a photo to remember \(name)'s first days", table: table)
+        }
+
+        static var addFirstPhoto: String {
+            String(localized: "Add First Photo", table: table)
+        }
+
+        // MARK: - Family Invite Prompt
+
+        static var invitePromptTitle: String {
+            String(localized: "Share the care", table: table)
+        }
+
+        static func invitePromptSubtitle(name: String) -> String {
+            String(localized: "Invite a partner or family member to help track \(name)", table: table)
+        }
+
+        static var inviteSomeone: String {
+            String(localized: "Invite Someone", table: table)
+        }
+
+        // MARK: - First Event Celebration
+
+        static var firstEventTitle: String {
+            String(localized: "First moment logged!", table: table)
+        }
+
+        static var firstEventSubtitle: String {
+            String(localized: "You're on your way to understanding your puppy's patterns.", table: table)
+        }
+
+        // MARK: - Streak Celebrations
+
+        static func streakCelebration(days: Int) -> String {
+            String(localized: "\(days)-day streak! You're building great habits.", table: table)
+        }
+
+        static var keepItUp: String {
+            String(localized: "Keep it up!", table: table)
+        }
+
+        // MARK: - Patterns Emerging
+
+        static var patternsEmergingTitle: String {
+            String(localized: "Patterns are forming", table: table)
+        }
+
+        static func patternsEmergingSubtitle(name: String) -> String {
+            String(localized: "We're learning \(name)'s rhythms. Keep logging!", table: table)
+        }
+
+        // MARK: - Week Recap Tease Preview
+
+        static var weekRecapTeaseTitle: String {
+            String(localized: "Your first recap is coming!", table: table)
+        }
+
+        static func weekRecapTeaseSubtitle(daysLeft: Int) -> String {
+            if daysLeft == 1 {
+                return String(localized: "Tomorrow you'll see your first weekly summary.", table: table)
+            } else {
+                return String(localized: "In \(daysLeft) days, you'll see your first weekly summary.", table: table)
+            }
+        }
+
+        // MARK: - Push Notifications
+
+        static func howIsPuppy(name: String) -> String {
+            String(localized: "How's \(name) doing?", table: table)
+        }
+
+        static var tapToLog: String {
+            String(localized: "Tap to log what they're up to right now.", table: table)
+        }
+
+        static var goodMorning: String {
+            String(localized: "Good morning!", table: table)
+        }
+
+        static func readyToTrack(name: String) -> String {
+            String(localized: "Ready to track \(name)'s day?", table: table)
+        }
+
+        static func dontForgetToLog(name: String) -> String {
+            String(localized: "Don't forget to log \(name)'s day", table: table)
+        }
+
+        static var evenQuickLogHelps: String {
+            String(localized: "Even a quick potty log helps build routine insights.", table: table)
+        }
+
+        static func dayStreak(days: Int) -> String {
+            String(localized: "Day \(days)!", table: table)
+        }
+
+        static var keepStreakGoing: String {
+            String(localized: "Keep the streak going — log your first moment.", table: table)
+        }
     }
 }

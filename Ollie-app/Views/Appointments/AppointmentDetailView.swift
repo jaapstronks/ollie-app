@@ -10,8 +10,8 @@ import OtisShared
 /// Detail view for displaying and managing an appointment
 struct AppointmentDetailView: View {
     let appointment: DogAppointment
-    @ObservedObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore
+    @Environment(ContactStore.self) var contactStore
 
     @State private var showingEditSheet = false
     @State private var showingDeleteConfirmation = false
@@ -26,7 +26,7 @@ struct AppointmentDetailView: View {
                 HStack {
                     Image(systemName: appointment.appointmentType.icon)
                         .font(.title2)
-                        .foregroundColor(.otisAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .frame(width: 44, height: 44)
                         .background(Color.otisAccent.opacity(0.1))
                         .clipShape(Circle())
@@ -38,11 +38,11 @@ struct AppointmentDetailView: View {
                         if appointment.isCompleted {
                             Label(Strings.Appointments.completed, systemImage: "checkmark.circle.fill")
                                 .font(.caption)
-                                .foregroundColor(.green)
+                                .foregroundStyle(.green)
                         } else if appointment.isPast {
                             Text(Strings.Appointments.past)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
 
@@ -50,12 +50,12 @@ struct AppointmentDetailView: View {
 
                     if appointment.isRecurring {
                         Image(systemName: "repeat")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
 
                     if appointment.isSyncedToCalendar {
                         Image(systemName: "calendar.badge.checkmark")
-                            .foregroundColor(.otisAccent)
+                            .foregroundStyle(Color.otisAccent)
                     }
                 }
             }
@@ -64,22 +64,22 @@ struct AppointmentDetailView: View {
             Section(Strings.Appointments.date) {
                 HStack {
                     Image(systemName: "calendar")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Text(appointment.dateString)
                 }
 
                 if !appointment.isAllDay {
                     HStack {
                         Image(systemName: "clock")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(appointment.timeRangeString)
                     }
                 } else {
                     HStack {
                         Image(systemName: "clock")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(Strings.Appointments.allDay)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -92,13 +92,13 @@ struct AppointmentDetailView: View {
                     } label: {
                         HStack {
                             Image(systemName: "map.fill")
-                                .foregroundColor(.otisAccent)
+                                .foregroundStyle(Color.otisAccent)
                             Text(location)
-                                .foregroundColor(.primary)
+                                .foregroundStyle(.primary)
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -112,7 +112,7 @@ struct AppointmentDetailView: View {
                         // Contact header
                         HStack {
                             Image(systemName: contact.contactType.icon)
-                                .foregroundColor(.otisAccent)
+                                .foregroundStyle(Color.otisAccent)
                             Text(contact.name)
                                 .font(.headline)
                         }
@@ -141,7 +141,7 @@ struct AppointmentDetailView: View {
             if let notes = appointment.notes, !notes.isEmpty {
                 Section(Strings.Appointments.notes) {
                     Text(notes)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -149,7 +149,7 @@ struct AppointmentDetailView: View {
             if appointment.isCompleted, let completionNotes = appointment.completionNotes, !completionNotes.isEmpty {
                 Section(Strings.Appointments.completionNotes) {
                     Text(completionNotes)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -233,7 +233,7 @@ struct AppointmentDetailView: View {
 /// Sheet for marking an appointment as completed with optional notes
 private struct CompletionSheet: View {
     let appointment: DogAppointment
-    @ObservedObject var appointmentStore: AppointmentStore
+    var appointmentStore: AppointmentStore
 
     @Environment(\.dismiss) private var dismiss
     @State private var completionNotes: String = ""
@@ -245,7 +245,7 @@ private struct CompletionSheet: View {
                     Text(appointment.title)
                         .font(.headline)
                     Text(appointment.dateString)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section(Strings.Appointments.completionNotes) {
@@ -269,7 +269,7 @@ private struct CompletionSheet: View {
                     Button(Strings.Common.save) {
                         appointmentStore.completeAppointment(
                             appointment,
-                            notes: completionNotes.isEmpty ? nil : completionNotes
+                            notes: completionNotes.nilIfBlank
                         )
                         dismiss()
                     }
@@ -292,6 +292,6 @@ private struct CompletionSheet: View {
             ),
             appointmentStore: AppointmentStore()
         )
-        .environmentObject(ContactStore())
+        .environment(ContactStore())
     }
 }

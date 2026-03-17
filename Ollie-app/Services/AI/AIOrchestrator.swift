@@ -6,6 +6,7 @@
 //  Handles caching, budget limits, rollout, and surface-specific logic.
 //
 
+@preconcurrency import CoreData
 import Foundation
 import OtisShared
 
@@ -22,27 +23,26 @@ final class AIOrchestrator {
     private let client: AIModelBrokerClientProtocol
     private let subscriptionManager: SubscriptionManager
     private let contextBuilder: AIContextBuilder
+    private let cacheManager: AICacheManager
+    private let budgetManager: AIBudgetManager
 
     // MARK: - State
 
-    private var responseCache: [String: CacheEntry] = [:]
     private var inFlightTasks: [String: Task<Void, Never>] = [:]
-
-    private struct CacheEntry {
-        let surface: AISurface
-        let response: AIBrokerResponse
-        let timestamp: Date
-    }
 
     // MARK: - Init
 
     private init(
         client: AIModelBrokerClientProtocol = AIModelBrokerClient(),
-        subscriptionManager: SubscriptionManager = .shared
+        subscriptionManager: SubscriptionManager = .shared,
+        cacheManager: AICacheManager = AICacheManager(),
+        budgetManager: AIBudgetManager = AIBudgetManager()
     ) {
         self.client = client
         self.subscriptionManager = subscriptionManager
         self.contextBuilder = AIContextBuilder()
+        self.cacheManager = cacheManager
+        self.budgetManager = budgetManager
     }
 
     // MARK: - Public API
@@ -64,14 +64,13 @@ final class AIOrchestrator {
             return .fallback(reason: .notEligible)
         }
 
-        // Check cache
-        let cacheKey = cacheKey(surface: surface, profileId: profile.id)
-        if let cached = validCachedResponse(for: cacheKey, surface: surface) {
+        // Check cache (CloudKit-synced Core Data)
+        if let cached = cacheManager.validCachedResponse(for: surface, profileId: profile.id) {
             return decodeResponse(cached, as: responseType)
         }
 
         // Check budget
-        guard consumeBudgetIfAvailable(profileId: profile.id, surface: surface) else {
+        guard budgetManager.consumeBudgetIfAvailable(profileId: profile.id, surface: surface) else {
             Analytics.trackAIDecision(
                 surface: legacySurface(surface),
                 applied: false,
@@ -110,12 +109,8 @@ final class AIOrchestrator {
             let response = try await executeBrokerRequest(request)
             let latencyMs = Int(Date().timeIntervalSince(start) * 1000)
 
-            // Cache response
-            responseCache[cacheKey] = CacheEntry(
-                surface: surface,
-                response: response,
-                timestamp: Date()
-            )
+            // Cache response (CloudKit-synced Core Data)
+            cacheManager.cacheResponse(response, surface: surface, profileId: profile.id)
 
             // Track analytics
             let confidence = extractConfidence(from: response)
@@ -154,8 +149,7 @@ final class AIOrchestrator {
         profileId: UUID,
         responseType: Response.Type
     ) -> Response? {
-        let cacheKey = cacheKey(surface: surface, profileId: profileId)
-        guard let cached = validCachedResponse(for: cacheKey, surface: surface) else {
+        guard let cached = cacheManager.validCachedResponse(for: surface, profileId: profileId) else {
             return nil
         }
 
@@ -175,10 +169,8 @@ final class AIOrchestrator {
         sleepState: SleepState? = nil,
         surfacePayload: Encodable? = nil
     ) {
-        let cacheKey = cacheKey(surface: surface, profileId: profile.id)
-
         // Already cached and fresh
-        if validCachedResponse(for: cacheKey, surface: surface) != nil {
+        if cacheManager.validCachedResponse(for: surface, profileId: profile.id) != nil {
             return
         }
 
@@ -211,7 +203,13 @@ final class AIOrchestrator {
 
     /// Clear all cached responses.
     func clearCache() {
-        responseCache.removeAll()
+        cacheManager.clearAll()
+    }
+
+    /// Get a cached response for a surface without making a request.
+    /// Returns nil if no valid cache entry exists.
+    func cachedResponse<Response: Codable>(surface: AISurface, profileId: UUID) -> Response? {
+        cacheManager.decodeCachedResponse(surface: surface, profileId: profileId, as: Response.self)
     }
 
     // MARK: - Provider Registration
@@ -228,6 +226,14 @@ final class AIOrchestrator {
     func registerSocializationProgressProvider(_ provider: @escaping (PuppyProfile) -> SocializationProgress?) {
         contextBuilder.registerSocializationProgressProvider(provider)
     }
+
+    func registerBehaviorInterventionProvider(_ provider: @escaping () -> [BehaviorIntervention]) {
+        contextBuilder.registerBehaviorInterventionProvider(provider)
+    }
+
+    func registerSentimentStateProvider(_ provider: @escaping () -> SentimentState?) {
+        contextBuilder.registerSentimentStateProvider(provider)
+    }
 }
 
 // MARK: - Private Helpers
@@ -243,35 +249,6 @@ private extension AIOrchestrator {
         guard subscriptionManager.hasAccess(to: .aiNudges) else { return false }
         let bucket = abs(profile.id.uuidString.hashValue) % 100
         return bucket < AINudgeRollout.rolloutPercentage
-    }
-
-    func cacheKey(surface: AISurface, profileId: UUID) -> String {
-        let window = Date().windowStamp(hours: surface.cacheDurationMinutes / 60)
-        return "\(profileId.uuidString)-\(surface.rawValue)-\(window)"
-    }
-
-    func validCachedResponse(for key: String, surface: AISurface) -> AIBrokerResponse? {
-        guard let entry = responseCache[key] else { return nil }
-        let age = Date().timeIntervalSince(entry.timestamp)
-        let maxAge = TimeInterval(surface.cacheDurationMinutes * 60)
-        return age < maxAge ? entry.response : nil
-    }
-
-    func consumeBudgetIfAvailable(profileId: UUID, surface: AISurface) -> Bool {
-        let day = Date().dayStamp()
-        let key = "ai.budget.\(profileId.uuidString).\(day).\(surface.rawValue)"
-        let current = UserDefaults.standard.integer(forKey: key)
-
-        guard current < surface.maxCallsPerDay else { return false }
-
-        // Check total daily budget
-        let totalKey = "ai.budget.\(profileId.uuidString).\(day).total"
-        let total = UserDefaults.standard.integer(forKey: totalKey)
-        guard total < AINudgeRollout.maxTotalCallsPerDay else { return false }
-
-        UserDefaults.standard.set(current + 1, forKey: key)
-        UserDefaults.standard.set(total + 1, forKey: totalKey)
-        return true
     }
 
     func executeBrokerRequest(_ request: AIBrokerRequest) async throws -> AIBrokerResponse {
@@ -293,7 +270,16 @@ private extension AIOrchestrator {
             recentEventCount: (recentEvents?.value as? RecentEventsSummary)?.eventsLast24h ?? 0,
             recentWalkCount: 0,
             recentMealCount: 0,
-            recentPottyCount: 0
+            recentPottyCount: 0,
+            // Historical comparison not available in legacy conversion
+            recentDaysWalkAvg: nil,
+            priorDaysWalkAvg: nil,
+            recentDaysMealAvg: nil,
+            priorDaysMealAvg: nil,
+            recentDaysPottyAvg: nil,
+            priorDaysPottyAvg: nil,
+            recentDaysTrainingAvg: nil,
+            priorDaysTrainingAvg: nil
         )
 
         return AINudgeBrokerRequest(
@@ -304,6 +290,8 @@ private extension AIOrchestrator {
             promptVersion: request.promptVersion,
             providerPolicy: request.providerPolicy,
             shadowMode: request.shadowMode,
+            systemInstruction: request.systemInstruction,
+            outputFormat: request.outputFormat,
             context: contextSummary,
             payload: .init(insightBundle: nil, notificationPolicy: nil)
         )
@@ -385,7 +373,7 @@ enum AIResult<Response> {
     }
 }
 
-enum AIFallbackReason {
+enum AIFallbackReason: CustomStringConvertible {
     case notEligible
     case budgetExhausted
     case requestFailed(Error)
@@ -403,29 +391,181 @@ enum AIFallbackReason {
     }
 }
 
-enum AIError: Error {
+enum AIError: LocalizedError {
     case brokerError(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .brokerError(let message):
+            return "Broker error: \(message)"
+        }
+    }
 }
 
 // MARK: - Helper Types
 
 private struct EmptyResponse: Codable {}
 
-private extension Date {
-    func dayStamp() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: self)
+// MARK: - Manual Test Methods (DEBUG only)
+
+#if DEBUG
+extension AIOrchestrator {
+
+    /// Test result for new AI surfaces
+    struct NewAITestResult: Identifiable {
+        let id: UUID = UUID()
+        let surface: AISurface
+        let timestamp: Date
+        let latencyMs: Int
+        let provider: String?
+        let model: String?
+        let reasoningTags: [String]
+        let response: Any?
+        let rawResponse: String?
+        let error: String?
+
+        var isSuccess: Bool { error == nil && response != nil }
+
+        var summaryText: String {
+            if let error = error {
+                return "Error: \(error)"
+            }
+            if let response = response {
+                if let data = try? JSONSerialization.data(withJSONObject: response, options: .prettyPrinted),
+                   let string = String(data: data, encoding: .utf8) {
+                    return string
+                }
+                return String(describing: response)
+            }
+            return "No response"
+        }
     }
 
-    func windowStamp(hours: Int) -> String {
-        let calendar = Calendar.current
-        let day = calendar.startOfDay(for: self)
-        let hour = calendar.component(.hour, from: self)
-        let bucket = max(1, hours)
-        let window = hour / bucket
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return "\(formatter.string(from: day))-\(window)"
+    /// Manually trigger an insight bundle request for testing.
+    func testInsightBundle(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.insightBundle, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a notification policy request for testing.
+    func testNotificationPolicy(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.notificationPolicy, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a training guidance request for testing.
+    func testTrainingGuidance(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.trainingGuidance, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a potty analysis request for testing.
+    func testPottyAnalysis(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.pottyAnalysis, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a socialization guidance request for testing.
+    func testSocializationGuidance(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.socializationGuidance, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a health insights request for testing.
+    func testHealthInsights(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.healthInsights, profile: profile, recentEvents: recentEvents)
+    }
+
+    private func testSurface(
+        _ surface: AISurface,
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        let start = Date()
+
+        // Build context
+        let contextPayload = contextBuilder.buildContext(
+            for: surface,
+            profile: profile,
+            recentEvents: recentEvents
+        )
+
+        // Build request
+        let request = AIInstructions.buildBrokerRequest(
+            surface: surface,
+            context: contextPayload,
+            providerPolicy: AIVendorPolicy(preferredOrder: [.anthropic], allowFailover: true),
+            shadowMode: false
+        )
+
+        do {
+            // Encode and send request
+            let jsonData = try JSONEncoder().encode(request)
+
+            guard let baseURL = AINudgeRollout.brokerBaseURL else {
+                throw AIError.brokerError("Invalid broker URL")
+            }
+            let brokerURL = baseURL.appendingPathComponent("ai/nudges/decide")
+
+            var urlRequest = URLRequest(url: brokerURL)
+            urlRequest.httpMethod = "POST"
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue(AINudgeRollout.brokerApiKey, forHTTPHeaderField: "X-API-Key")
+            urlRequest.httpBody = jsonData
+            urlRequest.timeoutInterval = 30
+
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+                let body = String(data: data, encoding: .utf8) ?? ""
+                throw AIError.brokerError("HTTP \(statusCode): \(body)")
+            }
+
+            let latency = Int(Date().timeIntervalSince(start) * 1000)
+
+            // Parse response
+            let brokerResponse = try JSONDecoder().decode(AIBrokerResponse.self, from: data)
+
+            return NewAITestResult(
+                surface: surface,
+                timestamp: Date(),
+                latencyMs: latency,
+                provider: brokerResponse.providerUsed,
+                model: brokerResponse.modelUsed,
+                reasoningTags: brokerResponse.reasoningTags ?? [],
+                response: brokerResponse.response.value,
+                rawResponse: brokerResponse.rawResponse,
+                error: brokerResponse.error
+            )
+        } catch {
+            let latency = Int(Date().timeIntervalSince(start) * 1000)
+            return NewAITestResult(
+                surface: surface,
+                timestamp: Date(),
+                latencyMs: latency,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                response: nil,
+                rawResponse: nil,
+                error: error.localizedDescription
+            )
+        }
     }
 }
+#endif
